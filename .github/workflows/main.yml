@@ -14,12 +14,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.4.0   # Updated version tag
 
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v3.2.0  # Updated version tag
       with:
-        node-version: '20'
+        node-version: '20.11.1'
 
     - name: Debug
       run: ls -R $GITHUB_WORKSPACE
