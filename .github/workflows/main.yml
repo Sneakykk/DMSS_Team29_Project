@@ -23,12 +23,11 @@ jobs:
 
     - name: Debug
       run: ls -R $GITHUB_WORKSPACE
-      
-    - name: Navigate to the dmss-team29-project directory
-      run: cd dmss-team29-project
-
+        
     - name: Install dependencies
       run: npm install
+      working-directory: ${{ github.workspace }}/dmss-team29-project
+
 
     - name: Build React app
       run: npm run build
