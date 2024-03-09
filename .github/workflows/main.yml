@@ -21,6 +21,9 @@ jobs:
       with:
         node-version: '20.11.1'
 
+    - name: Debug
+      run: ls -R $GITHUB_WORKSPACE
+      
     - name: Navigate to the dmss-team29-project directory
       run: cd dmss-team29-project
 
