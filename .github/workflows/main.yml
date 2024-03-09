@@ -23,6 +23,9 @@ jobs:
       with:
         node-version: '20.11.1'
 
+    - name: Navigate to the dmss-team29-project directory
+      run: cd dmss-team29-project
+
     - name: Install dependencies
       run: npm install
 
