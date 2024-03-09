@@ -31,6 +31,8 @@ jobs:
 
     - name: Build React app
       run: npm run build
+      working-directory: ${{ github.workspace }}/dmss-team29-project
 
     - name: Run tests
       run: npm test
+      working-directory: ${{ github.workspace }}/dmss-team29-project
