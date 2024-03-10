@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import './Food.css'; // Import Food.css for styling
+import { FaShoppingCart } from 'react-icons/fa'; // Import FaShoppingCart
+
 
 const Food = () => {
     const [clickedMenu, setClickedMenu] = useState(null);
     const [importedImages, setImportedImages] = useState({});
+    const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     useEffect(() => {
         const importImages = async () => {
@@ -33,6 +38,12 @@ const Food = () => {
         }
     };
 
+
+    const handleAddToCart = (itemName, price) => {
+        // Add the item to the cart
+        setCartItems([...cartItems, { itemName, price }]);
+    };
+
     return (
         <div>
             <Navbar /> {/* Include the same navbar */}
@@ -50,23 +61,23 @@ const Food = () => {
                                 <img src={importedImages['KayaToast.jpg']} alt="Kaya Toast" />
                                 <h3>Kaya Toast</h3>
                                 <p>Price: $3.50</p>
-                                <button>Add to Cart</button>
+                                <button onClick={() => handleAddToCart('Kaya Toast', 3.50)}>Add to Cart</button>
                             </div>
                             <div className="food-card">
                                 <img src={importedImages['FrenchToast.jpg']} alt="French Toast" />
                                 <h3>French Toast</h3>
                                 <p>Price: $3.50</p>
-                                <button>Add to Cart</button>
+                                <button onClick={() => handleAddToCart('French Toast', 3.50)}>Add to Cart</button>
                             </div>
                             <div className="food-card">
                                 <h3>Ham Toast</h3>
                                 <p>Price: $4.50</p>
-                                <button>Add to Cart</button>
+                                <button onClick={() => handleAddToCart('Ham Toast', 3.50)}>Add to Cart</button>
                             </div>
                             <div className="food-card">
                                 <h3>Tuna Toast</h3>
                                 <p>Price: $4.50</p>
-                                <button>Add to Cart</button>
+                                <button onClick={() => handleAddToCart('Tuna Toast', 3.50)}>Add to Cart</button>
                             </div>
                             <div className="food-card">
                                 <h3>Tuna Toast</h3>
@@ -148,6 +159,10 @@ const Food = () => {
                         </div>
                     )}
                 </div>
+            </div>
+            <div className="cart-icon" onClick={() => navigate('/cart', { state: { cartItems } })}>
+                <div className="blue-circle">{cartItems.length}</div>
+                <FaShoppingCart size="2x" />
             </div>
         </div>
     );

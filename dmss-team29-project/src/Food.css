@@ -89,3 +89,23 @@
   border-top-left-radius: 5px; /* Add border radius to image corners */
   border-top-right-radius: 5px; /* Add border radius to image corners */
 }
+
+.cart-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff; /* Blue background color */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.blue-circle {
+  color: white; /* White text color */
+  font-size: 1rem; /* Adjust font size as needed */
+}
