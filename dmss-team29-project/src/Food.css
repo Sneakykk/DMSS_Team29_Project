@@ -1,0 +1,91 @@
+.food-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu {
+  margin: 10px;
+  position: relative;
+}
+
+.menu-btn {
+  display: block;
+  width: 100vw; /* Set the width to fill the container */
+  text-align: center;
+}
+
+.dropdown-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.dropdown-content > * {
+  width: calc(20% - 10px); /* Set initial width for each item (20% to fit 5 items per row) */
+  margin-bottom: 10px; /* Add margin to create space between rows */
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) { /* Adjust breakpoint as needed */
+  .dropdown-content > * {
+    width: calc(25% - 10px); /* Change width to fit 4 items per row on smaller screens */
+  }
+}
+
+@media (max-width: 900px) { /* Adjust breakpoint as needed */
+  .dropdown-content > * {
+    width: calc(33.33% - 10px); /* Change width to fit 3 items per row on even smaller screens */
+  }
+}
+
+.menu.clicked .dropdown-content {
+  display: flex;
+}
+
+.food-card {
+  padding: 12px;
+  margin: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 5px; /* Add border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+  width: calc(20% - 10px); /* Adjust width to fit 5 items per row */
+  height: 320px; /* Set height to accommodate content and button */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Arrange content in a column */
+  justify-content: space-between; /* Distribute space between items */
+  overflow: hidden; /* Ensure content stays within the box */
+}
+
+.food-card h3 {
+  margin: 0;
+}
+
+.food-card p {
+  margin: 5px 0;
+}
+
+.food-card button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.food-card img {
+  width: 100%; /* Make the image fill the container */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Scale the image while maintaining aspect ratio */
+  border-top-left-radius: 5px; /* Add border radius to image corners */
+  border-top-right-radius: 5px; /* Add border radius to image corners */
+}

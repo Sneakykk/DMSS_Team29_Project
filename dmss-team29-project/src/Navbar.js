@@ -19,7 +19,7 @@ const Navbar = () => {
                 <FaUser className="user-icon" />
             </div>
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>
-                <li><a href="/" onClick={(e) => e.preventDefault()}>Food</a></li>
+                <li><a href="/food">Food</a></li>
                 <li><a href="/" onClick={(e) => e.preventDefault()}>Order History</a></li>
                 <li><a href="/" onClick={(e) => e.preventDefault()}>Analytics</a></li>
             </ul>

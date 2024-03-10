@@ -1,11 +1,12 @@
 /* Dashboard.css */
+
 .navbar {
     background-color: black;
     height: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Add this to push the icons to the right */
-    padding: 0 20px; /* Add padding to the navbar */
+    justify-content: space-between;
+    padding: 0 20px;
 }
 
 .menu-icon {
@@ -21,13 +22,13 @@
 .cart-icon, .user-icon {
     color: white;
     font-size: 20px;
-    margin-left: 20px; /* Adjust margin for spacing */
+    margin-left: 20px;
 }
 
 .menu-items {
     position: absolute;
     top: 60px;
-    left: 0;
+    right: 20px; /* Adjusted to align with the right edge */
     width: 200px;
     background-color: #333;
     color: white;
@@ -47,6 +48,7 @@
     padding: 10px 0;
     text-decoration: none;
     color: white;
+    transition: background-color 0.3s; /* Added transition effect */
 }
 
 .menu-items a:hover {
