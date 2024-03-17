@@ -40,4 +40,29 @@ public class ConnectToDatabase {
             System.out.println("Oops, there's an error: " + e.toString());
         }
     }
+
+    public boolean getLoginInfo(String userInfo, String password)
+    {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pwd);
+            System.out.println("Connected to database");
+            String sql = "SELECT * FROM USER where username = ?";
+            Statement statement = connection.createStatement();
+            preparedStatement.setString(1, userInfo);
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next()) {
+                String passwordTaken = resultSet.getString("password");
+                if (password.equals(passwordTaken)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Oops, there's an error: " + e.toString());
+        }
+    }
 }
