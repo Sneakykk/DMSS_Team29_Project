@@ -41,6 +41,7 @@
 
 .menu-items.show {
     display: block;
+    z-index: 1000;
 }
 
 .menu-items a {

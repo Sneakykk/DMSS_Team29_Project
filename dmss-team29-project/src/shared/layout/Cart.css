@@ -10,6 +10,7 @@
     font-weight: bold;
 }
 
+
 .cart-item {
     display: flex;
     justify-content: space-between;
@@ -56,3 +57,39 @@
     justify-content: flex-end; /* Align items to the right */
 }
 
+
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th {
+    text-align: left;
+    font-weight: bold;
+    font-size: large;
+    border-bottom: 1px solid black; /* Add border underneath header */
+  }
+
+  th:first-child {
+    padding-left: 40px;
+  }
+  
+  td {
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+  }
+  
+
+  td:first-child {
+    padding-left: 40px;
+  }
+
+  tfoot {
+    font-weight: bold;
+    border-top: 1px solid black; /* Add border underneath header */
+  }

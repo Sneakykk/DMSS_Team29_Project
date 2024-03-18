@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaBars, FaShoppingCart, FaUser } from 'react-icons/fa'; // Import FaShoppingCart and FaUser
-import './Navbar.css'; // Import Navbar.css
+import './shared/layout/Navbar.css'; // Import Navbar.css
 
 const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -20,7 +20,7 @@ const Navbar = () => {
             </div>
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>
                 <li><a href="/food">Food</a></li>
-                <li><a href="/" onClick={(e) => e.preventDefault()}>Order History</a></li>
+                <li><a href="/order_history">Order History</a></li>
                 <li><a href="/" onClick={(e) => e.preventDefault()}>Analytics</a></li>
             </ul>
         </div>
