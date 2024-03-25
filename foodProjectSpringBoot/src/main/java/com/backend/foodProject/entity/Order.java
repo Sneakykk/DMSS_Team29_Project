@@ -28,7 +28,7 @@ public class Order {
         this.userID = userID;
         this.username = username;
         this.timestamp = timestamp;
-        this.totalBill = totalBill
+        this.totalBill = totalBill;
     }
 
     public int getOrderId() {
