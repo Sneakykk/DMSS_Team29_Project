@@ -116,6 +116,26 @@ app.get("/Store2Drinks", async (req, res) => {
   }
 });
 
+// Function to format date and time
+function formatDateTime(date) {
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+
+  // Add leading zeros if needed
+  month = month < 10 ? `0${month}` : month;
+  day = day < 10 ? `0${day}` : day;
+  hours = hours < 10 ? `0${hours}` : hours;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  // Format: 'YYYY-MM-DD HH:mm:ss'
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 app.post("/login", async (req, res) => {
   const { userId, password } = req.body;
   try {
@@ -124,6 +144,14 @@ app.post("/login", async (req, res) => {
       `select * from EMPLOYEES where Username = '${userId}' and Pwd = '${password}'`
     );
     if (result.recordset.length > 0) {
+      const employeeId = result.recordset[0].EmployeeID;
+      const currentTime = formatDateTime(new Date());
+
+      // record down access in Login table
+      await sql.query(
+        `insert into Login (EmployeeID, TimeOfLogin) values (${employeeId}, '${currentTime}')`
+      );
+
       res.status(200).json({ success: true, message: "Login successful" });
     } else {
       res.status(401).json({ success: false, message: "Invalid credentials" });
