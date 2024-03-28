@@ -32,7 +32,7 @@ app.get("/menu", async (req, res) => {
   }
 });
 
-// get store 1 breakfast
+// get breakfast
 app.get("/Store1Breakfast", async (req, res) => {
   try {
     await sql.connect(config);
@@ -46,7 +46,7 @@ app.get("/Store1Breakfast", async (req, res) => {
   }
 });
 
-// get store 1 lunch and dinner
+// get lunch and dinner
 app.get("/Store1LunchAndDinner", async (req, res) => {
   try {
     await sql.connect(config);
@@ -60,7 +60,7 @@ app.get("/Store1LunchAndDinner", async (req, res) => {
   }
 });
 
-// get store 1 drinks
+// get drinks
 app.get("/Store1Drinks", async (req, res) => {
   try {
     await sql.connect(config);
