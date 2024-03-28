@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // Import CSS file for styling
 
-const Login = () => {
+const Login = ({ handleLoginSuccess }) => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -18,15 +18,15 @@ const Login = () => {
         body: JSON.stringify({ userId, password }),
       });
       const data = await response.json();
-
       if (response.ok) {
         // Navigate to the main page upon login button click
+        handleLoginSuccess(userId);
         navigate("/dashboard");
       } else {
         setErrorMessage(data.message);
       }
     } catch (error) {
-      console.error("Error loggin in: ", error);
+      console.error("Error logging in: ", error);
       setErrorMessage("Error loggin in. Please try again.");
     }
   };

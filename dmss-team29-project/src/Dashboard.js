@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 
-const Dashboard = () => {
+const Dashboard = ({ userId }) => {
   const [menuItems, setMenuItems] = useState([]);
-
   useEffect(() => {
     fetch("http://localhost:3001/menu") // Update the URL with your backend URL
       .then((response) => response.json())
