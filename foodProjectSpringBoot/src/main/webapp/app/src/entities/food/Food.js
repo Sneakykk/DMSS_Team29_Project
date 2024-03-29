@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/Food.css'; // Import Food.css for styling
 import { FaShoppingCart } from 'react-icons/fa'; // Import FaShoppingCart
@@ -13,13 +13,16 @@ const Food = () => {
         items: [],
     });
     const [menuItems, setMenuItems] = useState([]);
+    const [storeData, setStoreData] = useState([]);
+
     const navigate = useNavigate(); // Initialize useNavigate hook
 
     useEffect(() => {
 
 
         importImages();
-        fetchMockData()
+        fetchFoodMenu();
+        fetchStoreData();
 
 
     }, []);
@@ -36,26 +39,42 @@ const Food = () => {
         setImportedImages(importedImages);
     };
 
-    const fetchMockData = () => {
-        setTimeout(() => {
-          const mockData = [
-            { id: 1, foodName: 'Kaya Toast', foodPrice: 5.99 },
-            { id: 2, foodName: 'French Toast', foodPrice: 8.99 },
-            { id: 3, foodName: 'Ham Toast', foodPrice: 6.49 },
-            { id :4, foodName:"Tuna Toast", foodPrice: 7.29},
-            { id: 5, foodName: "Steak", foodPrice: 15.99 },
-            { id: 6, foodName: "Sushi", foodPrice: 12.99 },
-            { id: 7, foodName: "Sandwich", foodPrice: 6.49 },
-            { id: 8, foodName: "Fries", foodPrice: 3.99 },
-            { id: 9, foodName: "Soup", foodPrice: 4.99 },
-            { id: 10, foodName: "Taco", foodPrice: 9.99 },
-            { id: 11, foodName: "Chicken Wings", foodPrice: 8.99 },
-            { id: 12, foodName: "Fish and Chips", foodPrice: 11.49 }
-            // Add more mock data as needed
-          ];
-          setMenuItems(mockData);
-        }, 1000); // Simulate a 1 second delay
-      };
+
+    const fetchFoodMenu = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/food');
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            const jsonData = await response.json();
+            setMenuItems(jsonData);
+            console.log(jsonData);
+            // setLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            // setLoading(false);
+        }
+    };
+
+    const fetchStoreData = async () => {
+        try {
+          const storeResponse = await fetch('http://localhost:8080/api/store');
+          if (!storeResponse.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const storeJsonData = await storeResponse.json();
+          setStoreData(storeJsonData);
+          console.log(storeJsonData)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+  
+    const getStoreName = (storeId) => {
+        const store = storeData.find((store) => store.storeId === storeId);
+        return store ? store.storeName : 'Store Not Found';
+    };
+      
 
 
     const handleMenuClick = (menu) => {
@@ -112,11 +131,12 @@ const Food = () => {
                         <div className="dropdown-content">
                             {
                                 menuItems.map((item) => (
-                                    <div className="food-card">
+                                    <div className="food-card" key={item.itemId}>
                                     <img src={importedImages['KayaToast.jpg']} alt="Kaya Toast" />
-                                    <h3>{item.foodName}</h3>
-                                    <p>Price: {item.foodPrice}</p>
-                                    <button onClick={() => handleAddToCart(item.id, item.foodName, item.foodPrice)}>Add to Cart</button>
+                                    <h3>{item.itemName}</h3>
+                                    <p>Price: ${item.itemPrice}</p>
+                                    <p>Store: {getStoreName(item.storeId)}</p>
+                                    <button onClick={() => handleAddToCart(item.itemId, item.itemName, item.itemPrice)}>Add to Cart</button>
                                 </div>
                                 ))
                             }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.backend.foodProject.entity.*;
 
 import java.util.List;
@@ -57,18 +59,21 @@ public class foodProjectController {
     }
 
     @GetMapping("/food")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
     public List<Food> allFoods ()
     {
         return foodService.getAllFoods();
     }
 
     @GetMapping("/order")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
     public List<Order> allOrders ()
     {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/store")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
     public List<Store> allStores ()
     {
         return storeService.getAllStores();
