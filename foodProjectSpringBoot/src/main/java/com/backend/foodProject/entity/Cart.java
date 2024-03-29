@@ -1,15 +1,28 @@
 package com.backend.foodProject.entity;
-
 import com.backend.foodProject.entity.*;
+import jakarta.persistence.*;
 
 import java.util.List;
 
+@Entity
 public class Cart {
 
+    @Id
     private int id;
+
+    @Transient
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cart_id")
     private List<Food> itemsInCart;
+    
+    @Transient
     private int foodItemCount;
-    private Order currentOrder;
+    // private Order currentOrder;
+
+    @Transient
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Cart()
     {
@@ -57,9 +70,13 @@ public class Cart {
         return i;
     }
 
-    public Order confirmOrder()
-    {
-        return currentOrder;
-    }
+    public int getItemId() {
+    return id;
+}
+
+    // public Order confirmOrder()
+    // {
+    //     return currentOrder;
+    // }
 
 }

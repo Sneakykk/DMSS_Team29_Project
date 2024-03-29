@@ -1,11 +1,17 @@
 package com.backend.foodProject.entity;
 import java.util.*;
+import jakarta.persistence.*;
 
+@Entity
 public class User {
+    @Id
+    private int userId;
     private String username;
     private String fullName;
-    private int userId;
-    private List<Order> orderHistory;
+    private String password;
+    // private List<Order> orderHistory;
+    @Transient
+    @OneToMany(mappedBy = "user")
     private Cart cart;
 
     public User()
@@ -28,13 +34,13 @@ public class User {
         return userId;
     }
 
-    public List<Order> getOrderHistory() {
-        return orderHistory;
-    }
+    // public List<Order> getOrderHistory() {
+    //     return orderHistory;
+    // }
 
-    public void setOrderHistory(List<Order> orderHistory) {
-        this.orderHistory = orderHistory;
-    }
+    // public void setOrderHistory(List<Order> orderHistory) {
+    //     this.orderHistory = orderHistory;
+    // }
 
     public Cart getCart() {
         return cart;

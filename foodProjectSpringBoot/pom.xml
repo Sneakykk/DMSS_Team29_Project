@@ -14,7 +14,7 @@
 	<name>foodProject</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<server-app.port>8080</server-app.port>
+		<server-app.port>8000</server-app.port>
 		<app-base.ref>/foodProject</app-base.ref>
 		<java.version>17</java.version>
 	</properties>
@@ -42,6 +42,12 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>3.2.0</version>
 		</dependency>
+		        <!-- Hibernate Core for ORM support -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc11</artifactId>
@@ -53,6 +59,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -1,9 +1,15 @@
 package com.backend.foodProject.entity;
+import jakarta.persistence.*;
 
+@Entity
 public class Store {
 
+    @Id
+    @Column(name = "StoreID") // Specify the correct column name here
+    private int storeId;
+
+    @Column(name = "Name") // Specify the correct column name here
     private String storeName;
-    private int StoreId;
 
     public Store ()
     {
@@ -11,11 +17,11 @@ public class Store {
     }
 
     public int getStoreId() {
-        return StoreId;
+        return storeId;
     }
 
     public void setStoreId(int storeId) {
-        StoreId = storeId;
+        storeId = storeId;
     }
 
     public String getStoreName() {

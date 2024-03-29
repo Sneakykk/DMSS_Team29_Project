@@ -1,36 +1,51 @@
 package com.backend.foodProject.entity;
 
-import java.util.*;
+import java.time.LocalDateTime;
+
+
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @Column(name = "OrderID", columnDefinition = "int")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
-    private Date timestamp;
-    private String username;
-    private int userID;
+
+    @Column(name = "EmployeeID")
+    private String employeeId;
+
+     @Column(name = "ItemName")
+    private String itemName;
+    
+    @Column(name = "TimeOfOrder")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime timeOfOrder;
+
+    @Column(name = "TotalBill")
     private float totalBill;
 
-    public Order()
-    {
+    @Column(name = "Quantity")
+    private String quantity;
 
+    // Constructors, getters, and setters
+    // Constructor for JPA
+    public Order() {
     }
 
-    //for new orders
-    public Order (int orderId, String username, int userID)
-    {
+    public Order(int orderId, String employeeId, String itemName, LocalDateTime timeOfOrder, float totalBill, String quantity) {
         this.orderId = orderId;
-        this.userID = userID;
-        this.username = username;
-    }
-
-    public Order (Date timestamp, float totalBill, int orderId, String username, int userID)
-    {
-        this.orderId = orderId;
-        this.userID = userID;
-        this.username = username;
-        this.timestamp = timestamp;
+        this.employeeId = employeeId;
+        this.itemName = itemName;
+        this.timeOfOrder = timeOfOrder;
         this.totalBill = totalBill;
+        this.quantity = quantity;
     }
 
+    // Getters and setters
     public int getOrderId() {
         return orderId;
     }
@@ -39,20 +54,28 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmployeeId() {
+        return employeeId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
+    
+    public String getItemName() {
+        return itemName;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public LocalDateTime getTimeOfOrder(){
+        return timeOfOrder;
+    }
+
+    public void setTimeOfOrder(LocalDateTime timeOfOrder) {
+        this.timeOfOrder = timeOfOrder;
     }
 
     public float getTotalBill() {
@@ -63,21 +86,12 @@ public class Order {
         this.totalBill = totalBill;
     }
 
-    public int getUserID() {
-        return userID;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
-    public Order getOrder()
-    {
-        return this;
-    }
-
-    public float calculateTotalBill()
-    {
-        return totalBill;
-    }
 }

@@ -9,7 +9,7 @@ public class ConnectToDatabase {
     private String pwd;
 
     public ConnectToDatabase(){
-        url = "jdbc:sqlserver://team29database.cvsgu0ki6trg.ap-southeast-1.rds.amazonaws.com:1433;databaseName=project;encrypt=true;trustServerCertificate=true";
+        url = "jdbc:sqlserver://team29database.cvsgu0ki6trg.ap-southeast-1.rds.amazonaws.com:1433;databaseName=project;encrypt=false;trustServerCertificate=false";
         user = "admin";
         pwd = "password123";
     }

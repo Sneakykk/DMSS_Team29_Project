@@ -2,11 +2,13 @@ package com.backend.foodProject.Service;
 
 import com.backend.foodProject.entity.Food;
 import com.backend.foodProject.repo.FoodRepository;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.*;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.*;
 
+@Service
 public class FoodService {
 
     @Autowired
@@ -17,17 +19,34 @@ public class FoodService {
         this.foodRepository = foodRepository;
     }
 
-    public List<Food> getAllFood() {
+    public List<Food> getAllFoods() {
         return foodRepository.findAll();
     }
+
+    // public List<Food> getAllMenu(){
+    //     List<Object[]> results = foodRepository.getAllMenu();
+    //     List<Food> foods = new ArrayList<>();
+    //     for (Object[] result : results) {
+    //         Food food = new Food();
+    //         food.setItemId((Integer) result[0]);
+    //         food.setItemName((String) result[1]);
+    //         food.setItemPrice((Float) result[2]);
+    //         food.setStoreId((Integer) result[3]);
+    //         food.setItemType((String) result[4]);
+    //         // Set other attributes if needed
+    //         foods.add(food);
+    //     }
+    //     return foods;
+
+    // }
 
     public Food getFoodById(int id) {
         return foodRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Food not found with id: " + id));
     }
 
-    public List<Food> getFoodItemsByStoreID(int storeID) {
-        return foodRepository.findByStoreID(storeID);
+    public List<Food> getFoodItemsByStoreId(int storeId) {
+        return foodRepository.findByStoreId(storeId);
     }
 
     public Food createFood(Food food) {
