@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/Food.css'; // Import Food.css for styling
 import { FaShoppingCart } from 'react-icons/fa'; // Import FaShoppingCart
