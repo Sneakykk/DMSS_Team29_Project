@@ -120,6 +120,64 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.post('/submit-order', async (req, res) => {
+  const { userName, items, totalPrice } = req.body;
+
+  let pool;
+  pool = await sql.connect(config);
+  const transaction = new sql.Transaction(pool);
+  try {
+    await transaction.begin();
+
+    const request = new sql.Request(transaction);
+
+    // Get the current maximum OrderID and increment by 1
+    const result = await request.query('SELECT MAX(OrderID) as maxOrderId FROM Orders');
+    const orderID = (result.recordset[0].maxOrderId || 0) + 1;
+    for (const item of items) {
+      console.log(item);
+    }
+
+    const itemNames = items.map(item => item.itemName).join(', '); 
+    const itemQuantities = items.map(item => item.itemCount).join(', ');
+
+    await request
+      .input('orderID', sql.Int, orderID)
+      .input('employeeID', sql.VarChar(sql.MAX), userName)
+      .input('itemNames', sql.VarChar(sql.MAX), `[${itemNames}]`)
+      .input('totalPrice', sql.Decimal(18, 2), totalPrice)
+      .input('itemQuantities', sql.VarChar(sql.MAX), `[${itemQuantities}]`)
+      .query(`
+        INSERT INTO ORDERS (OrderID, EmployeeID, ItemName, TimeOfOrder, TotalBill, Quantity)
+        VALUES (@orderID, @employeeID, @itemNames, GETDATE(), @totalPrice, @itemQuantities)
+      `);
+
+    // Create a new Request instance for each item to avoid parameter name conflicts
+    for (const item of items) {
+      let itemRequest = new sql.Request(transaction);
+      await itemRequest
+        .input('orderID', sql.Int, orderID)
+        .input('itemID', sql.Int, item.itemID)
+        .input('itemCount', sql.Int, item.itemCount)
+        .query(`
+          INSERT INTO ORDERED_QUANTITY (OrderID, ItemID, ItemCount)
+          VALUES (@orderID, @itemID, @itemCount)
+        `);
+    }
+
+    await transaction.commit();
+    res.json({ success: true, message: 'Order submitted successfully', orderID });
+  } catch (error) {
+    await transaction.rollback(); // Roll back if there's an error
+    console.error('Error submitting order:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    // Release the connection back to the pool
+    pool.close();
+  }
+});
+
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

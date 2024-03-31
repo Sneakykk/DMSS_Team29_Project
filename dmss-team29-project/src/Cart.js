@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 // import Navbar from "./Navbar";
 import "./Cart.css"; // Import Cart.css for styling
 
@@ -31,6 +32,49 @@ const Cart = ({ userId }) => {
   const totalPrice = updatedCartItems.reduce((acc, item) => {
     return acc + item.price * item.quantity;
   }, 0);
+
+  const navigate = useNavigate();
+
+  const handleSubmitOrder = async () => {
+    // Construct the order data
+    const orderData = {
+      userName: userId, // Assuming userId is the employee's ID
+      items: updatedCartItems.map(item => ({
+        itemID: item.itemId,
+        itemName: item.itemName, 
+        itemCount: item.quantity
+      })),
+      totalPrice: totalPrice,
+      // additional order details as needed
+    };
+  
+    try {
+      // POST request to your server endpoint to submit the order
+      const response = await fetch('http://localhost:3001/submit-order', { // use the correct server endpoint here
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      if (response.ok) {
+        // Handle a successful submission
+        console.log('Order submitted successfully');
+        navigate('/food');
+        // Redirect or display a success message
+      } else {
+        // Handle responses that aren't a 200 OK
+        console.error('Order submission failed');
+        // Display an error message
+      }
+    } catch (error) {
+      // Handle any network errors
+      console.error('Network error on order submission:', error);
+      // Display an error message
+    }
+  };
+  
 
   return (
     <div>
@@ -69,6 +113,7 @@ const Cart = ({ userId }) => {
         </ul>
         <hr />
         <div className="total-price">Total Price: ${totalPrice.toFixed(2)}</div>
+        <button onClick={handleSubmitOrder}>Submit Order</button>
       </div>
     </div>
   );
