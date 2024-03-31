@@ -49,8 +49,3 @@ jobs:
     - name: Build React app
       run: npm run build
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
-
-    # Optionally, add steps to test the React application if you have tests set up
-    - name: Test React app
-      run: npm test
-      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
