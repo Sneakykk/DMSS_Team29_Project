@@ -1,69 +1,57 @@
 package com.backend.foodProject.database;
 
-import java.sql.*;
+import org.springframework.stereotype.Service;
 
+import java.sql.*;
+import javax.sql.DataSource;
+
+@Service
 public class ConnectToDatabase {
 
-    private String url;
-    private String user;
-    private String pwd;
+    private DataSource dataSource;
 
-    public ConnectToDatabase(){
-        url = "jdbc:sqlserver://team29database.cvsgu0ki6trg.ap-southeast-1.rds.amazonaws.com:1433;databaseName=project;encrypt=false;trustServerCertificate=false";
-        user = "admin";
-        pwd = "password123";
+    public ConnectToDatabase(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
-    public void connect(){
-        try {
+    public void connect() {
+        String sql = "SELECT * FROM MENU";
+        try (Connection connection = dataSource.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
 
-            Connection connection = DriverManager.getConnection(url, user, pwd);
-            System.out.println("Connected to database");
-            String sql = "SELECT * FROM MENU";
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery(sql);
-
-            while(result.next()){
+            while (result.next()) {
                 String storeID = result.getString("StoreID");
                 String itemName = result.getString("ItemName");
                 String price = result.getString("ItemPrice");
 
-                System.out.println("Store ID: "+storeID+"  Item name: "+itemName+"   Price: $"+price);
-
+                System.out.println("Store ID: " + storeID + "  Item name: " + itemName + "   Price: $" + price);
             }
-            connection.close();
         } catch (SQLException e) {
-            System.out.println("Oops, there's an error: " + e.toString());
+            System.err.println("Database connection failed: " + e.getMessage());
         }
     }
 
-    public boolean getLoginInfo(String userInfo, String password) {
-        // SQL query to retrieve user information by username
-        String sql = "SELECT * FROM USER WHERE username = ?";
+    public boolean getLoginInfo(String username, String password) {
+        // Correct SQL query using placeholders for parameters
+        String sql = "SELECT Pwd FROM EMPLOYEES WHERE Username = ?";
 
-        try (Connection connection = DriverManager.getConnection(url, user, pwd);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            // Set the username parameter in the prepared statement
-            preparedStatement.setString(1, userInfo);
+            // Set the placeholder value with the provided username
+            preparedStatement.setString(1, username);
 
-            // Execute the query
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                // Iterate through the results
-                while (resultSet.next()) {
-                    // Retrieve the password from the result set
-                    String passwordTaken = resultSet.getString("password");
-
-                    // Check if the provided password matches the retrieved password
-                    if (password.equals(passwordTaken)) {
-                        return true; // Authentication successful
-                    }
+                if (resultSet.next()) {
+                    String passwordTaken = resultSet.getString("Pwd");
+                    return password.equals(passwordTaken);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Oops, there's an SQL error: " + e.getMessage());
+            System.err.println("Failed to retrieve login information: " + e.getMessage());
         }
-
-        return false; // Authentication failed
+        return false;
     }
+
 }

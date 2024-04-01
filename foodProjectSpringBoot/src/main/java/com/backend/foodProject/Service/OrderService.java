@@ -23,8 +23,8 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<Order> getOrderByEmployeeName(String name)
-    {
-        return orderRepository.findByEmployeeName(name);
-    }
+//    public List<Order> getOrderByEmployeeName(String name)
+//    {
+//        return orderRepository.findByEmployeeName(name);
+//    }
 }

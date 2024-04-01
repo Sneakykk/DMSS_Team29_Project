@@ -3,7 +3,7 @@ import java.util.*;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Employee")
+@Table(name = "EMPLOYEES")
 public class User {
     @Id
     private int userId;

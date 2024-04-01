@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.backend.foodProject.entity.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -39,24 +41,25 @@ public class foodProjectController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
 
-    @PostMapping("/user/login")
-    public ResponseEntity<User> login (@RequestBody String details)
-    {
-        JSONObject data = new JSONObject(details);
 
-        Optional<User> check = userService.loginUser(data.getString("username"), data.getString("password"));
-
-        if (check.isPresent())
-        {
-            User user = check.get();
-            return new ResponseEntity<User>(user, HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    @PostMapping("/login")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Map<String, Object> response = new HashMap<>();
+        if (authenticationService.login(loginRequest)) {
+            response.put("success", true);
+            response.put("message", "Login successful");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("success", false);
+            response.put("message", "Login failed. Username or password is incorrect.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+
 
     @GetMapping("/food")
     @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000

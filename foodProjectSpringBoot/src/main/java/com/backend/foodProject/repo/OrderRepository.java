@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    Optional<Order> findByEmployeeName(String name);
+    // Optional<Order> findByEmployeeName(String name);
 }

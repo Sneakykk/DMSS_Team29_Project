@@ -1,7 +1,7 @@
 com\backend\foodProject\controller\foodProjectController.class
-com\backend\foodProject\entity\LoginPage.class
 com\backend\foodProject\repo\StoreRepository.class
 com\backend\foodProject\repo\UserRepository.class
+com\backend\foodProject\entity\LoginRequest.class
 com\backend\foodProject\entity\Food.class
 com\backend\foodProject\entity\User.class
 com\backend\foodProject\Service\StoreService.class
@@ -12,6 +12,7 @@ com\backend\foodProject\repo\OrderRepository.class
 com\backend\foodProject\Service\CartService.class
 com\backend\foodProject\repo\CartRepository.class
 com\backend\foodProject\Service\OrderService.class
+com\backend\foodProject\Service\AuthenticationService.class
 com\backend\foodProject\Service\UserService.class
 com\backend\foodProject\database\ConnectToDatabase.class
 com\backend\foodProject\entity\Cart.class

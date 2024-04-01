@@ -1,3 +1,6 @@
-DatabaseConnectionTest$TestDataSourceConfiguration.class
 com\backend\foodProject\FoodProjectRepositoryTests.class
+com\backend\foodProject\LoginRequestTest.class
 DatabaseConnectionTest.class
+DatabaseConnectionTest$TestDataSourceConfiguration.class
+com\backend\foodProject\ConnectToDatabaseIntegrationTest.class
+com\backend\foodProject\AuthenticationServiceTest.class
