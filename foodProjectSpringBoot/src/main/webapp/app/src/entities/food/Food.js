@@ -14,6 +14,7 @@ const Food = () => {
     });
     const [menuItems, setMenuItems] = useState([]);
     const [storeData, setStoreData] = useState([]);
+    const [foodTypes, setFoodTypes] = useState([]);
 
     const navigate = useNavigate(); // Initialize useNavigate hook
 
@@ -23,6 +24,7 @@ const Food = () => {
         importImages();
         fetchFoodMenu();
         fetchStoreData();
+        fetchUnqiueFoodType();
 
 
     }, []);
@@ -42,13 +44,13 @@ const Food = () => {
 
     const fetchFoodMenu = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/food');
+            const response = await fetch('http://localhost:8080/api/get_all_foods');
             if (!response.ok) {
             throw new Error('Network response was not ok');
             }
             const jsonData = await response.json();
             setMenuItems(jsonData);
-            console.log(jsonData);
+            // console.log(jsonData);
             // setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -58,13 +60,26 @@ const Food = () => {
 
     const fetchStoreData = async () => {
         try {
-          const storeResponse = await fetch('http://localhost:8080/api/store');
+          const storeResponse = await fetch('http://localhost:8080/api/get_all_stores');
           if (!storeResponse.ok) {
             throw new Error('Network response was not ok');
           }
           const storeJsonData = await storeResponse.json();
           setStoreData(storeJsonData);
-          console.log(storeJsonData)
+        //   console.log(storeJsonData)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const fetchUnqiueFoodType = async () => {
+        try {
+          const uniqueFoodtypeResponse = await fetch('http://localhost:8080/api/get_unique_food_type');
+          if (!uniqueFoodtypeResponse.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const uniqueFoodtypeData = await uniqueFoodtypeResponse.json();
+          setFoodTypes(uniqueFoodtypeData);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -122,78 +137,33 @@ const Food = () => {
             <h1 align="center">MENU</h1>
             <div className="food-container">
                 {/* Button for Breakfast */}
-                <div className={`menu ${clickedMenu === 'Breakfast' ? 'clicked' : ''}`}>
-                    <button className="menu-btn" onClick={() => handleMenuClick('Breakfast')}>
-                        Breakfast
-                    </button>
-                    {/* Dropdown content for Breakfast */}
-                    {clickedMenu === 'Breakfast' && (
-                        <div className="dropdown-content">
-                            {
-                                menuItems.map((item) => (
-                                    <div className="food-card" key={item.itemId}>
-                                    <img src={importedImages['KayaToast.jpg']} alt="Kaya Toast" />
-                                    <h3>{item.itemName}</h3>
-                                    <p>Price: ${item.itemPrice}</p>
-                                    <p>Store: {getStoreName(item.storeId)}</p>
-                                    <button onClick={() => handleAddToCart(item.itemId, item.itemName, item.itemPrice)}>Add to Cart</button>
-                                </div>
-                                ))
-                            }
-                        </div>
-                    )}
-                </div>
-                {/* Button for Lunch */}
-                <div className={`menu ${clickedMenu === 'Lunch' ? 'clicked' : ''}`}>
-                    <button className="menu-btn" onClick={() => handleMenuClick('Lunch')}>
-                        Lunch
-                    </button>
-                    {/* Dropdown content for Lunch */}
-                    {clickedMenu === 'Lunch' && (
-                        <div className="dropdown-content">
-                            <div className="food-card">
-                                <h3>Lunch Item 1</h3>
-                                <p>Price: $10.99</p>
-                                <button>Add to Cart</button>
+
+                {
+    foodTypes.map((item) => (
+        <div className={`menu ${clickedMenu === item ? 'clicked' : ''}`} key={item}>
+            <button className="menu-btn" onClick={() => handleMenuClick(item)}>
+                {item}
+            </button>
+            {/* Dropdown content for the clicked menu item */}
+            {clickedMenu === item && (
+                <div className="dropdown-content">
+                    {menuItems.map((menuItem) => (
+                        menuItem.itemType === item && (
+                            <div className="food-card" key={menuItem.itemId}>
+                                <img src={importedImages['KayaToast.jpg']} alt="Kaya Toast" />
+                                <h3>{menuItem.itemName}</h3>
+                                <p>Price: ${menuItem.itemPrice}</p>
+                                <p>Store: {getStoreName(menuItem.storeId)}</p>
+                                <button onClick={() => handleAddToCart(menuItem.itemId, menuItem.itemName, menuItem.itemPrice)}>Add to Cart</button>
                             </div>
-                            {/* Add more lunch items here */}
-                        </div>
-                    )}
+                        )
+                    ))}
                 </div>
-                {/* Button for Snacks */}
-                <div className={`menu ${clickedMenu === 'Snacks' ? 'clicked' : ''}`}>
-                    <button className="menu-btn" onClick={() => handleMenuClick('Snacks')}>
-                        Snacks
-                    </button>
-                    {/* Dropdown content for Snacks */}
-                    {clickedMenu === 'Snacks' && (
-                        <div className="dropdown-content">
-                            <div className="food-card">
-                                <h3>Snack Item 1</h3>
-                                <p>Price: $5.99</p>
-                                <button>Add to Cart</button>
-                            </div>
-                            {/* Add more snack items here */}
-                        </div>
-                    )}
-                </div>
-                {/* Button for Drinks */}
-                <div className={`menu ${clickedMenu === 'Drinks' ? 'clicked' : ''}`}>
-                    <button className="menu-btn" onClick={() => handleMenuClick('Drinks')}>
-                        Drinks
-                    </button>
-                    {/* Dropdown content for Drinks */}
-                    {clickedMenu === 'Drinks' && (
-                        <div className="dropdown-content">
-                            <div className="food-card">
-                                <h3>Drink Item 1</h3>
-                                <p>Price: $2.99</p>
-                                <button>Add to Cart</button>
-                            </div>
-                            {/* Add more drink items here */}
-                        </div>
-                    )}
-                </div>
+            )}
+        </div>
+    ))
+}
+               
             </div>
             <div className="cart-icon" onClick={() => navigate('/cart', { state: { cartItems } })}>
                 <div className="blue-circle">{cartItems.totalQty}</div>
