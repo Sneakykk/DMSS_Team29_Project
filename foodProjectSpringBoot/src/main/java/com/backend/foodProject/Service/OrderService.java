@@ -22,4 +22,9 @@ public class OrderService {
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    public List<Order> getOrderByEmployeeName(String name)
+    {
+        return orderRepository.findByEmployeeName(name);
+    }
 }
