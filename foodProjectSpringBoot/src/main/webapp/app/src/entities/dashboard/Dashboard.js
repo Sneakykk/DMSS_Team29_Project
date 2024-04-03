@@ -3,7 +3,7 @@ import Layout from '../../Layout';
 
 const Dashboard = () => {
     // Access the state passed from the login page
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState([null]);
 
     useEffect(() => {
         // Retrieve user data from localStorage when component mounts

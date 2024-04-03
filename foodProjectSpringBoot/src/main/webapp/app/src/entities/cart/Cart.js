@@ -56,7 +56,7 @@ const Cart = () => {
         const currentDate = new Date();
 
         // Format the date and time as a string (optional)
-        const formattedDate = currentDate.toLocaleString();
+        let foodNameString = ""
         const foodNames = updatedCartItems.items.map(item => item.foodName);
         const quantities = updatedCartItems.items.map(item => item.qty);
         const randomFourDigitNumber = Math.floor(Math.random() * 10000);

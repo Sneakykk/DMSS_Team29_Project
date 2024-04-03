@@ -1,24 +1,108 @@
 import Navbar from '../../Navbar';
+import React, {useState,useEffect} from 'react';
 
 import '../../shared/layout/OrderHistory.css'; // Import Food.css for styling
 
 const OrderHistory = () => {
 
+    const [userData, setUserData] = useState([null]);
+    const [orderHistory, setOrderHistory] = useState([]);
+    const [searchCriteria, setSearchCriteria] = useState({
+        startDate: "",
+        endDate: ""
+    })
+
+    useEffect(()=>{
+        // Retrieve user data from localStorage when component mounts
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+  
+            const parsedUserData = JSON.parse(storedUserData);
+            setUserData({...parsedUserData});
+        }
+
+    },[])
+
+    useEffect(()=>{
+        if (!Array.isArray(userData) || userData[0] !== null) {
+            const searchBody = {
+                ...searchCriteria,
+                "id": userData.employeeId
+            }
+            loadOrderHistory(searchBody);
+        }
+    },[userData])
+    
+    const loadOrderHistory = async(searchData) =>{
+        try {
+            console.log(searchData)
+            const response = await fetch('http://localhost:8080/api/employee/get_food_history', { // Update to your backend endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(searchData),
+        });
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Fetch Order History Successfully!',data);
+                setOrderHistory(data);
+    
+            } else {
+                console.error('Failed to get Order History');
+                // setError('Login failed. Please try again.');
+            }
+        } catch (error) {
+            // setError('An error occurred. Please try again.');
+            console.error('An error occurred:', error);
+        }
+    }
+
+    const formatDate = (orderDate) =>{
+        const date = new Date(orderDate);
+
+        // Extract the date and time components
+        const year = date.getFullYear();
+        const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-indexed
+        const day = ("0" + date.getDate()).slice(-2);
+        const hours = ("0" + date.getHours()).slice(-2);
+        const minutes = ("0" + date.getMinutes()).slice(-2);
+        const seconds = ("0" + date.getSeconds()).slice(-2);
+
+        // Format the date and time
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const onChangeSearchCriteria = e =>{
+        const {name,value} = e.target;
+        console.log(name);
+        console.log(value);
+        setSearchCriteria({
+            ...searchCriteria,
+            [name]: value
+        })
+    }
+
+    const searchButton = e =>{
+        e.preventDefault()
+        const searchBody = {
+            ...searchCriteria,
+            "id": userData.employeeId
+        }
+        loadOrderHistory(searchBody);
+    }
+
+
     return (
         <div>
             <Navbar /> {/* Include the same navbar */}
-            <div class="container">
-                <div class="search-container">
-                    <select>
-                    <option value="">Select Food Store</option>
-                    <option value="store1">Store 1</option>
-                    <option value="store2">Store 2</option>
-                    </select>
+            <div className="container">
+                <div className="search-container">
                     Start Date
-                    <input type="date" placeholder="Start Date" />
+                    <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" />
                     End Date
-                    <input type="date" placeholder="End Date" />
-                    <button>Search</button>
+                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" />
+                    <button onClick={searchButton}>Search</button>
                 </div>
 
                 <table>
@@ -26,26 +110,34 @@ const OrderHistory = () => {
                     <tr>
                         <th>S/N</th>
                         <th>Orders</th>
-                        <th>Ordered Date</th>
                         <th>Qty</th>
+                        <th>Ordered Date</th>
                         <th>Price</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Item 1</td>
-                        <td>2023-12-14</td>
-                        <td>2</td>
-                        <td>$10.99</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Item 2</td>
-                        <td>2023-12-15</td>
-                        <td>1</td>
-                        <td>$5.99</td>
-                    </tr>
+
+                        {orderHistory.map((order,index) =>(
+                            
+                            <tr key={index}>
+                                <td>{index+1}</td>
+                                {/* <td>{order.itemName}</td> */}
+                                <td>
+                                    {/* Split the itemName string into an array and map over it */}
+                                {order.itemName.replace(/[\[\]"]/g, '').split(",").map((item, i) => (
+                                    <div key={i}>{i+1}: {item.trim()}</div> 
+                                ))}
+                                </td>
+                                <td>
+                                {order.quantity.replace(/\[|\]/g, '').split(",").map((item, i) => (
+                                    <div key={i}> x{item.trim()}</div> 
+                                ))}
+                                </td>
+                                <td>{formatDate(order.timeOfOrder)}</td>
+                                <td>{order.totalBill}</td>
+                            </tr>
+                            
+                        ))}
                     </tbody>
                 </table>
             </div>
