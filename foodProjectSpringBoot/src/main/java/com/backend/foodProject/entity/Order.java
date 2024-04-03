@@ -1,6 +1,7 @@
 package com.backend.foodProject.entity;
 
 import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 
 import jakarta.persistence.*;
@@ -22,8 +23,8 @@ public class Order {
     private String itemName;
     
     @Column(name = "TimeOfOrder")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime timeOfOrder;
+    // @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp timeOfOrder;
 
     @Column(name = "TotalBill")
     private float totalBill;
@@ -39,7 +40,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderId, int employeeId, String itemName, LocalDateTime timeOfOrder, float totalBill, String quantity) {
+    public Order(int orderId, int employeeId, String itemName, Timestamp timeOfOrder, float totalBill, String quantity) {
         this.orderId = orderId;
         this.employeeId = employeeId;
         this.itemName = itemName;
@@ -73,11 +74,11 @@ public class Order {
         this.itemName = itemName;
     }
 
-    public LocalDateTime getTimeOfOrder(){
+    public Timestamp getTimeOfOrder(){
         return timeOfOrder;
     }
 
-    public void setTimeOfOrder(LocalDateTime timeOfOrder) {
+    public void setTimeOfOrder(Timestamp timeOfOrder) {
         this.timeOfOrder = timeOfOrder;
     }
 

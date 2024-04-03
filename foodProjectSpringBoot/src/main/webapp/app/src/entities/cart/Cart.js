@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/Cart.css'; // Import Cart.css for styling
+import moment from 'moment';
 
 const Cart = () => {
     const location = useLocation();
@@ -53,8 +54,14 @@ const Cart = () => {
 
     const checkoutOrder = async (e) =>{
         console.log(updatedCartItems)
-        const currentDate = new Date();
+        const currentDate = Date.now();
 
+        console.log(currentDate)
+
+        // Format the date according to the desired format
+        const dateObject = new Date(currentDate);
+        const timestamp = dateObject.getTime();
+    
         // Format the date and time as a string (optional)
         let foodNameString = ""
         const foodNames = updatedCartItems.items.map(item => item.foodName);
@@ -67,7 +74,7 @@ const Cart = () => {
             "orderId":fourDigitUuid,
              "employeeId":userData.employeeId,
              "itemName": JSON.stringify(foodNames),
-             "timeOfOrder": currentDate,
+             "timeOfOrder": timestamp,
              "totalBill": totalPrice(),
              "quantity": JSON.stringify(quantities)
         }

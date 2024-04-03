@@ -9,6 +9,12 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 
 import java.util.*;
 
@@ -39,15 +45,18 @@ public class OrderService {
     public List<Order> employeeOrderHistory(int id, String startDate, String endDate) {
     
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        System.out.println("startDate: " + startDate+" 00:00:00");
-        System.out.println("endDate: " + endDate+" 00:00:00");
 
-        // Parse the string to a LocalDateTime object
-        LocalDateTime startDateTime = LocalDateTime.parse((startDate+" 00:00:00"),formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse((endDate+" 00:00:00"), formatter);
+        // Parse the string to LocalDateTime object
+        LocalDateTime startDateTimeLocal = LocalDateTime.parse((startDate+" 00:00:00"), formatter);
+        LocalDateTime endDateTimeLocal = LocalDateTime.parse((endDate+" 00:00:00"), formatter);
 
-        System.out.println("startDateTime: " + startDateTime);
-        System.out.println("endDateTime: " + endDateTime);
+        // Convert LocalDateTime object to Timestamp
+        Timestamp startDateTime = Timestamp.valueOf(startDateTimeLocal);
+        Timestamp endDateTime = Timestamp.valueOf(endDateTimeLocal.with(LocalTime.MAX));
+
+
+        System.out.println(startDateTime);
+        System.out.println(endDateTime);
 
        return orderRepository.findByEmployeeIdAndTimeOfOrderBetween(id, startDateTime, endDateTime);
         
