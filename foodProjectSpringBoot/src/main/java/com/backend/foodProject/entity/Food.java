@@ -21,6 +21,12 @@ public class Food {
     @Column(name="Type")
     private String itemType;
 
+    @Transient
+    private String[] itemTypeUnqiue;
+
+    @Transient
+    private Food[] foodHistory;
+
     public Food()
     {
 
@@ -73,5 +79,23 @@ public class Food {
 
     public void setStoreId(int storeId){
         this.storeId = storeId;
+    }
+
+    public String[] getItemTypeUnqiueArr() {
+        return itemTypeUnqiue;
+    }
+
+    // Setter method for myArray
+    public void setItemTypeUnqiueArr(String[] itemTypeUnqiue) {
+        this.itemTypeUnqiue = itemTypeUnqiue;
+    }
+
+    public Food[] getFoodHistory() {
+        return foodHistory;
+    }
+
+    // Setter method for myArray
+    public void setFoodHistory(Food[] foodHistory) {
+        this.foodHistory = foodHistory;
     }
 }

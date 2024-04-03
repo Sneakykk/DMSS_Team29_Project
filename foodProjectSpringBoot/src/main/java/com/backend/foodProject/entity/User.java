@@ -1,61 +1,51 @@
 package com.backend.foodProject.entity;
-import java.util.*;
+
+import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="EMPLOYEES")
 public class User {
+
     @Id
-    private int userId;
+    @Column(name = "EmployeeID")
+    private int employeeId;
+
+    @Column(name = "Username")
     private String username;
-    private String fullName;
-    private String password;
-    // private List<Order> orderHistory;
+
+    @Column(name = "FirstName")
+    private String firstName;
+
+    @Column(name = "LastName")
+    private String lastName;
+
+    @Column(name = "Pwd")
+    private String pwd;
+
     @Transient
     @OneToMany(mappedBy = "user")
     private Cart cart;
 
-    public User()
-    {
-
+    public User() {
     }
 
-    public User(String username, String fullName, int userId)
-    {
-        this.userId = userId;
+    public User(int employeeId, String firstName, String lastName, String username, String pwd) {
+        this.employeeId = employeeId;
         this.username = username;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pwd = pwd;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    // Getters and setters for all fields
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    // public List<Order> getOrderHistory() {
-    //     return orderHistory;
-    // }
-
-    // public void setOrderHistory(List<Order> orderHistory) {
-    //     this.orderHistory = orderHistory;
-    // }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getUsername() {
@@ -66,4 +56,35 @@ public class User {
         this.username = username;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

@@ -68,5 +68,10 @@ public class FoodService {
         }
         foodRepository.deleteById(id);
     }
+
+    public List<String> getUnqiueTypeArray(){
+        return foodRepository.getUniqueFoodType();
+    }
+    
 }
 

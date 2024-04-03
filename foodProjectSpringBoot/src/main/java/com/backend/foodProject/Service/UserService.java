@@ -28,8 +28,8 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
     }
 
-    public Optional<User> loginUser(String username, String password) {
-        Optional<User> userOptional = userRepository.findByUsernameAndPassword(username, password);
+    public Optional<User> loginUser(String username, String pwd) {
+        Optional<User> userOptional = userRepository.findByUsernameAndPwd(username, pwd);
         return userOptional; // Return true if user exists, false otherwise
     }
 
@@ -41,7 +41,7 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
-        user.setUserId(id); // Ensure the ID is set for update
+        user.setEmployeeId(id); // Ensure the ID is set for update
         return userRepository.save(user);
     }
 

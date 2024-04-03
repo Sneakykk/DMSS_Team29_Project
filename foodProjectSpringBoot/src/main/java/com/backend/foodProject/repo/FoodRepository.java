@@ -14,4 +14,8 @@ public interface FoodRepository extends JpaRepository<Food, Integer> {
     // @Query("SELECT f FROM Food f")
     @Query("SELECT f.itemId, f.itemName, f.itemPrice, f.storeId, f.itemType FROM Food f")
     List<Object[]> getAllMenu();
+
+    @Query(value="SELECT DISTINCT TYPE FROM MENU", nativeQuery = true)
+    List<String> getUniqueFoodType();
+    
 }

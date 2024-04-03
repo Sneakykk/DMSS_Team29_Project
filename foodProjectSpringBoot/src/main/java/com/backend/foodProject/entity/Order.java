@@ -16,7 +16,7 @@ public class Order {
     private int orderId;
 
     @Column(name = "EmployeeID")
-    private String employeeId;
+    private int employeeId;
 
      @Column(name = "ItemName")
     private String itemName;
@@ -31,12 +31,15 @@ public class Order {
     @Column(name = "Quantity")
     private String quantity;
 
+    @Transient
+    private Order[] employeeOrderHistory;
+
     // Constructors, getters, and setters
     // Constructor for JPA
     public Order() {
     }
 
-    public Order(int orderId, String employeeId, String itemName, LocalDateTime timeOfOrder, float totalBill, String quantity) {
+    public Order(int orderId, int employeeId, String itemName, LocalDateTime timeOfOrder, float totalBill, String quantity) {
         this.orderId = orderId;
         this.employeeId = employeeId;
         this.itemName = itemName;
@@ -54,11 +57,11 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
     
@@ -93,5 +96,14 @@ public class Order {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
+
+    public Order[] getEmployeeOrderHistory() {
+        return employeeOrderHistory;
+    }
+
+    public void setEmployeeOrderHistory(Order[] employeeOrderHistory) {
+        this.employeeOrderHistory = employeeOrderHistory;
+    }
+
 
 }
