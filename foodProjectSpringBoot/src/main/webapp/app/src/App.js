@@ -6,6 +6,7 @@ import Dashboard from './entities/dashboard/Dashboard';
 import Food from './entities/food/Food';
 import Cart from './entities/cart/Cart';
 import OrderHistory from './entities/history/OrderHistory';
+import Analytics from './entities/analytics/Analytics';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/food" element={<Food />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order_history" element={<OrderHistory />} />
+        <Route path ="/analytics" element={<Analytics/>} />
       </Routes>
     </Router>
   );
