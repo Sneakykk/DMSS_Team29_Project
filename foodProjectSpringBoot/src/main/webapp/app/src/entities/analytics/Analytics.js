@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
-import '../../shared/layout/Analytics.css';  // Import Navbar.css   
+import '../../shared/layout/Analytics.css'; // Import Analytics.css for styling
 
 const Analytics = () => {
     const [userData, setUserData] = useState(null);
@@ -79,26 +79,28 @@ const Analytics = () => {
                     <button onClick={searchButton}>Search</button>
                 </div>
 
-                {analyticsData.map((item, index) => (
-                    <div key={index} className="analytics-card">
-                        <h3>{item.metricName}</h3>
-                        {item.metricName === 'Order Volumes' ? (
-                            <p>Total Orders: {item.metricValue}</p>
-                        ) : item.metricName === 'Popular Menu Items' ? (
-                            <ul>
-                                {item.metricValue.map((menuItem, idx) => (
-                                    <li key={idx}>{menuItem}</li>
-                                ))}
-                            </ul>
-                        ) : item.metricName === 'Peak Ordering Hours' ? (
-                            <ul>
-                                {item.metricValue.map((hour, idx) => (
-                                    <li key={idx}>{hour}</li>
-                                ))}
-                            </ul>
-                        ) : null}
-                    </div>
-                ))}
+                <div className="cards-container">
+                    {analyticsData.map((item, index) => (
+                        <div key={index} className="analytics-card">
+                            <h3>{item.metricName}</h3>
+                            {item.metricName === 'Order Volumes' ? (
+                                <p>Total Orders: {item.metricValue}</p>
+                            ) : item.metricName === 'Popular Menu Items' ? (
+                                <ul>
+                                    {item.metricValue.map((menuItem, idx) => (
+                                        <li key={idx}>{menuItem}</li>
+                                    ))}
+                                </ul>
+                            ) : item.metricName === 'Peak Ordering Hours' ? (
+                                <ul>
+                                    {item.metricValue.map((hour, idx) => (
+                                        <li key={idx}>{hour}</li>
+                                    ))}
+                                </ul>
+                            ) : null}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

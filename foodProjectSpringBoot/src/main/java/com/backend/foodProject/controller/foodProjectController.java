@@ -116,7 +116,7 @@ public class foodProjectController {
 
     }
 
-    @PostMapping("/analytics")
-    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    // @PostMapping("/analytics")
+    // @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
 
 }
