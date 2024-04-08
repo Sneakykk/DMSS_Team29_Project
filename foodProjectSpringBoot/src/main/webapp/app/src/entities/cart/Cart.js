@@ -3,29 +3,24 @@ import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/Cart.css'; // Import Cart.css for styling
 import moment from 'moment';
+import GooglePayButton from '@google-pay/button-react';
 
 const Cart = () => {
     const location = useLocation();
-    const { cartItems } = location.state || {}; // Retrieve cartItems from location state
+    const { cartItems } = location.state || {};
 
     const [updatedCartItems, setUpdatedCartItems] = useState();
-
-    useEffect(() => {
-        // Initialize cart items with quantity property
-        //const initializedCartItems = cartItems.map(item => ({ ...item, quantity: 1 }));
-        setUpdatedCartItems(cartItems);
-    }, [cartItems]);
-
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        // Retrieve user data from localStorage when component mounts
+        setUpdatedCartItems(cartItems);
+    }, [cartItems]);
+
+    useEffect(() => {
         const storedUserData = localStorage.getItem('userData');
-        console.log(storedUserData)
         if (storedUserData) {
             const parsedUserData = JSON.parse(storedUserData);
             setUserData({...parsedUserData});
-            console.log(userData)
         }
     }, []);
 
@@ -33,133 +28,134 @@ const Cart = () => {
         const updatedItems = {...updatedCartItems};
         updatedItems.items[index].qty += change;
         if (updatedItems.items[index].qty < 1) {
-            updatedItems.items.splice(index, 1); // Remove item if quantity becomes zero or negative
+            updatedItems.items.splice(index, 1);
         }
         setUpdatedCartItems(updatedItems);
     };
 
-    //console.log(updatedCartItems.items)
     const totalPrice = () => {
-        if (updatedCartItems && updatedCartItems.items) { // Check if updatedCartItems and updatedCartItems.items are not undefined
-
+        if (updatedCartItems && updatedCartItems.items) {
             return updatedCartItems.items.reduce((acc, item) => {
-
                 return acc + (item.foodPrice * item.qty);
             }, 0).toFixed(2);
         } else {
-            return 0; // Return 0 if updatedCartItems or updatedCartItems.items is undefined
+            return 0;
         }
     }
 
-
-    const checkoutOrder = async (e) =>{
-        console.log(updatedCartItems)
+    const checkoutOrder = async () => {
         const currentDate = Date.now();
-
-        console.log(currentDate)
-
-        // Format the date according to the desired format
         const dateObject = new Date(currentDate);
         const timestamp = dateObject.getTime();
-    
-        // Format the date and time as a string (optional)
-        let foodNameString = ""
-        const foodNames = updatedCartItems.items.map(item => item.foodName);
-        const quantities = updatedCartItems.items.map(item => item.qty);
+        let foodNames = updatedCartItems.items.map(item => item.foodName);
+        let quantities = updatedCartItems.items.map(item => item.qty);
         const randomFourDigitNumber = Math.floor(Math.random() * 10000);
-
-        // Pad the number with leading zeros to ensure it's always 4 digits
         const fourDigitUuid = randomFourDigitNumber.toString().padStart(4, '0');
         const finalOrderDetails ={
-            "orderId":fourDigitUuid,
-             "employeeId":userData.employeeId,
+            "orderId": fourDigitUuid,
+             "employeeId": userData.employeeId,
              "itemName": JSON.stringify(foodNames),
              "timeOfOrder": timestamp,
              "totalBill": totalPrice(),
              "quantity": JSON.stringify(quantities)
         }
 
-        console.log(finalOrderDetails)
+        console.log(finalOrderDetails);
+
         try {
-            const response = await fetch('http://localhost:8080/api/add_order', { // Update to your backend endpoint
+            const response = await fetch('http://localhost:8080/api/add_order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...finalOrderDetails}),
+                body: JSON.stringify({ ...finalOrderDetails }),
             });
 
             if (response.ok) {
                 console.log('Order added successfully');
+                // Here, you can integrate Google Pay payment processing
+                // For example, after adding the order successfully, initiate the Google Pay payment flow
             } else {
                 console.error('Failed to add order');
-                // setError('Login failed. Please try again.');
             }
         } catch (error) {
-            // setError('An error occurred. Please try again.');
             console.error('An error occurred:', error);
         }
     }
 
+    const paymentRequestData = {
+        apiVersion: 2,
+        apiVersionMinor: 0,
+        allowedPaymentMethods: [
+            {
+                type: 'CARD',
+                parameters: {
+                    allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                    allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                },
+                tokenizationSpecification: {
+                    type: 'PAYMENT_GATEWAY',
+                    parameters: {
+                        gateway: 'example',
+                        gatewayMerchantId: 'exampleGatewayMerchantId',
+                    },
+                },
+            },
+        ],
+        merchantInfo: {
+            merchantId: '12345678901234567890',
+            merchantName: 'Demo Merchant',
+        },
+        transactionInfo: {
+            totalPriceStatus: 'FINAL',
+            totalPriceLabel: 'Total',
+            totalPrice: '100.00',
+            currencyCode: 'USD',
+            countryCode: 'US',
+        },
+    };
+
     return (
         <div>
-            <Navbar /> 
+            <Navbar />
             <h1>Cart</h1>
-            {/* <div className="cart-container">
-                <div className="cart-header">
-                    <div className="cart-heading" style={{paddingInlineStart: "40px"}}>Item Name</div>
-                    <div className="cart-heading">Price</div>
-                    <div className="cart-heading">Quantity</div>
-                </div>
-                <hr />
-                <ul >
-                    {updatedCartItems && updatedCartItems.items.map((item, index) => (
-                        <li  key={index} className="cart-item">
-                            <div className="item-details1">{item.foodName}</div>
-                            <div className="item-details2">${item.foodPrice.toFixed(2)}</div>
-                            <div className="item-details3">
-                                <button className="quantity-btn" onClick={() => handleQuantityChange(index, -1)}>-</button>
-                                <span>{item.qty}</span>
-                                <button className="quantity-btn" onClick={() => handleQuantityChange(index, 1)}>+</button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-                <hr />
-
-                <div className="total-price" style={{paddingInlineStart: "40px"}}>Total Price: ${totalPrice()}</div> */}
-
-                <table>
-                    <thead>
-                        <tr>
+            <table>
+                <thead>
+                    <tr>
                         <th>S/N</th>
                         <th>Item Name</th>
                         <th>Price</th>
                         <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    </tr>
+                </thead>
+                <tbody>
                     {updatedCartItems && updatedCartItems.items.map((item, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item.foodName}</td>
-                                <td>${item.foodPrice.toFixed(2)}</td>
-                                <td>
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>{item.foodName}</td>
+                            <td>${item.foodPrice.toFixed(2)}</td>
+                            <td>
                                 <button className="quantity-btn" onClick={() => handleQuantityChange(index, -1)}>-</button>
                                 <span>{item.qty}</span>
                                 <button className="quantity-btn" onClick={() => handleQuantityChange(index, 1)}>+</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                        <td colSpan="2">Total Price: ${totalPrice()}</td>
+                            </td>
                         </tr>
-                    </tfoot>
-                    </table>
-
-                    <button onClick={checkoutOrder}>Checkout</button>
+                    ))}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colSpan="2">Total Price: ${totalPrice()}</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <GooglePayButton
+                environment="TEST"
+                paymentRequest={paymentRequestData}
+                onLoadPaymentData={paymentRequest => {
+                    console.log('load payment data', paymentRequest);
+                }}
+            />
+            <button onClick={checkoutOrder}>Checkout</button>
         </div>
     );
 };
