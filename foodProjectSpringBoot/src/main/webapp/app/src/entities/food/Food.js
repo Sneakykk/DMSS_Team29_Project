@@ -147,7 +147,7 @@ const Food = () => {
             {/* Dropdown content for the clicked menu item */}
             {clickedMenu === item && (
                 <div className="dropdown-content">
-                    {menuItems.map((menuItem) => (
+                    {menuItems.map((menuItem,index) => (
                         menuItem.itemType === item && (
                             <div className="food-card" key={menuItem.itemId}>
                                 <img src={importedImages['KayaToast.jpg']} alt="Kaya Toast" />

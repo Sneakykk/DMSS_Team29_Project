@@ -67,6 +67,27 @@ public class OrderService {
        return orderRepository.findByEmployeeId(id);
     }
 
+    public List<Order> orderVolume(String startDate, String endDate)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Parse the string to LocalDateTime object
+        LocalDateTime startDateTimeLocal = LocalDateTime.parse((startDate+" 00:00:00"), formatter);
+        LocalDateTime endDateTimeLocal = LocalDateTime.parse((endDate+" 00:00:00"), formatter);
+
+        // Convert LocalDateTime object to Timestamp
+        Timestamp startDateTime = Timestamp.valueOf(startDateTimeLocal);
+        Timestamp endDateTime = Timestamp.valueOf(endDateTimeLocal.with(LocalTime.MAX));
+
+        System.out.println(startDateTime);
+        System.out.println(endDateTime);
+
+        List<Order> ordersBetweenDates = orderRepository.findByTimeOfOrderBetween(startDateTime, endDateTime);
+
+        return ordersBetweenDates;
+
+    }
+
     
 
 }

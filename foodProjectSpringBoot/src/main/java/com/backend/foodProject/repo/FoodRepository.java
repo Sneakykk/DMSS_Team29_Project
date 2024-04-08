@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Integer> {
-    List<Food> findByStoreId(int storeId);
+    @Query("SELECT f.itemName FROM Food f WHERE f.storeId = :storeId")
+    List<String> findByStoreId(int storeId);
 
     // @Query("SELECT f FROM Food f")
     @Query("SELECT f.itemId, f.itemName, f.itemPrice, f.storeId, f.itemType FROM Food f")

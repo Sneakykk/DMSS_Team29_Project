@@ -35,6 +35,9 @@ public class Order {
     @Transient
     private Order[] employeeOrderHistory;
 
+    // @Transient
+    // private Menu[] menuByStore;
+
     // Constructors, getters, and setters
     // Constructor for JPA
     public Order() {
@@ -105,6 +108,14 @@ public class Order {
     public void setEmployeeOrderHistory(Order[] employeeOrderHistory) {
         this.employeeOrderHistory = employeeOrderHistory;
     }
+
+    // public Menu[] getMenuByStore() {
+    //     return menuByStore;
+    // }
+
+    // public void menuByStore(Store[] menuByStore) {
+    //     this.menuByStore = employeeOrderHistory;
+    // }
 
 
 }

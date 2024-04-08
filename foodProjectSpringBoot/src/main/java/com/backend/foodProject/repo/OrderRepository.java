@@ -25,4 +25,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByEmployeeIdAndTimeOfOrderBetween(int employeeId, Timestamp startDate, Timestamp endDate );
     
     List<Order> findByEmployeeId(int employeeId);
+
+    List<Order> findByTimeOfOrderBetween(Timestamp startDate, Timestamp endDate);
 }

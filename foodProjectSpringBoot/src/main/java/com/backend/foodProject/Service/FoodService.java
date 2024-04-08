@@ -45,7 +45,7 @@ public class FoodService {
                 .orElseThrow(() -> new EntityNotFoundException("Food not found with id: " + id));
     }
 
-    public List<Food> getFoodItemsByStoreId(int storeId) {
+    public List<String> getFoodItemsByStoreId(int storeId) {
         return foodRepository.findByStoreId(storeId);
     }
 
