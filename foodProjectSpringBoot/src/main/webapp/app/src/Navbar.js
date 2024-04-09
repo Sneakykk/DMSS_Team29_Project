@@ -16,6 +16,9 @@ const Navbar = () => {
         const storedUserData = localStorage.getItem('userData');
         if (!storedUserData) {
             navigate('/');
+        }else{
+            const parsedUserData = JSON.parse(storedUserData);
+            setUserData({...parsedUserData});
         }
     }, []);
 
@@ -58,10 +61,28 @@ const Navbar = () => {
                 )}
             </div>
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>
-                <li><a href="/food">Food</a></li>
-                <li><a href="/order_history">Order History</a></li>
-                <li><a href="/storeMenuItem">Store Menu Item</a></li>
-                <li><a href="/analytics">Analytics</a></li>
+                
+            {userData.storeId !== 0  ? (
+                    <>
+                        <li><a href="/storeMenuItem">Store Menu Item</a></li>
+                        <li><a href="/analytics">Analytics</a></li>
+                    </>
+                ) : (
+                    <>
+                        <li><a href="/food">Food</a></li>
+                        <li><a href="/order_history">Order History</a></li>
+                    </>
+                )}
+
+            {userData.username === "admin"?(
+                <>
+                    <li><a href="/storeMenuItem">Store Menu Item</a></li>
+                    <li><a href="/analytics">Analytics</a></li>
+                    {/* <li><a href="/food">Food</a></li>
+                    <li><a href="/order_history">Order History</a></li> */}
+                </>
+            ):""}
+                
             </ul>
         </div>
     );

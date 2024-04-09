@@ -8,6 +8,7 @@ import Cart from './entities/cart/Cart';
 import OrderHistory from './entities/history/OrderHistory';
 import Analytics from './entities/analytics/Analytics';
 import StoreMenuItem from './entities/storeMenuItem/StoreMenuItem';
+import StoreMenuPage from './entities/storeMenuItem/addStoreItem';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/order_history" element={<OrderHistory />} />
         <Route path ="/analytics" element={<Analytics/>} />
         <Route path="/storeMenuItem" element={<StoreMenuItem/>} />
+        <Route path="/addStoreItem" element={<StoreMenuPage/>} />
       </Routes>
     </Router>
   );

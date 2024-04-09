@@ -17,10 +17,10 @@ import java.sql.Timestamp;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "INSERT INTO orders (OrderID, EmployeeID, ItemName, TimeOfOrder, TotalBill, Quantity) VALUES (?1, ?2, ?3, ?4, ?5, ?6)", nativeQuery = true)
-    void insertOrder(int orderId, int employeeId, String itemName, Timestamp timeOfOrder, float totalBill, String quantity);
+    // @Modifying
+    // @Transactional
+    // @Query(value = "INSERT INTO orders (OrderID, EmployeeID, ItemName, TimeOfOrder, TotalBill, Quantity) VALUES (?1, ?2, ?3, ?4, ?5, ?6)", nativeQuery = true)
+    // void insertOrder(int orderId, int employeeId, String itemName, Timestamp timeOfOrder, float totalBill, String quantity);
 
     List<Order> findByEmployeeIdAndTimeOfOrderBetween(int employeeId, Timestamp startDate, Timestamp endDate );
     

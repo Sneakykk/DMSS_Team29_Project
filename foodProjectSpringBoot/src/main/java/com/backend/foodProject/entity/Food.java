@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 public class Food {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ItemID") // Specify the correct column name here
     private Integer itemId;
 

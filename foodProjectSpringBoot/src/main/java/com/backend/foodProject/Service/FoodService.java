@@ -23,22 +23,10 @@ public class FoodService {
         return foodRepository.findAll();
     }
 
-    // public List<Food> getAllMenu(){
-    //     List<Object[]> results = foodRepository.getAllMenu();
-    //     List<Food> foods = new ArrayList<>();
-    //     for (Object[] result : results) {
-    //         Food food = new Food();
-    //         food.setItemId((Integer) result[0]);
-    //         food.setItemName((String) result[1]);
-    //         food.setItemPrice((Float) result[2]);
-    //         food.setStoreId((Integer) result[3]);
-    //         food.setItemType((String) result[4]);
-    //         // Set other attributes if needed
-    //         foods.add(food);
-    //     }
-    //     return foods;
-
-    // }
+    public void addFoodItemByStoreId(Food food){
+        foodRepository.save(food);
+        return;
+    }
 
     public Food getFoodById(int id) {
         return foodRepository.findById(id)
@@ -47,6 +35,14 @@ public class FoodService {
 
     public List<String> getFoodItemsByStoreId(int storeId) {
         return foodRepository.findByStoreId(storeId);
+    }
+
+    public List<Object> getFoodItemsAndItemPriceByStoreId(int storeId) {
+        return foodRepository.findItemNameAndItemPriceByStoreId(storeId);
+    }
+
+    public List<Food> getAllFoodByStoreId(int storeId) {
+        return foodRepository.findFoodByStoreId(storeId);
     }
 
     public Food createFood(Food food) {

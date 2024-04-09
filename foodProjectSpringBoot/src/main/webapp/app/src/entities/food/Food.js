@@ -147,17 +147,17 @@ const Food = () => {
             {/* Dropdown content for the clicked menu item */}
             {clickedMenu === item && (
                 <div className="dropdown-content">
-                        {menuItems.map((menuItem) => (
-                            menuItem.itemType === item && (
-                                <div className="food-card" key={menuItem.itemId}>
-                                    <img src={importedImages[menuItem.itemName+'.jpg']} alt={menuItem.itemName} />
-                                    <h3>{menuItem.itemName}</h3>
-                                    <p>Price: ${menuItem.itemPrice}</p>
-                                    <p>Store: {getStoreName(menuItem.storeId)}</p>
-                                    <button onClick={() => handleAddToCart(menuItem.itemId, menuItem.itemName, menuItem.itemPrice)}>Add to Cart</button>
-                                </div>
-                            )
-                        ))}
+                    {menuItems.map((menuItem) => (
+                        menuItem.itemType === item && (
+                            <div className="food-card" key={menuItem.itemId}>
+                                <img src={importedImages[menuItem.itemName+'.jpg']} alt={menuItem.itemName} />
+                                <h3>{menuItem.itemName}</h3>
+                                <p>Price: ${menuItem.itemPrice}</p>
+                                <p>Store: {getStoreName(menuItem.storeId)}</p>
+                                <button onClick={() => handleAddToCart(menuItem.itemId, menuItem.itemName, menuItem.itemPrice)}>Add to Cart</button>
+                            </div>
+                        )
+                    ))}
                 </div>
             )}
         </div>

@@ -23,6 +23,9 @@ public class User {
     @Column(name = "Pwd")
     private String pwd;
 
+    @Column(name = "StoreId")
+    private int storeId;
+
     @Transient
     @OneToMany(mappedBy = "user")
     private Cart cart;
@@ -30,12 +33,13 @@ public class User {
     public User() {
     }
 
-    public User(int employeeId, String firstName, String lastName, String username, String pwd) {
+    public User(int employeeId, String firstName, String lastName, String username, String pwd, int storeId) {
         this.employeeId = employeeId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.pwd = pwd;
+        this.storeId = storeId;
     }
 
     // Getters and setters for all fields
@@ -78,6 +82,14 @@ public class User {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public int getStoreId() {
+        return storeId;
     }
 
     public Cart getCart() {

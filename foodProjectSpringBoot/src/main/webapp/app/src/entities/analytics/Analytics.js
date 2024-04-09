@@ -45,13 +45,15 @@ const Analytics = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...searchData, storeId: 1 }),
+                body: JSON.stringify({ ...searchData, storeId: userData.storeId }),
             });
             if (responseOrderVolume.ok) {
-                const orderVolumeData = await responseOrderVolume.json();
+                const orderVolumeData = await responseOrderVolume.text();
+                console.log()
                 setAnalyticsData(prevData => ({
                     ...prevData,
-                    "orderVolume": orderVolumeData
+                    "totalOrderAmount":(JSON.parse(orderVolumeData)).totalAmount,
+                    "orderVolume": (JSON.parse(orderVolumeData)).totalVolume
                 }));
             } else {
                 console.error('Failed to fetch analytics data');
@@ -62,7 +64,7 @@ const Analytics = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...searchData, storeId: 1 }),
+                body: JSON.stringify({ ...searchData, storeId: userData.storeId }),
             });
             if (responsePopularItems.ok) {
                 const popularItemsData = await responsePopularItems.text();
@@ -79,7 +81,7 @@ const Analytics = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...searchData, storeId: 1 }),
+                body: JSON.stringify({ ...searchData, storeId: userData.storeId }),
             });
             if (responsePeakHour.ok) {
                 const peakHourData = await responsePeakHour.json();

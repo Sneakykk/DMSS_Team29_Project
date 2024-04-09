@@ -38,7 +38,7 @@ public class OrderService {
 
     public void addOrder(Order orderItem) {
         
-        orderRepository.insertOrder(orderItem.getOrderId(), orderItem.getEmployeeId(), orderItem.getItemName(), orderItem.getTimeOfOrder(), orderItem.getTotalBill(), orderItem.getQuantity());
+        orderRepository.save(orderItem);
         return ;
     }
 
