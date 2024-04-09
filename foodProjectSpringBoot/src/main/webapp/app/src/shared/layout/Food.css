@@ -20,6 +20,13 @@
   display: block;
   width: 100vw; /* Set the width to fill the container */
   text-align: center;
+  background-color: #d3d3d3; /* White background */
+  color: #000; /* Black text color */
+  border: 3px solid #000; /* Black border */
+  padding: 10px;
+  border-radius: 5px; /* Rounded corners */
+  font-weight: bold; /* Make the words inside the button bold */
+  text-transform: uppercase; /* Convert text to all caps */
 }
 
 .dropdown-content {
@@ -53,7 +60,7 @@
 
 .food-card {
   padding: 12px;
-  margin: 10px;
+  margin: 12px;
   box-sizing: border-box;
   border: 1px solid #ccc; /* Add border */
   border-radius: 5px; /* Add border radius */
@@ -64,6 +71,7 @@
   flex-direction: column; /* Arrange content in a column */
   justify-content: space-between; /* Distribute space between items */
   overflow: hidden; /* Ensure content stays within the box */
+  text-transform: uppercase; /* Convert text to all caps */
 }
 
 .food-card h3 {
@@ -75,7 +83,9 @@
 }
 
 .food-card button {
-  background-color: #4caf50;
+  background-color: #00BFFF;
+  font-weight: bold;
+  text-transform: uppercase;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -84,17 +94,19 @@
 
 .food-card img {
   width: 100%; /* Make the image fill the container */
-  height: auto; /* Maintain aspect ratio */
+  height: 200px; /* Set a specific height for the image */
   object-fit: cover; /* Scale the image while maintaining aspect ratio */
   border-top-left-radius: 5px; /* Add border radius to image corners */
   border-top-right-radius: 5px; /* Add border radius to image corners */
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .cart-icon {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #007bff; /* Blue background color */
+  background-color: #00BFFF; /* Blue background color */
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -109,5 +121,3 @@
   color: white; /* White text color */
   font-size: 1rem; /* Adjust font size as needed */
 }
-
-

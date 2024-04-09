@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
+import Chart from 'chart.js/auto';
 import '../../shared/layout/Analytics.css'; // Import Analytics.css for styling
 
 const Analytics = () => {
     const [userData, setUserData] = useState(null);
     const [analyticsData, setAnalyticsData] = useState({
         "orderVolume": 0,
+        "totalOrderAmount": 0,
         "popularMenuItem": [],
         "peakOrderingHours": []
     });
@@ -14,6 +16,8 @@ const Analytics = () => {
         startDate: "",
         endDate: ""
     });
+
+    const [peakOrderChart, setPeakOrderChart] = useState(null);
 
     useEffect(() => {
         // Retrieve user data from localStorage when component mounts
@@ -36,69 +40,56 @@ const Analytics = () => {
 
     const fetchAnalyticsData = async (searchData) => {
         try {
-            const responseOrderVolume = await fetch('http://localhost:8080/api/analytics/order_volume', { // Update to your backend endpoint
+            const responseOrderVolume = await fetch('http://localhost:8080/api/analytics/order_volume', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({...searchData, storeId: 1}),
+                body: JSON.stringify({ ...searchData, storeId: 1 }),
             });
             if (responseOrderVolume.ok) {
-                const orderVolumeData  = await responseOrderVolume.json();
-                console.log(orderVolumeData )
+                const orderVolumeData = await responseOrderVolume.json();
                 setAnalyticsData(prevData => ({
-                     ...prevData,
-                      "orderVolume": orderVolumeData  
+                    ...prevData,
+                    "orderVolume": orderVolumeData
                 }));
-
             } else {
                 console.error('Failed to fetch analytics data');
             }
 
-            const responsePopularItems = await fetch('http://localhost:8080/api/analytics/popular_items', { // Update to your backend endpoint
+            const responsePopularItems = await fetch('http://localhost:8080/api/analytics/popular_items', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({...searchData, storeId: 1}),
-                });
+                body: JSON.stringify({ ...searchData, storeId: 1 }),
+            });
             if (responsePopularItems.ok) {
-                const popularItemsData  = await responsePopularItems.text();
-                console.log(JSON.parse(popularItemsData ))
+                const popularItemsData = await responsePopularItems.text();
                 setAnalyticsData(prevData => ({
-                     ...prevData,
-                    "popularMenuItem": JSON.parse(popularItemsData )  
-                    }));
-
+                    ...prevData,
+                    "popularMenuItem": JSON.parse(popularItemsData)
+                }));
             } else {
                 console.error('Failed to fetch analytics data');
             }
-        
-            const responsePeakHour = await fetch('http://localhost:8080/api/analytics/peak_ordering_hours', { // Update to your backend endpoint
+
+            const responsePeakHour = await fetch('http://localhost:8080/api/analytics/peak_ordering_hours', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({...searchData, storeId: 1}),
-                });
+                body: JSON.stringify({ ...searchData, storeId: 1 }),
+            });
             if (responsePeakHour.ok) {
-                const peakHourData  = await responsePeakHour.json();
-                console.log(peakHourData )
+                const peakHourData = await responsePeakHour.json();
                 setAnalyticsData(prevData => ({
-                     ...prevData,
-                      "peakOrderingHours": peakHourData  
-                    }));
-
+                    ...prevData,
+                    "peakOrderingHours": peakHourData
+                }));
             } else {
                 console.error('Failed to fetch analytics data');
             }
-
-
-
-
-
-
-
 
         } catch (error) {
             console.error('An error occurred while fetching analytics data:', error);
@@ -119,9 +110,50 @@ const Analytics = () => {
             ...searchCriteria,
             userId: userData.employeeId // Assuming employeeId is stored in userData
         };
-        console.log(searchBody)
         fetchAnalyticsData(searchBody);
     };
+
+    const updatePeakOrderChart = () => {
+        const ctx = document.getElementById('peakOrderChart');
+        if (!ctx) return; // If canvas element does not exist, return
+
+        // Check if peakOrderChart instance exists
+        if (peakOrderChart) {
+            peakOrderChart.destroy(); // Destroy the previous chart
+        }
+
+        // Create a new chart instance
+        const newChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: analyticsData.peakOrderingHours.map(data => data.datetime),
+                datasets: [
+                    {
+                        label: 'Peak Ordering Hours',
+                        data: analyticsData.peakOrderingHours.map(data => data.orders),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
+        setPeakOrderChart(newChart);
+    };
+
+    useEffect(() => {
+        if (analyticsData.peakOrderingHours.length > 0) {
+            updatePeakOrderChart();
+        }
+    }, [analyticsData.peakOrderingHours]);
 
     return (
         <div>
@@ -132,7 +164,7 @@ const Analytics = () => {
                     <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" />
                     End Date
                     <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" />
-                    <button onClick={searchButton}>Search</button>
+                    <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
                 {/* {analyticsData} */}
                 <div className="cards-container">
@@ -142,53 +174,34 @@ const Analytics = () => {
                     </div>
 
                     <div className="analytics-card">
+                        <h3>Total Order Amount</h3>
+                        <p>Total Amount: {analyticsData.totalOrderAmount}</p>
+                    </div>
+
+                    <div className="analytics-card">
                         <h3>Popular Menu Items</h3>
                         <ul>
-                           
-
-    
                             {analyticsData.popularMenuItem?.map((item, index) => (
                                 <div key={index}>
-                                {Object.entries(item).map(([itemName, count]) => (
-                                    <li key={index}>{itemName}: {count}</li>
-                                ))}
+                                    {Object.entries(item).map(([itemName, count]) => (
+                                        <li key={index}>{itemName}: {count}</li>
+                                    ))}
                                 </div>
                             ))}
-
-                            
                         </ul>
-
-                        
                     </div>
 
                     <div className="analytics-card">
                         <h3>Peak Ordering Hours</h3>
+                        <div className="chart-container">
+                            <canvas id="peakOrderChart" width="400" height="200"></canvas>
+                        </div>
                         <ul>
                             {analyticsData.peakOrderingHours.map((data, index) => (
-                                <li key={index}>{data.Datetime}: {data.orders}</li>
+                                <li key={index}>{data.datetime}: {data.orders}</li>
                             ))}
                         </ul>
                     </div>
-                    {/* {analyticsData.map((item, index) => (
-                        <div key={index} className="analytics-card">
-                            <h3>{item.metricName}</h3>
-                            {item.metricName === 'Order Volumes' ? (
-                                <p>Total Orders: {item.metricValue}</p>
-                            ) : item.metricName === 'Popular Menu Items' ? (
-                                <ul>
-                                    {item.metricValue.map((menuItem, idx) => (
-                                        <li key={idx}>{menuItem}</li>
-                                    ))}
-                                </ul>
-                            ) : item.metricName === 'Peak Ordering Hours' ? (
-                                <ul>
-                                    {item.metricValue.map((hour, idx) => (
-                                        <li key={idx}>{hour}</li>
-                                    ))}
-                                </ul>
-                            ) : null}
-                        </div>
-                    ))} */}
                 </div>
             </div>
         </div>

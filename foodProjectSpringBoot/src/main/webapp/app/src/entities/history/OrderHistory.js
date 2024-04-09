@@ -102,7 +102,7 @@ const OrderHistory = () => {
                     <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" />
                     End Date
                     <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" />
-                    <button onClick={searchButton}>Search</button>
+                    <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
 
                 <table>

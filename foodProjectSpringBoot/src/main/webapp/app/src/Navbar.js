@@ -60,6 +60,7 @@ const Navbar = () => {
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>
                 <li><a href="/food">Food</a></li>
                 <li><a href="/order_history">Order History</a></li>
+                <li><a href="/storeMenuItem">Store Menu Item</a></li>
                 <li><a href="/analytics">Analytics</a></li>
             </ul>
         </div>
