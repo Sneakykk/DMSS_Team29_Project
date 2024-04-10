@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+
 
 import com.backend.foodProject.entity.*;
 
@@ -79,6 +83,13 @@ public class foodProjectController {
         return foodService.getAllFoods();
     }
 
+    @PostMapping("/get_food_by_itemId")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public Food getFoodByItemId (@RequestBody int storedId)
+    {
+        return foodService.getFoodById(storedId);
+    }
+
     @GetMapping("/get_all_orders")
     public List<Order> allOrders ()
     {
@@ -119,6 +130,20 @@ public class foodProjectController {
         food.setStoreId(data.getInt("storeId"));
         foodService.addFoodItemByStoreId(food);
         return ;
+    }
+
+    @PostMapping("/update_food_by_itemId")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public Food updateFoodById (@RequestBody String details)
+    {
+        JSONObject data = new JSONObject(details);
+        System.out.println(data);
+        Food food = new Food();
+        food.setItemName(data.getString("foodName"));
+        food.setItemPrice(data.getFloat("foodPrice"));
+        food.setItemType(data.getString("foodType"));
+        food.setStoreId(data.getInt("storeId"));
+        return foodService.updateFood(data.getInt("foodId"),food);
     }
 
     @PostMapping("/employee/get_food_history")
@@ -359,4 +384,37 @@ public class foodProjectController {
             return generateOrderData(data, orderService.orderVolume(data.getString("startDate"), data.getString("endDate")));
         }
     }
+
+
+    @PostMapping("/upload")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName) {
+        if (file == null || file.isEmpty()) {
+            return "File is empty";
+        }
+        
+        try {
+            // Specify the directory where you want to save the file
+
+            File currentDirFile = new File(".");
+            String helper = currentDirFile.getAbsolutePath();
+            // String currentDir = helper.substring(0, helper.length() - 1);
+
+            String uploadDir = helper+"/src/main/webapp/app/src/shared/images/";
+            File uploadDirFile = new File(uploadDir);
+            if (!uploadDirFile.exists()) {
+                uploadDirFile.mkdirs();
+            }
+
+            // Save the file to the specified directory
+            String filePath = uploadDir + fileName+".jpg";
+            file.transferTo(new File(filePath));
+
+            return "File uploaded successfully";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed to upload file";
+        }
+    }
+
 }

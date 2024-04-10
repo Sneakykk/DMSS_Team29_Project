@@ -61,7 +61,7 @@ const Navbar = () => {
                 )}
             </div>
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>
-                
+                <li><a href="/dashboard">Home</a></li>
             {userData.storeId !== 0  ? (
                     <>
                         <li><a href="/storeMenuItem">Store Menu Item</a></li>

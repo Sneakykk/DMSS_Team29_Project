@@ -57,6 +57,11 @@ const StoreMenuPage = () => {
         navigate('/addStoreItem');
     }
 
+    const editItem = e =>{
+        const {id} = e.target;
+        navigate(`/addStoreItem?itemId=${id}`);
+    }
+
     return (
         <div>
         <Navbar />
@@ -84,7 +89,7 @@ const StoreMenuPage = () => {
                             <td>{row.itemName}</td>
                             <td>{row.itemPrice}</td>
                             <td>{row.itemType}</td>
-                            <td><button>Edit</button></td>
+                            <td><button onClick={editItem} id={row.itemId}>Edit</button></td>
                         </tr>
                     ))}
                     </tbody>

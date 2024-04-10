@@ -26,6 +26,32 @@ const Dashboard = () => {
                     <p>Name: {userData?.username}</p>
                     <p>Email: {userData?.employeeId}</p>
             </div>
+
+            {userData.storeId?(
+                <>
+                    <h1>Store Owner</h1>
+                    <h1>Current Orders</h1>
+                    <table>
+                    <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Orders</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Time of Order</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+                </>
+            )
+        :
+        (
+            <p>user</p>
+        )}
         </Layout>
     );
 };
