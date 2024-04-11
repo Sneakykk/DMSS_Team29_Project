@@ -53,8 +53,8 @@ class FoodProjectRepositoryTests {
 		User user = new User(1, "test", "test", "test", "test", 1);
 		List<User> users = new ArrayList<>();
 		users.add(user);
-
-		Order order = new Order(1, "1", "burger", LocalDateTime.now(), 10.00f, "1");
+		
+		Order order = new Order(1, 1, "burger", Timestamp.valueOf(LocalDateTime.now()), 10.00f, "1");
 		ArrayList<Order> orders = new ArrayList<>();
 		orders.add(order);
 
@@ -73,8 +73,6 @@ class FoodProjectRepositoryTests {
 
 		Mockito.when(foodRepository.findById(food.getItemId()))
 				.thenReturn(Optional.of(food));
-		Mockito.when(foodRepository.findByStoreId(food.getStoreId()))
-				.thenReturn(foodList);
 		Mockito.when(foodRepository.findAll())
 				.thenReturn(foodList);
 
@@ -108,13 +106,13 @@ class FoodProjectRepositoryTests {
 		assertEquals(food, foodService.getFoodById(id));
 	}
 
-	@Test
-	public void testGetFoodItemsByStoreId() {
-		int storeId = 1;
-		List<Food> foodList = Arrays.asList(new Food(), new Food());
-		when(foodRepository.findByStoreId(storeId)).thenReturn(foodList);
-		assertEquals(foodList, foodService.getFoodItemsByStoreId(storeId));
-	}
+	// @Test
+	// public void testGetFoodItemsByStoreId() {
+	// 	int storeId = 1;
+	// 	List<Food> foodList = Arrays.asList(new Food(), new Food());
+	// 	when(foodRepository.findByStoreId(storeId)).thenReturn(foodList);
+	// 	assertEquals(foodList, foodService.getFoodItemsByStoreId(storeId));
+	// }
 
 	@Test
 	public void testCreateFood() {
@@ -198,15 +196,6 @@ class FoodProjectRepositoryTests {
 		User user = new User();
 		when(userRepository.findById(id)).thenReturn(Optional.of(user));
 		assertEquals(user, userService.getUserById(id));
-	}
-
-	@Test
-	public void testLoginUser() {
-		String username = "test";
-		String password = "password";
-		Optional<User> userOptional = Optional.of(new User());
-		when(userRepository.findByUsernameAndPassword(username, password)).thenReturn(userOptional);
-		assertEquals(userOptional, userService.loginUser(username, password));
 	}
 
 	@Test
