@@ -89,6 +89,13 @@ const StoreMenuPage = () => {
         }
     }, [userData, itemId]);
 
+    useEffect(()=>{
+        if(foodDetails.foodName!==""){
+            fetchImage();
+        }
+        // eslint-disable-next-line
+    },[foodDetails])
+
     const onChangeHandler = e => {
         const { value, id } = e.target;
         setFoodDetails(prevState => ({
@@ -140,6 +147,13 @@ const StoreMenuPage = () => {
             });
             if (response.ok) {
                 console.log('Food item updated Successfully!');
+
+                if(imageToShow!==selectedImage){
+                    console.log(imageToShow)
+                    console.log(selectedImage)
+                    handleUpload();
+                }
+
             } else {
                 console.error('Failed to update food item');
             }
@@ -152,7 +166,7 @@ const StoreMenuPage = () => {
         const formData = new FormData();
         formData.append('file', selectedImage);
         formData.append('fileName', foodDetails.foodName);
-        console.log(formData);
+        console.log("testWEEREWREWR"+formData);
 
         try {
             await fetch('http://localhost:8080/api/upload', {
@@ -164,6 +178,28 @@ const StoreMenuPage = () => {
             console.error('Error uploading file:', error);
         }
     };
+
+    const fetchImage = async () => {
+        try {
+            console.log(foodDetails.foodName)
+        const formData = {
+            "imageName":foodDetails.foodName
+        }
+          const response = await fetch('http://localhost:8080/api/get_image',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          }); // Replace with your API endpoint
+          const data = await response.blob();
+          const urlToShow = URL.createObjectURL(data)
+          setImageToShow(urlToShow);
+          setSelectedImage(urlToShow)
+        } catch (error) {
+          console.error('Error fetching image:', error);
+        }
+      };
 
     const saveFoodItem = () => {
         if (selectedImage) {

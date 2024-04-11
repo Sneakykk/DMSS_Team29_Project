@@ -55,9 +55,12 @@ const Navbar = () => {
                     <FaUser className="user-icon" />
                 </div>
                 {showUserMenu && (
+                    <>
                     <ul className={`user-items show user-menu`}>
+                        Hello {userData.firstName} {userData.lastName} :
                         <li><a href="/" onClick={handleLogout}>Logout</a></li>
                     </ul>
+                    </>
                 )}
             </div>
             <ul className={`menu-items ${showMenu ? 'show' : ''}`}>

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from '../../Navbar';
 import Chart from 'chart.js/auto';
 import '../../shared/layout/Analytics.css'; // Import Analytics.css for styling
-
+ 
 const Analytics = () => {
     const [userData, setUserData] = useState(null);
     const [analyticsData, setAnalyticsData] = useState({
@@ -11,14 +11,16 @@ const Analytics = () => {
         "popularMenuItem": [],
         "peakOrderingHours": []
     });
-
+ 
     const [searchCriteria, setSearchCriteria] = useState({
         startDate: "",
         endDate: ""
     });
-
+ 
     const [peakOrderChart, setPeakOrderChart] = useState(null);
-
+ 
+    const prevSearchCriteriaRef = useRef(null);
+ 
     const fetchAnalyticsData = useCallback(async (searchData) => {
         try {
             const responseOrderVolume = await fetch('http://localhost:8080/api/analytics/order_volume', {
@@ -30,7 +32,6 @@ const Analytics = () => {
             });
             if (responseOrderVolume.ok) {
                 const orderVolumeData = await responseOrderVolume.text();
-                console.log()
                 setAnalyticsData(prevData => ({
                     ...prevData,
                     "totalOrderAmount": (JSON.parse(orderVolumeData)).totalAmount,
@@ -39,7 +40,7 @@ const Analytics = () => {
             } else {
                 console.error('Failed to fetch analytics data');
             }
-
+ 
             const responsePopularItems = await fetch('http://localhost:8080/api/analytics/popular_items', {
                 method: 'POST',
                 headers: {
@@ -56,7 +57,7 @@ const Analytics = () => {
             } else {
                 console.error('Failed to fetch analytics data');
             }
-
+ 
             const responsePeakHour = await fetch('http://localhost:8080/api/analytics/peak_ordering_hours', {
                 method: 'POST',
                 headers: {
@@ -73,21 +74,21 @@ const Analytics = () => {
             } else {
                 console.error('Failed to fetch analytics data');
             }
-
+ 
         } catch (error) {
             console.error('An error occurred while fetching analytics data:', error);
         }
     }, [userData]);
-
+ 
     const updatePeakOrderChart = useCallback(() => {
         const ctx = document.getElementById('peakOrderChart');
         if (!ctx) return; // If canvas element does not exist, return
-
+ 
         // Check if peakOrderChart instance exists
         if (peakOrderChart) {
             peakOrderChart.destroy(); // Destroy the previous chart
         }
-
+ 
         // Create a new chart instance
         const newChart = new Chart(ctx, {
             type: 'line',
@@ -111,10 +112,10 @@ const Analytics = () => {
                 },
             },
         });
-
+ 
         setPeakOrderChart(newChart);
     }, [analyticsData.peakOrderingHours, peakOrderChart]);
-
+ 
     useEffect(() => {
         // Retrieve user data from localStorage when component mounts
         const storedUserData = localStorage.getItem('userData');
@@ -123,7 +124,7 @@ const Analytics = () => {
             setUserData(parsedUserData);
         }
     }, []);
-
+ 
     useEffect(() => {
         if (userData) {
             const searchBody = {
@@ -132,22 +133,37 @@ const Analytics = () => {
             };
             fetchAnalyticsData(searchBody);
         }
-    }, [userData, searchCriteria, fetchAnalyticsData]); // Include fetchAnalyticsData in the dependency array
-
+        // eslint-disable-next-line
+    }, [userData, fetchAnalyticsData]); // Include fetchAnalyticsData in the dependency array
+ 
     useEffect(() => {
-        if (analyticsData.peakOrderingHours.length > 0) {
+        prevSearchCriteriaRef.current = searchCriteria;
+    });
+ 
+    useEffect(() => {
+        if (prevSearchCriteriaRef.current !== searchCriteria) {
+            const searchBody = {
+                ...searchCriteria,
+                userId: userData.employeeId // Assuming employeeId is stored in userData
+            };
+            fetchAnalyticsData(searchBody);
+        }
+    }, [userData, searchCriteria, fetchAnalyticsData]);
+ 
+    useEffect(() => {
+        if (analyticsData.peakOrderingHours.length > 0 && peakOrderChart === null) {
             updatePeakOrderChart();
         }
-    }, [analyticsData.peakOrderingHours, updatePeakOrderChart]);
-
+    }, [analyticsData.peakOrderingHours, peakOrderChart, updatePeakOrderChart]);
+ 
     const onChangeSearchCriteria = (e) => {
         const { name, value } = e.target;
-        setSearchCriteria({
-            ...searchCriteria,
+        setSearchCriteria(prevSearchCriteria => ({
+            ...prevSearchCriteria,
             [name]: value
-        });
+        }));
     };
-
+ 
     const searchButton = (e) => {
         e.preventDefault();
         const searchBody = {
@@ -156,21 +172,21 @@ const Analytics = () => {
         };
         fetchAnalyticsData(searchBody);
     };
-
-
+ 
+ 
     const getCurrentDate = () => {
         const today = new Date();
         const year = today.getFullYear();
         let month = today.getMonth() + 1;
         let day = today.getDate();
-
+ 
         // Pad month and day with leading zeros if needed
         month = month < 10 ? `0${month}` : month;
         day = day < 10 ? `0${day}` : day;
-
+ 
         return `${year}-${month}-${day}`;
     };
-
+ 
     return (
         <div>
             <Navbar />
@@ -188,12 +204,12 @@ const Analytics = () => {
                         <h3>Order Volume</h3>
                         <p>Total Orders: {analyticsData.orderVolume}</p>
                     </div>
-
+ 
                     <div className="analytics-card">
                         <h3>Total Order Amount</h3>
                         <p>Total Amount: {analyticsData.totalOrderAmount}</p>
                     </div>
-
+ 
                     <div className="analytics-card">
                         <h3>Popular Menu Items</h3>
                         <ul>
@@ -206,7 +222,7 @@ const Analytics = () => {
                             ))}
                         </ul>
                     </div>
-
+ 
                     <div className="analytics-card">
                         <h3>Peak Ordering Hours</h3>
                         <div className="chart-container">
@@ -223,5 +239,5 @@ const Analytics = () => {
         </div>
     );
 };
-
+ 
 export default Analytics;

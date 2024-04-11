@@ -53,6 +53,35 @@ const StoreMenuPage = () => {
         }
     }
 
+    const deleteMenuItem = async(itemId,fileName) =>{
+        try {
+
+           const data={
+                "itemId":itemId,
+                "fileName":fileName
+            }
+            const response = await fetch('http://localhost:8080/api/delete_food_by_itemId', { // Update to your backend endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+            if (response.ok) {
+                console.log('Deleted food item Successfully!');
+                window.location.reload();
+    
+            } else {
+                console.error('Failed to delete food item');
+                // setError('Login failed. Please try again.');
+            }
+        } catch (error) {
+            // setError('An error occurred. Please try again.');
+            console.error('An error occurred:', error);
+        }
+    }
+
+
     const addNewMenu = () =>{
         navigate('/addStoreItem?action=add');
     }
@@ -60,6 +89,16 @@ const StoreMenuPage = () => {
     const editItem = e =>{
         const {id} = e.target;
         navigate(`/addStoreItem?itemId=${id}&action=edit`);
+    }
+
+    const deleteItem = e =>{
+        const {id,name} = e.target;
+        const result = window.confirm("Are you sure you want to perform this action?");
+        if (result) {
+            deleteMenuItem(id,name);
+        } else {
+            return
+        }
     }
 
     return (
@@ -86,7 +125,10 @@ const StoreMenuPage = () => {
                             <td>{row.itemName}</td>
                             <td>${row.itemPrice}</td>
                             <td>{row.itemType}</td>
-                            <td><button className="edit-button" onClick={editItem} id={row.itemId}>Edit</button></td>
+                            <td>
+                                <button className="edit-button" onClick={editItem} id={row.itemId}>Edit</button>
+                                <button className="delete-button" onClick={deleteItem} name={row.itemName} id={row.itemId}>Delete</button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>

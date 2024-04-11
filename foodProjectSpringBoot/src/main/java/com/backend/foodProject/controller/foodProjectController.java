@@ -21,7 +21,13 @@ import java.util.stream.Collectors;
 import java.time.*;
 import java.math.BigDecimal;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 @RestController
 @RequestMapping("/api")
@@ -151,6 +157,20 @@ public class foodProjectController {
         food.setStoreId(data.getInt("storeId"));
         return foodService.updateFood(data.getInt("foodId"),food);
     }
+    
+    @PostMapping("/delete_food_by_itemId")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public void deleteFoodById (@RequestBody String details)
+    {
+        try{
+            JSONObject data = new JSONObject(details);
+            foodService.deleteFood(data.getInt("itemId"));
+            deleteFile(data.getString("fileName"));
+        } catch(Exception e){
+            System.out.println("An error occurred: "+e);
+        }
+        return;
+    }
 
     @PostMapping("/employee/get_food_history")
     @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
@@ -182,7 +202,50 @@ public class foodProjectController {
         if (data.getString("startDate").isEmpty() || data.getString("endDate").isEmpty()) {
 
             // return orderService.findByEmployeeId(data.getInt("id"));
-            return "{\"totalVolume\": 0, \"totalAmount\": \"0\"}";
+            // return "{\"totalVolume\": 0, \"totalAmount\": \"0\"}";
+            LocalDateTime today = LocalDateTime.now();
+            LocalDateTime startOfDay = today.toLocalDate().atStartOfDay();
+            LocalDateTime endOfDay = today.toLocalDate().atTime(LocalTime.MAX);
+
+            // Format the start of the day as a string
+            String formattedStartOfDay = startOfDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            // Format the end of the day as a string
+            String formattedEndOfDay = endOfDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+            List<Order> ordersBetweenDates =  orderService.orderVolume(formattedStartOfDay,formattedEndOfDay);
+            List<Object> menuByStoreId = foodService.getFoodItemsAndItemPriceByStoreId(data.getInt("storeId"));
+            
+            int totalVolume = 0; 
+            BigDecimal totalAmount = BigDecimal.ZERO; // Initialize totalAmount as BigDecimal.ZERO
+
+            for (int i = 0; i < menuByStoreId.size(); i++) {
+                Object[] row = (Object[]) menuByStoreId.get(i);
+                System.out.println(Arrays.toString(row));
+
+                String foodName = row[0].toString();
+                BigDecimal itemPrice = new BigDecimal(row[1].toString()); // Convert to BigDecimal
+                System.out.println(foodName);
+
+                for (Order order : ordersBetweenDates) {
+                    String orderedItems = order.getItemName();
+
+                    if (orderedItems.contains(foodName)) {
+                        totalVolume += 1;
+                        totalAmount = totalAmount.add(itemPrice); // Use add() to accumulate BigDecimal
+                        // System.out.println(totalVolume);
+                    }
+                }
+            }
+            
+            System.out.println("Final Value: "+totalVolume);
+            System.out.println("Final Value: "+totalAmount);
+
+            String responseJson = "{\"totalVolume\": " + totalVolume + ", \"totalAmount\": \"" + totalAmount + "\"}";
+
+
+            return responseJson;
 
         }else{
 
@@ -394,7 +457,7 @@ public class foodProjectController {
 
     @PostMapping("/upload")
     @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
-    public String uploadFile(@RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName) {
+    public String uploadImage(@RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName) {
         if (file == null || file.isEmpty()) {
             return "File is empty";
         }
@@ -408,18 +471,63 @@ public class foodProjectController {
 
             String uploadDir = helper+"/src/main/webapp/app/src/shared/images/";
             File uploadDirFile = new File(uploadDir);
-            if (!uploadDirFile.exists()) {
-                uploadDirFile.mkdirs();
-            }
-
+           
             // Save the file to the specified directory
-            String filePath = uploadDir + fileName+".jpg";
-            file.transferTo(new File(filePath));
+            String uploadPath = uploadDir + fileName+".jpg";
+
+            Path filePath = Paths.get(uploadPath);
+            // Delete existing file if it exists
+            Files.deleteIfExists(filePath);
+
+            file.transferTo(new File(uploadPath));
 
             return "File uploaded successfully";
         } catch (IOException e) {
             e.printStackTrace();
             return "Failed to upload file";
+        }
+    }
+
+    @PostMapping("/get_image")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public ResponseEntity<byte[]> getImage(@RequestBody String details) throws IOException {
+        JSONObject data = new JSONObject(details);
+        File currentDirFile = new File(".");
+        String helper = currentDirFile.getAbsolutePath();
+
+        String filePath = helper+"/src/main/webapp/app/src/shared/images/"+data.getString("imageName")+".jpg";
+
+        Path imagePath = Paths.get(filePath);
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG); // Adjust content type if necessary
+
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+    }
+    
+
+    public static void deleteFile(String fileName){
+        
+        File currentDirFile = new File(".");
+        String helper = currentDirFile.getAbsolutePath();
+
+        String deleteFilePath = helper+"/src/main/webapp/app/src/shared/images/"+fileName+".jpg";
+        System.out.println(deleteFilePath);
+        File fileToDelete = new File(deleteFilePath);
+
+        if (fileToDelete.exists()) {
+            // Attempt to delete the file
+            boolean deleted = fileToDelete.delete();
+
+            // Check if the file was successfully deleted
+            if (deleted) {
+                System.out.println("File deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the file.");
+            }
+        } else {
+            System.out.println("File does not exist.");
         }
     }
 
