@@ -28,7 +28,7 @@ jobs:
     - name: Build and test Spring Boot
       run: |
         cd ${{ github.workspace }}/foodProjectSpringBoot
-        mvn clean compile
+        mvn clean compile test
 
     # Setup Node.js environment
     - name: Set up Node.js
