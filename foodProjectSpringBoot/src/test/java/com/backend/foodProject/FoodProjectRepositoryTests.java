@@ -47,10 +47,10 @@ class FoodProjectRepositoryTests {
 	public void setUp() {
 		Food food = new Food(1, 1, "burger", 10.00F, "food");
 
-		ArrayList<Food> foodList = new ArrayList<>(1);
+		List<Food> foodList = new ArrayList<>();
 		foodList.add(food);
 
-		User user = new User("test", "test", 1);
+		User user = new User(1, "test", "test", "test", "test", 1);
 		List<User> users = new ArrayList<>();
 		users.add(user);
 
@@ -78,7 +78,7 @@ class FoodProjectRepositoryTests {
 		Mockito.when(foodRepository.findAll())
 				.thenReturn(foodList);
 
-		Mockito.when(userRepository.findById(user.getUserId()))
+		Mockito.when(userRepository.findById(user.getEmployeeId()))
 				.thenReturn(Optional.of(user));
 		Mockito.when(userRepository.findAll())
 				.thenReturn(users);
