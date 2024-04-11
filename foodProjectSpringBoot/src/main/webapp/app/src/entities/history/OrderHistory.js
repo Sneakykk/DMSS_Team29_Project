@@ -20,30 +20,30 @@ const OrderHistory = () => {
     }, []);
 
     useEffect(() => {
-        if (!Array.isArray(userData) || userData[0] !== null) {
+        if (userData && userData.employeeId) {
             const searchBody = {
                 ...searchCriteria,
                 "id": userData.employeeId
-            }
+            };
             loadOrderHistory(searchBody);
         }
-    }, [userData, searchCriteria])
+    }, [userData, searchCriteria]);
 
     const loadOrderHistory = async (searchData) => {
         try {
-            console.log(searchData)
+            console.log(searchData);
             const response = await fetch('http://localhost:8080/api/employee/get_food_history', { // Update to your backend endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(searchData),
-        });
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(searchData),
+            });
             if (response.ok) {
                 const data = await response.json();
                 console.log('Fetch Order History Successfully!', data);
                 setOrderHistory(data);
-    
+
             } else {
                 console.error('Failed to get Order History');
                 // setError('Login failed. Please try again.');
@@ -52,7 +52,7 @@ const OrderHistory = () => {
             // setError('An error occurred. Please try again.');
             console.error('An error occurred:', error);
         }
-    }
+    };
 
     const formatDate = (orderDate) => {
         const date = new Date(orderDate);
@@ -67,26 +67,26 @@ const OrderHistory = () => {
 
         // Format the date and time
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
+    };
 
-    const onChangeSearchCriteria = e =>{
-        const {name,value} = e.target;
+    const onChangeSearchCriteria = (e) => {
+        const { name, value } = e.target;
         console.log(name);
         console.log(value);
         setSearchCriteria({
             ...searchCriteria,
             [name]: value
-        })
-    }
+        });
+    };
 
-    const searchButton = e =>{
-        e.preventDefault()
+    const searchButton = (e) => {
+        e.preventDefault();
         const searchBody = {
             ...searchCriteria,
             "id": userData.employeeId
-        }
+        };
         loadOrderHistory(searchBody);
-    }
+    };
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -101,7 +101,6 @@ const OrderHistory = () => {
         return `${year}-${month}-${day}`;
     };
 
-
     return (
         <div>
             <Navbar /> {/* Include the same navbar */}
@@ -110,42 +109,40 @@ const OrderHistory = () => {
                     Start Date
                     <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" max={getCurrentDate()} />
                     End Date
-                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()}/>
+                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()} />
                     <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
 
                 <table>
                     <thead>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Orders</th>
-                        <th>Qty</th>
-                        <th>Ordered Date</th>
-                        <th>Price($)</th>
-                    </tr>
+                        <tr>
+                            <th>S/N</th>
+                            <th>Orders</th>
+                            <th>Qty</th>
+                            <th>Ordered Date</th>
+                            <th>Price($)</th>
+                        </tr>
                     </thead>
                     <tbody>
-
-                        {orderHistory.map((order,index) =>(
-                            
+                        {orderHistory.map((order, index) => (
                             <tr key={index}>
-                                <td>{index+1}</td>
+                                <td>{index + 1}</td>
                                 {/* <td>{order.itemName}</td> */}
                                 <td>
                                     {/* Split the itemName string into an array and map over it */}
-                                {order.itemName.replace(/["]/g, '').split(",").map((item, i) => (
-                                    <div key={i}>{i+1}: {item.trim()}</div> 
-                                ))}
+                                    {order.itemName.replace(/[[\]]/g, '').split(",").map((item, i) => (
+                                        <div key={i}>{i + 1}: {item.replace(/['"]/g, '').trim()}</div>
+                                    ))}
                                 </td>
                                 <td>
-                                {order.quantity.replace(/\[\]/g, '').split(",").map((item, i) => (
-                                    <div key={i}> x{item.trim()}</div> 
-                                ))}
+                                    {/* Split the quantity string into an array and map over it */}
+                                    {order.quantity.replace(/[[\]]/g, '').split(",").map((item, i) => (
+                                        <div key={i}> x{item.trim()}</div>
+                                    ))}
                                 </td>
                                 <td>{formatDate(order.timeOfOrder)}</td>
                                 <td>${order.totalBill}</td>
                             </tr>
-                            
                         ))}
                     </tbody>
                 </table>
