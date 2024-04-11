@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from '../../Navbar';
 import Chart from 'chart.js/auto';
 import '../../shared/layout/Analytics.css'; // Import Analytics.css for styling
@@ -19,26 +19,7 @@ const Analytics = () => {
 
     const [peakOrderChart, setPeakOrderChart] = useState(null);
 
-    useEffect(() => {
-        // Retrieve user data from localStorage when component mounts
-        const storedUserData = localStorage.getItem('userData');
-        if (storedUserData) {
-            const parsedUserData = JSON.parse(storedUserData);
-            setUserData(parsedUserData);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (userData) {
-            const searchBody = {
-                ...searchCriteria,
-                userId: userData.employeeId // Assuming employeeId is stored in userData
-            };
-            fetchAnalyticsData(searchBody);
-        }
-    }, [userData, fetchAnalyticsData, searchCriteria]);
-
-    const fetchAnalyticsData = async (searchData) => {
+    const fetchAnalyticsData = useCallback(async (searchData) => {
         try {
             const responseOrderVolume = await fetch('http://localhost:8080/api/analytics/order_volume', {
                 method: 'POST',
@@ -52,7 +33,7 @@ const Analytics = () => {
                 console.log()
                 setAnalyticsData(prevData => ({
                     ...prevData,
-                    "totalOrderAmount":(JSON.parse(orderVolumeData)).totalAmount,
+                    "totalOrderAmount": (JSON.parse(orderVolumeData)).totalAmount,
                     "orderVolume": (JSON.parse(orderVolumeData)).totalVolume
                 }));
             } else {
@@ -96,26 +77,9 @@ const Analytics = () => {
         } catch (error) {
             console.error('An error occurred while fetching analytics data:', error);
         }
-    };
+    }, [userData]);
 
-    const onChangeSearchCriteria = (e) => {
-        const { name, value } = e.target;
-        setSearchCriteria({
-            ...searchCriteria,
-            [name]: value
-        });
-    };
-
-    const searchButton = (e) => {
-        e.preventDefault();
-        const searchBody = {
-            ...searchCriteria,
-            userId: userData.employeeId // Assuming employeeId is stored in userData
-        };
-        fetchAnalyticsData(searchBody);
-    };
-
-    const updatePeakOrderChart = () => {
+    const updatePeakOrderChart = useCallback(() => {
         const ctx = document.getElementById('peakOrderChart');
         if (!ctx) return; // If canvas element does not exist, return
 
@@ -149,13 +113,50 @@ const Analytics = () => {
         });
 
         setPeakOrderChart(newChart);
-    };
+    }, [analyticsData.peakOrderingHours, peakOrderChart]);
+
+    useEffect(() => {
+        // Retrieve user data from localStorage when component mounts
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+            const parsedUserData = JSON.parse(storedUserData);
+            setUserData(parsedUserData);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (userData) {
+            const searchBody = {
+                ...searchCriteria,
+                userId: userData.employeeId // Assuming employeeId is stored in userData
+            };
+            fetchAnalyticsData(searchBody);
+        }
+    }, [userData, searchCriteria, fetchAnalyticsData]); // Include fetchAnalyticsData in the dependency array
 
     useEffect(() => {
         if (analyticsData.peakOrderingHours.length > 0) {
             updatePeakOrderChart();
         }
     }, [analyticsData.peakOrderingHours, updatePeakOrderChart]);
+
+    const onChangeSearchCriteria = (e) => {
+        const { name, value } = e.target;
+        setSearchCriteria({
+            ...searchCriteria,
+            [name]: value
+        });
+    };
+
+    const searchButton = (e) => {
+        e.preventDefault();
+        const searchBody = {
+            ...searchCriteria,
+            userId: userData.employeeId // Assuming employeeId is stored in userData
+        };
+        fetchAnalyticsData(searchBody);
+    };
+
 
     const getCurrentDate = () => {
         const today = new Date();
@@ -178,7 +179,7 @@ const Analytics = () => {
                     Start Date
                     <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" max={getCurrentDate()} />
                     End Date
-                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()}  />
+                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()} />
                     <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
                 {/* {analyticsData} */}
