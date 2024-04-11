@@ -22,15 +22,17 @@
 
 /* Style the form inputs */
 .form-input {
-    width: 100%;
+    width: calc(100% - 10px); /* Adjust width and subtract the border width */
     padding: 8px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    vertical-align: middle; /* Align vertically */
 }
 
 /* Style the form button */
-.form-button {
+.form-button,
+.custom-file-input-button {
     background-color: #00BFFF;
     color: #000;
     border: 2px solid #000;
@@ -39,15 +41,23 @@
     font-weight: bold;
     text-transform: uppercase;
     padding: 10px 20px;
+    margin-right: 5px; /* Adjust margin for better alignment */
+    font-size: 14px; /* Adjust font size */
 }
 
 /* Change button color on hover */
-.form-button:hover {
+.form-button:hover,
+.custom-file-input-button:hover {
     background-color: #0080FF;
 }
 
-/* Style the file input button */
+/* Remove unnecessary styling for file input button */
 input[type="file"] {
+    display: none; /* Hide the default file input */
+}
+
+/* Style the custom file input button */
+.custom-file-input-button {
     background-color: #00BFFF;
     color: #000;
     border: 2px solid #000;
@@ -55,7 +65,6 @@ input[type="file"] {
     cursor: pointer;
     font-weight: bold;
     text-transform: uppercase;
-    padding: 7px 15px;
+    padding: 10px 20px; /* Adjust padding */
     margin-left: 5px;
 }
-

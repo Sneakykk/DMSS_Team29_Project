@@ -194,7 +194,10 @@ const StoreMenuPage = () => {
 
                 <button className="form-button" onClick={saveFoodItem}>{itemId ? "Update" : "Save"}</button>
 
-                <input type="file" onChange={handleImageChange} accept="image/*" />
+                <label htmlFor="fileInput" className="custom-file-input-button">Choose File</label>
+                <input type="file" id="fileInput" onChange={handleImageChange} accept="image/*" />
+
+
                 {selectedImage && (
                     <div>
                         <img src={imageToShow} alt="Selected" style={{ maxWidth: '200px' }} />
