@@ -1,10 +1,9 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/AddStoreItem.css';
 
 const StoreMenuPage = () => {
-
     const [userData, setUserData] = useState([null]);
     const [foodDetails, setFoodDetails] = useState({
         "foodId":null,
@@ -44,7 +43,6 @@ const StoreMenuPage = () => {
         // Retrieve user data from localStorage when component mounts
         const storedUserData = localStorage.getItem('userData');
         if (storedUserData) {
-  
             const parsedUserData = JSON.parse(storedUserData);
             setUserData({...parsedUserData});
         }
@@ -62,15 +60,15 @@ const StoreMenuPage = () => {
                 getMenuItem();
             }
         }
-    }, [userData, itemId, getMenuItem]);
+    }, [userData, itemId]);
 
-    const onChangeHandler = e =>{
-        const {value,id} = e.target;
+    const onChangeHandler = e => {
+        const { value, id } = e.target;
         setFoodDetails(prevState => ({
             ...prevState,
             [id]: value // Use square brackets for dynamic property name
         }));
-    }
+    };
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -189,7 +187,6 @@ const StoreMenuPage = () => {
             console.log("Please upload a jpg image");
         }
     }
-
 
     return (
         <div>

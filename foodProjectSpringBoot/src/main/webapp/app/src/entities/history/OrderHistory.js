@@ -1,29 +1,25 @@
+import React, { useState, useEffect } from 'react';
 import Navbar from '../../Navbar';
-import React, {useState,useEffect} from 'react';
-
-import '../../shared/layout/OrderHistory.css'; // Import Food.css for styling
+import '../../shared/layout/OrderHistory.css'; // Import OrderHistory.css for styling
 
 const OrderHistory = () => {
-
-    const [userData, setUserData] = useState([null]);
+    const [userData, setUserData] = useState(null);
     const [orderHistory, setOrderHistory] = useState([]);
     const [searchCriteria, setSearchCriteria] = useState({
         startDate: "",
         endDate: ""
-    })
+    });
 
-    useEffect(()=>{
+    useEffect(() => {
         // Retrieve user data from localStorage when component mounts
         const storedUserData = localStorage.getItem('userData');
         if (storedUserData) {
-  
             const parsedUserData = JSON.parse(storedUserData);
-            setUserData({...parsedUserData});
+            setUserData(parsedUserData);
         }
+    }, []);
 
-    },[])
-
-    useEffect(()=>{
+    useEffect(() => {
         if (!Array.isArray(userData) || userData[0] !== null) {
             const searchBody = {
                 ...searchCriteria,
@@ -31,9 +27,9 @@ const OrderHistory = () => {
             }
             loadOrderHistory(searchBody);
         }
-    },[userData, searchCriteria])
-    
-    const loadOrderHistory = async(searchData) =>{
+    }, [userData, searchCriteria])
+
+    const loadOrderHistory = async (searchData) => {
         try {
             console.log(searchData)
             const response = await fetch('http://localhost:8080/api/employee/get_food_history', { // Update to your backend endpoint
@@ -45,7 +41,7 @@ const OrderHistory = () => {
         });
             if (response.ok) {
                 const data = await response.json();
-                console.log('Fetch Order History Successfully!',data);
+                console.log('Fetch Order History Successfully!', data);
                 setOrderHistory(data);
     
             } else {
@@ -58,7 +54,7 @@ const OrderHistory = () => {
         }
     }
 
-    const formatDate = (orderDate) =>{
+    const formatDate = (orderDate) => {
         const date = new Date(orderDate);
 
         // Extract the date and time components
@@ -137,7 +133,7 @@ const OrderHistory = () => {
                                 {/* <td>{order.itemName}</td> */}
                                 <td>
                                     {/* Split the itemName string into an array and map over it */}
-                                {order.itemName.replace(/[\[\]"]/g, '').split(",").map((item, i) => (
+                                {order.itemName.replace(/["]/g, '').split(",").map((item, i) => (
                                     <div key={i}>{i+1}: {item.trim()}</div> 
                                 ))}
                                 </td>
