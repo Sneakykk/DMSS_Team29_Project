@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/AddStoreItem.css';
@@ -13,12 +13,21 @@ const StoreMenuPage = () => {
         "storeId": ""
     });
     const location = useLocation();
+    const itemId = new URLSearchParams(location.search).get('itemId');
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageToShow, setImageToShow] = useState(null);
     const [action, setAction] = useState('');
     const [title, setTitle] = useState('');
-    const searchParams = new URLSearchParams(location.search);
-    const itemId = new URLSearchParams(location.search).get('itemId');
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const actionParam = searchParams.get('action');
+        if (actionParam === 'add' || actionParam === 'edit') {
+            setAction(actionParam);
+        } else {
+            setAction('add');
+        }
+    }, [location.search]);
 
     useEffect(() => {
         if (action === 'add') {
@@ -31,25 +40,44 @@ const StoreMenuPage = () => {
     }, [action]);
 
     useEffect(() => {
-        const actionParam = searchParams.get('action');
-        if (actionParam === 'add' || actionParam === 'edit') {
-            setAction(actionParam);
-        } else {
-            setAction('add');
-        }
-    }, [searchParams]);
-
-    useEffect(() => {
         // Retrieve user data from localStorage when component mounts
         const storedUserData = localStorage.getItem('userData');
         if (storedUserData) {
             const parsedUserData = JSON.parse(storedUserData);
-            setUserData({...parsedUserData});
+            setUserData({ ...parsedUserData });
         }
     }, []);
 
     useEffect(() => {
-        if (userData && userData.storeId) {
+        const getMenuItem = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/get_food_by_itemId', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: itemId,
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    console.log('Food item fetched Successfully!');
+                    setFoodDetails({
+                        "foodId": data.itemId,
+                        "foodName": data.itemName,
+                        "foodPrice": data.itemPrice,
+                        "foodType": data.itemType,
+                        "storeId": userData.storeId
+                    });
+                } else {
+                    console.error('Failed to fetch food item');
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+            }
+        };
+
+        if (userData && userData.storeId) { // Check if userData and storeId exist
             setFoodDetails(prevFoodDetails => ({
                 ...prevFoodDetails,
                 storeId: userData.storeId
@@ -59,13 +87,13 @@ const StoreMenuPage = () => {
                 getMenuItem();
             }
         }
-    }, [userData, itemId]); // Added itemId as a dependency
+    }, [userData, itemId]);
 
     const onChangeHandler = e => {
         const { value, id } = e.target;
         setFoodDetails(prevState => ({
             ...prevState,
-            [id]: value
+            [id]: value // Use square brackets for dynamic property name
         }));
     };
 
@@ -74,38 +102,10 @@ const StoreMenuPage = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImageToShow(reader.result)
+                setImageToShow(reader.result);
                 setSelectedImage(file);
             };
             reader.readAsDataURL(file);
-        }
-    };
-
-    const getMenuItem = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/api/get_food_by_itemId', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: itemId,
-            });
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data)
-                console.log('Food item fetched Successfully!');
-                setFoodDetails({
-                    "foodId": data.itemId,
-                    "foodName": data.itemName,
-                    "foodPrice": data.itemPrice,
-                    "foodType": data.itemType,
-                    "storeId": userData.storeId
-                });
-            } else {
-                console.error('Failed to fetch food item');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
         }
     };
 
