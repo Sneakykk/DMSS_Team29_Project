@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
 import '../../shared/layout/Cart.css'; // Import Cart.css for styling
-import moment from 'moment';
 import GooglePayButton from '@google-pay/button-react';
 
 const Cart = () => {

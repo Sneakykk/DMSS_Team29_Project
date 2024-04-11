@@ -36,7 +36,7 @@ const Analytics = () => {
             };
             fetchAnalyticsData(searchBody);
         }
-    }, [userData]);
+    }, [userData, fetchAnalyticsData, searchCriteria]);
 
     const fetchAnalyticsData = async (searchData) => {
         try {
@@ -155,7 +155,20 @@ const Analytics = () => {
         if (analyticsData.peakOrderingHours.length > 0) {
             updatePeakOrderChart();
         }
-    }, [analyticsData.peakOrderingHours]);
+    }, [analyticsData.peakOrderingHours, updatePeakOrderChart]);
+
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+
+        // Pad month and day with leading zeros if needed
+        month = month < 10 ? `0${month}` : month;
+        day = day < 10 ? `0${day}` : day;
+
+        return `${year}-${month}-${day}`;
+    };
 
     return (
         <div>
@@ -163,9 +176,9 @@ const Analytics = () => {
             <div className="analytics-container">
                 <div className="search-container">
                     Start Date
-                    <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" />
+                    <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" max={getCurrentDate()} />
                     End Date
-                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" />
+                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()}  />
                     <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
                 {/* {analyticsData} */}

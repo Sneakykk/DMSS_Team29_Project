@@ -54,30 +54,27 @@ const StoreMenuPage = () => {
     }
 
     const addNewMenu = () =>{
-        navigate('/addStoreItem');
+        navigate('/addStoreItem?action=add');
     }
 
     const editItem = e =>{
         const {id} = e.target;
-        navigate(`/addStoreItem?itemId=${id}`);
+        navigate(`/addStoreItem?itemId=${id}&action=edit`);
     }
 
     return (
         <div>
         <Navbar />
-        <div className="blank-container">
-            <h1>Welcome to Blank Page</h1>
-            <p>This is a blank page example.</p>
+        <div className="edit-container">
+            <h1>Store Menu Configuration Page</h1>
         </div>
-
-
-
+        <button className="add-button" onClick={addNewMenu}>Add New Item</button>
         <table>
                     <thead>
                     <tr>
                         <th>S/N</th>
                         <th>Food Name</th>
-                        <th>Price</th>
+                        <th>Price($)</th>
                         <th>Type</th>
                         <th>Action</th>
                     </tr>
@@ -87,14 +84,13 @@ const StoreMenuPage = () => {
                         <tr key={index}>
                             <td>{index+1}</td>
                             <td>{row.itemName}</td>
-                            <td>{row.itemPrice}</td>
+                            <td>${row.itemPrice}</td>
                             <td>{row.itemType}</td>
-                            <td><button onClick={editItem} id={row.itemId}>Edit</button></td>
+                            <td><button className="edit-button" onClick={editItem} id={row.itemId}>Edit</button></td>
                         </tr>
                     ))}
                     </tbody>
-                </table>
-                <button onClick={addNewMenu}>Add</button>
+        </table>
         </div>
     );
 };

@@ -31,7 +31,7 @@ const OrderHistory = () => {
             }
             loadOrderHistory(searchBody);
         }
-    },[userData])
+    },[userData, searchCriteria])
     
     const loadOrderHistory = async(searchData) =>{
         try {
@@ -92,6 +92,19 @@ const OrderHistory = () => {
         loadOrderHistory(searchBody);
     }
 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+
+        // Pad month and day with leading zeros if needed
+        month = month < 10 ? `0${month}` : month;
+        day = day < 10 ? `0${day}` : day;
+
+        return `${year}-${month}-${day}`;
+    };
+
 
     return (
         <div>
@@ -99,9 +112,9 @@ const OrderHistory = () => {
             <div className="container">
                 <div className="search-container">
                     Start Date
-                    <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" />
+                    <input onChange={onChangeSearchCriteria} name="startDate" type="date" placeholder="Start Date" max={getCurrentDate()} />
                     End Date
-                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" />
+                    <input onChange={onChangeSearchCriteria} name="endDate" type="date" placeholder="End Date" max={getCurrentDate()}/>
                     <button className="search-button" onClick={searchButton}>Search</button>
                 </div>
 
@@ -112,7 +125,7 @@ const OrderHistory = () => {
                         <th>Orders</th>
                         <th>Qty</th>
                         <th>Ordered Date</th>
-                        <th>Price</th>
+                        <th>Price($)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -129,12 +142,12 @@ const OrderHistory = () => {
                                 ))}
                                 </td>
                                 <td>
-                                {order.quantity.replace(/\[|\]/g, '').split(",").map((item, i) => (
+                                {order.quantity.replace(/\[\]/g, '').split(",").map((item, i) => (
                                     <div key={i}> x{item.trim()}</div> 
                                 ))}
                                 </td>
                                 <td>{formatDate(order.timeOfOrder)}</td>
-                                <td>{order.totalBill}</td>
+                                <td>${order.totalBill}</td>
                             </tr>
                             
                         ))}

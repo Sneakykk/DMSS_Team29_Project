@@ -20,7 +20,7 @@ const Navbar = () => {
             const parsedUserData = JSON.parse(storedUserData);
             setUserData({...parsedUserData});
         }
-    }, []);
+    }, [navigate]);
 
 
 

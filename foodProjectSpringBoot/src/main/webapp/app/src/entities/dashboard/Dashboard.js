@@ -14,7 +14,7 @@ const Dashboard = () => {
             setUserData({...parsedUserData});
             console.log(userData)
         }
-    }, []);
+    }, [userData]);
 
 
     return (

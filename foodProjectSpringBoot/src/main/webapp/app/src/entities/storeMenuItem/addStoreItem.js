@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../../Navbar';
-import '../../shared/layout/StoreMenuItem.css';
+import '../../shared/layout/AddStoreItem.css';
 
 const StoreMenuPage = () => {
 
@@ -17,6 +17,28 @@ const StoreMenuPage = () => {
     const itemId = new URLSearchParams(location.search).get('itemId');
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageToShow, setImageToShow] = useState(null);
+    const searchParams = new URLSearchParams(location.search);
+    const [action, setAction] = useState('');
+    const [title, setTitle] = useState('');
+
+    useEffect(() => {
+        if (action === 'add') {
+            setTitle('Add Food Item');
+        } else if (action === 'edit') {
+            setTitle('Edit Food Item');
+        } else {
+            setTitle('Error Item Page');
+        }
+    }, [action]);
+
+    useEffect(() => {
+        const actionParam = searchParams.get('action');
+        if (actionParam === 'add' || actionParam === 'edit') {
+            setAction(actionParam);
+        } else {
+            setAction('add');
+        }
+    }, [searchParams]);
 
     useEffect(()=>{
         // Retrieve user data from localStorage when component mounts
@@ -40,7 +62,7 @@ const StoreMenuPage = () => {
                 getMenuItem();
             }
         }
-    }, [userData]);
+    }, [userData, itemId, getMenuItem]);
 
     const onChangeHandler = e =>{
         const {value,id} = e.target;
@@ -146,9 +168,9 @@ const StoreMenuPage = () => {
         console.log(formData);
 
         try {
-          const response = await fetch('http://localhost:8080/api/upload', {
-            method: 'POST',
-            body: formData,
+            await fetch('http://localhost:8080/api/upload', {
+                method: 'POST',
+                body: formData,
           });
           // Handle response as needed
         } catch (error) {
@@ -172,26 +194,27 @@ const StoreMenuPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="blank-container">
-                <h1>Welcome to add menu item</h1>
-                <p>This is a blank page example.</p>
+            <div className="form-container">
+                <h1>{title}</h1>
+
+                <label className="form-label" htmlFor="foodName">Food Name:</label>
+                <input className="form-input" onChange={onChangeHandler} value={foodDetails.foodName} type="text" id="foodName" />
+
+                <label className="form-label" htmlFor="foodPrice">Food Price:</label>
+                <input className="form-input" onChange={onChangeHandler} value={foodDetails.foodPrice} type="number" id="foodPrice" />
+
+                <label className="form-label" htmlFor="foodType">Food Type:</label>
+                <input className="form-input" onChange={onChangeHandler} value={foodDetails.foodType} type="text" id="foodType" />
+
+                <button className="form-button" onClick={saveFoodItem}>{itemId ? "Update" : "Save"}</button>
+
+                <input type="file" onChange={handleImageChange} accept="image/*" />
+                {selectedImage && (
+                    <div>
+                        <img src={imageToShow} alt="Selected" style={{ maxWidth: '200px' }} />
+                    </div>
+                )}
             </div>
-            <label htmlFor="foodName">Food Name:</label>
-            <input onChange={onChangeHandler} value={foodDetails.foodName} type="text" id="foodName" />
-
-            <label htmlFor="foodPrice">Food Price:</label>
-            <input onChange={onChangeHandler} value={foodDetails.foodPrice} type="number" id="foodPrice" />
-
-            <label htmlFor="foodType">Food Type:</label>
-            <input onChange={onChangeHandler} value={foodDetails.foodType} type="text" id="foodType" />
-            <button onClick={saveFoodItem}>{itemId?"Update":"Save"}</button>
-
-            <input type="file" onChange={handleImageChange} accept="image/*" />
-            {selectedImage && (
-                <div>
-                    <img src={imageToShow} alt="Selected" style={{ maxWidth: '200px' }} />
-                </div>
-            )}
         </div>
     );
 };
