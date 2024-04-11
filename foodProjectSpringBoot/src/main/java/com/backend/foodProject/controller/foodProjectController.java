@@ -123,13 +123,19 @@ public class foodProjectController {
     {
         JSONObject data = new JSONObject(details);
         System.out.println(data);
+        Food food = foodBuilder(data);
+        foodService.addFoodItemByStoreId(food);
+        return ;
+    }
+
+    private Food foodBuilder (JSONObject data)
+    {
         Food food = new Food();
         food.setItemName(data.getString("foodName"));
         food.setItemPrice(data.getFloat("foodPrice"));
         food.setItemType(data.getString("foodType"));
         food.setStoreId(data.getInt("storeId"));
-        foodService.addFoodItemByStoreId(food);
-        return ;
+        return food;
     }
 
     @PostMapping("/update_food_by_itemId")
