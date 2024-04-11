@@ -6,19 +6,19 @@ import '../../shared/layout/AddStoreItem.css';
 const StoreMenuPage = () => {
     const [userData, setUserData] = useState([null]);
     const [foodDetails, setFoodDetails] = useState({
-        "foodId":null,
+        "foodId": null,
         "foodName": "",
         "foodPrice": "",
         "foodType": "",
         "storeId": ""
     });
     const location = useLocation();
-    const itemId = new URLSearchParams(location.search).get('itemId');
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageToShow, setImageToShow] = useState(null);
-    const searchParams = new URLSearchParams(location.search);
     const [action, setAction] = useState('');
     const [title, setTitle] = useState('');
+    const searchParams = new URLSearchParams(location.search);
+    const itemId = new URLSearchParams(location.search).get('itemId');
 
     useEffect(() => {
         if (action === 'add') {
@@ -39,57 +39,57 @@ const StoreMenuPage = () => {
         }
     }, [searchParams]);
 
-    useEffect(()=>{
+    useEffect(() => {
         // Retrieve user data from localStorage when component mounts
         const storedUserData = localStorage.getItem('userData');
         if (storedUserData) {
             const parsedUserData = JSON.parse(storedUserData);
             setUserData({...parsedUserData});
         }
-
-    },[])
+    }, []);
 
     useEffect(() => {
-        if (userData && userData.storeId) { // Check if userData and storeId exist
-            setFoodDetails((prevFoodDetails) => ({
+        if (userData && userData.storeId) {
+            setFoodDetails(prevFoodDetails => ({
                 ...prevFoodDetails,
                 storeId: userData.storeId
             }));
 
-            if(itemId!==null){
+            if (itemId !== null) {
                 getMenuItem();
             }
         }
-    }, [userData, itemId]);
+    }, [userData, itemId]); // Added itemId as a dependency
 
     const onChangeHandler = e => {
         const { value, id } = e.target;
         setFoodDetails(prevState => ({
             ...prevState,
-            [id]: value // Use square brackets for dynamic property name
+            [id]: value
         }));
     };
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setImageToShow(reader.result)
-            setSelectedImage(file);
-          };
-          reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImageToShow(reader.result)
+                setSelectedImage(file);
+            };
+            reader.readAsDataURL(file);
         }
-      };
-    const getMenuItem = async() =>{
+    };
+
+    const getMenuItem = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/get_food_by_itemId', { // Update to your backend endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: itemId,
-        });
+            const response = await fetch('http://localhost:8080/api/get_food_by_itemId', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: itemId,
+            });
             if (response.ok) {
                 const data = await response.json();
                 console.log(data)
@@ -101,63 +101,52 @@ const StoreMenuPage = () => {
                     "foodType": data.itemType,
                     "storeId": userData.storeId
                 });
-    
             } else {
                 console.error('Failed to fetch food item');
-                // setError('Login failed. Please try again.');
             }
         } catch (error) {
-            // setError('An error occurred. Please try again.');
             console.error('An error occurred:', error);
         }
-    }
+    };
 
-    const addMenuItem = async() =>{
+    const addMenuItem = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/add_food_by_store', { // Update to your backend endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(foodDetails),
-        });
+            const response = await fetch('http://localhost:8080/api/add_food_by_store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(foodDetails),
+            });
             if (response.ok) {
-                //const data = await response.json();
                 console.log('Food item added Successfully!');
                 handleUpload();
-    
             } else {
                 console.error('Failed to add food item');
-                // setError('Login failed. Please try again.');
             }
         } catch (error) {
-            // setError('An error occurred. Please try again.');
             console.error('An error occurred:', error);
         }
-    }
+    };
 
-    const updateMenuItem = async() =>{
+    const updateMenuItem = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/update_food_by_itemId', { // Update to your backend endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(foodDetails),
-        });
+            const response = await fetch('http://localhost:8080/api/update_food_by_itemId', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(foodDetails),
+            });
             if (response.ok) {
-                //const data = await response.json();
                 console.log('Food item updated Successfully!');
-    
             } else {
                 console.error('Failed to update food item');
-                // setError('Login failed. Please try again.');
             }
         } catch (error) {
-            // setError('An error occurred. Please try again.');
             console.error('An error occurred:', error);
         }
-    }
+    };
 
     const handleUpload = async () => {
         const formData = new FormData();
@@ -169,24 +158,24 @@ const StoreMenuPage = () => {
             await fetch('http://localhost:8080/api/upload', {
                 method: 'POST',
                 body: formData,
-          });
-          // Handle response as needed
+            });
+            // Handle response as needed
         } catch (error) {
-          console.error('Error uploading file:', error);
+            console.error('Error uploading file:', error);
         }
-      };
+    };
 
-    const saveFoodItem = () =>{
-        if(selectedImage){
+    const saveFoodItem = () => {
+        if (selectedImage) {
             if (window.confirm(itemId ? "Are you sure you want to update?" : "Are you sure you want to save?")) {
                 itemId ? updateMenuItem() : addMenuItem();
             } else {
                 return;
             }
-        }else{
+        } else {
             console.log("Please upload a jpg image");
         }
-    }
+    };
 
     return (
         <div>
