@@ -12,13 +12,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        path: 'foodProjectSpringBoot'  # Checks out the repository into this subdirectory
 
+    # Setup Node.js environment
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3.2.0
       with:
-        node-version: '14'
+        node-version: '20.11.1'
 
     - name: Install Dependencies
       run: npm install
