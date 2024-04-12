@@ -12,19 +12,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        path: 'foodProjectSpringBoot'  # Checks out the repository into this subdirectory
+
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
+
     - name: Install Dependencies
       run: npm install
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
     - name: Build React project
       run: npm run build
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: .
-        file: Dockerfile
+        context: ./foodProjectSpringBoot/src/main/webapp/app  # Adjusted context for Docker build
+        file: ./foodProjectSpringBoot/src/main/webapp/app/Dockerfile
         tags: ringo1225/dmss_frontend:latest
         push: true
         secrets: dckr_pat_Q2aNfZY2BhkwCaNd3Ed7Vqnubco
