@@ -10,7 +10,7 @@ COPY package-lock.json ./
 RUN npm install
 
 # Bundle app source inside Docker image
-COPY . .
+COPY .. .
 
 # Build the app for production
 RUN npm run build
