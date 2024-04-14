@@ -1,0 +1,65 @@
+name: Run Selenium Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2.4.0
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Build and test Spring Boot
+      run: |
+        cd ${{ github.workspace }}/foodProjectSpringBoot
+        mvn clean compile test
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3.2.0
+      with:
+        node-version: '20.11.1'
+
+    - name: Install React dependencies
+      run: npm install
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
+    - name: Build React app
+      run: npm run build
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
+    - name: Start Spring Boot App
+      run: mvn spring-boot:run &
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot
+      shell: bash
+
+    - name: Start React App
+      run: npm start &
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+      shell: bash
+
+    - name: Install Selenium WebDriver
+      run: npm install webdriver-manager --save-dev
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
+    - name: Start Selenium tests
+      run: npm run test:selenium
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
+    - name: Shutdown Spring Boot and React App
+      if: always()
+      run: kill $(jobs -p) || true
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot
+      shell: bash
