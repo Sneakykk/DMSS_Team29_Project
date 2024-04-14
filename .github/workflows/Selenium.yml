@@ -32,9 +32,6 @@ jobs:
       with:
         node-version: '20.11.1'
 
-    - name: Debug
-      run: ls -R $GITHUB_WORKSPACE
-
     - name: Install React dependencies
       run: npm install
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
@@ -43,20 +40,25 @@ jobs:
       run: npm run build
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
 
-    - name: Install Selenium WebDriver
-      run: npm install webdriver-manager --save-dev
-      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
-
     - name: Start Spring Boot App
       run: mvn spring-boot:run &
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot
       shell: bash
 
+    - name: Start React App
+      run: npm start &
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+      shell: bash
+
+    - name: Install Selenium WebDriver
+      run: npm install webdriver-manager --save-dev
+      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
     - name: Start Selenium tests
       run: npm run test:selenium
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
 
-    - name: Shutdown Spring Boot
+    - name: Shutdown Spring Boot and React App
       if: always()
       run: kill $(jobs -p) || true
       working-directory: ${{ github.workspace }}/foodProjectSpringBoot
