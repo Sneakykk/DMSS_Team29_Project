@@ -135,4 +135,44 @@ describe('AddToCart', function() {
     })
 })
 
+describe('OrderHistory', function() {
+    this.timeout(30000)
+    let driver
+    let vars
+    beforeEach(async function() {
+        const options = new chrome.Options();
+        options.addArguments('--headless'); // Comment out or remove for GUI mode
+        options.addArguments('--disable-gpu'); // Optional: only needed for headless
+        options.addArguments('--window-size=1536,824'); // Sets the window size
+
+        driver = await new Builder()
+            .forBrowser('chrome')
+            .setChromeOptions(options)
+            .build();
+
+        vars = {};
+    })
+    afterEach(async function() {
+        await driver.quit();
+    })
+    it('OrderHistory', async function() {
+        await driver.get("http://localhost:3000/")
+        await driver.manage().window().setRect({ width: 1536, height: 824 })
+        await driver.findElement(By.name("username")).click()
+        await driver.findElement(By.name("username")).sendKeys("pck")
+        await driver.findElement(By.name("password")).click()
+        await driver.findElement(By.name("password")).sendKeys("passwordPCK")
+        await driver.findElement(By.css(".login-button")).click()
+        await driver.sleep(1000);
+        await driver.findElement(By.css(".menu-icon > svg")).click()
+        await driver.sleep(1000);
+        await driver.findElement(By.linkText("Order History")).click()
+        await driver.sleep(1000);
+        assert(await driver.findElement(By.css("th:nth-child(1)")).getText() === "S/N")
+        await driver.sleep(1000);
+        assert(await driver.findElement(By.css("th:nth-child(2)")).getText() === "ORDERS")
+    })
+})
+
+
 
