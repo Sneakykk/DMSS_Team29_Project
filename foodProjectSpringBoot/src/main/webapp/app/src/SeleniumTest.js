@@ -104,33 +104,33 @@ describe('AddToCart', function() {
         await driver.findElement(By.name("password")).click()
         await driver.findElement(By.name("password")).sendKeys("passwordPCK")
         await driver.findElement(By.css(".login-button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".menu-icon > svg")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.linkText("Food")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".menu:nth-child(1) > .menu-btn")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".food-card:nth-child(1) > button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".food-card:nth-child(2) > button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".food-card:nth-child(3) > button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".clicked > .menu-btn")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".menu:nth-child(2) > .menu-btn")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".food-card:nth-child(2) > button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".clicked > .menu-btn")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".menu:nth-child(3) > .menu-btn")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css(".food-card:nth-child(2) > button")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         await driver.findElement(By.css("svg:nth-child(2)")).click()
-        await driver.sleep(500);
+        await driver.sleep(1000);
         assert(await driver.findElement(By.css("tfoot td")).getText() === "Total Price: $22.00")
     })
 })
