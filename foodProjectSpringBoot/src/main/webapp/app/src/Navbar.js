@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 import { FaBars, FaShoppingCart, FaUser } from 'react-icons/fa'; // Import FaBars, FaShoppingCart, and FaUser
 import './shared/layout/Navbar.css'; // Import Navbar.css
 
@@ -9,6 +9,7 @@ const Navbar = () => {
     const [userData, setUserData] = useState([null]);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
 
     useEffect(() => {
@@ -42,15 +43,20 @@ const Navbar = () => {
         window.location.href = '/';
     };
 
+    // Check if the current page is the cart page
+    const isCartPage = location.pathname === '/cart';
+
     return (
         <div className="navbar">
             <div className="menu-icon" onClick={toggleMenu}>
                 <FaBars />
             </div>
             <div className="icons">
-                <div className="icon-wrapper">
-                    <FaShoppingCart className="cart-icon" />
-                </div>
+            {isCartPage && (
+                    <div className="icon-wrapper">
+                        <FaShoppingCart className="cart-icon" />
+                    </div>
+                )}
                 <div className="icon-wrapper" onClick={toggleUserMenu}>
                     <FaUser className="user-icon" />
                 </div>

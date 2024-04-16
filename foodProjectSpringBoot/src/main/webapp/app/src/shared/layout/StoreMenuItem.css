@@ -29,3 +29,18 @@
 .edit-button:hover {
     background-color: #0073e6; /* Darker blue background on hover */
 }
+
+.delete-button {
+    background-color: #00BFFF; /* Blue background */
+    color: #000; /* Black text color */
+    border: 2px solid #000; /* Black border */
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px; /* Add margin to separate button from border */
+    font-weight: bold; /* Make the words inside the button bold */
+    text-transform: uppercase; /* Convert text to all caps */
+}
+
+.delete-button:hover {
+    background-color: #0073e6; /* Darker blue background on hover */
+}
