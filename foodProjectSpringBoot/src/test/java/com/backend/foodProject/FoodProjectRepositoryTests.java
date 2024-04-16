@@ -56,7 +56,7 @@ class FoodProjectRepositoryTests {
 		List<User> users = new ArrayList<>();
 		users.add(user);
 		
-		Order order = new Order(1, 1, "burger", Timestamp.valueOf(LocalDateTime.now()), 10.00f, "1");
+		Order order = new Order(1, 1, "burger", Timestamp.valueOf(LocalDateTime.now()), 10.00f, "1","Sending Orders", true);
 		ArrayList<Order> orders = new ArrayList<>();
 		orders.add(order);
 

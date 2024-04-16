@@ -30,6 +30,7 @@ const Cart = () => {
             updatedItems.items.splice(index, 1);
         }
         setUpdatedCartItems(updatedItems);
+        console.log(updatedCartItems)
     };
 
     const totalPrice = () => {
@@ -48,15 +49,23 @@ const Cart = () => {
         const timestamp = dateObject.getTime();
         let foodNames = updatedCartItems.items.map(item => item.foodName);
         let quantities = updatedCartItems.items.map(item => item.qty);
-        const randomFourDigitNumber = Math.floor(Math.random() * 10000);
-        const fourDigitUuid = randomFourDigitNumber.toString().padStart(4, '0');
+
+        const firstStoreId = updatedCartItems.items[0].storeId;
+        const allSameStoreId = updatedCartItems.items.every(item => item.storeId === firstStoreId);
+        const orderStatus = allSameStoreId ? "Sending orders" : "Sending order, Sending orders";
+        const mixedStores = allSameStoreId ? 1 : 0;
+
+        // const randomFourDigitNumber = Math.floor(Math.random() * 10000);
+        // const fourDigitUuid = randomFourDigitNumber.toString().padStart(4, '0');
         const finalOrderDetails ={
-            "orderId": fourDigitUuid,
+            // "orderId": fourDigitUuid,
              "employeeId": userData.employeeId,
              "itemName": JSON.stringify(foodNames),
              "timeOfOrder": timestamp,
              "totalBill": totalPrice(),
-             "quantity": JSON.stringify(quantities)
+             "quantity": JSON.stringify(quantities),
+             "orderStatus": orderStatus,
+             "mixedStores": !allSameStoreId
         }
 
         console.log(finalOrderDetails);

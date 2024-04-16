@@ -104,7 +104,7 @@ const Food = () => {
     };
 
 
-    const handleAddToCart = (id, name, price) => {
+    const handleAddToCart = (id, name, price, storeId) => {
         // Add the item to the cart
         const updatedCartItems =  {...cartItems} ;
 
@@ -116,7 +116,7 @@ const Food = () => {
         if (index !== -1) {
             updatedCartItems.items[index].qty += 1;
         }else{
-            updatedCartItems.items.push({ id: id, foodName: name, foodPrice: price, qty: 1 });
+            updatedCartItems.items.push({ id: id, foodName: name, foodPrice: price, qty: 1, storeId: storeId });
         }
 
 
@@ -154,7 +154,7 @@ const Food = () => {
                                 <h3>{menuItem.itemName}</h3>
                                 <p>Price: ${menuItem.itemPrice}</p>
                                 <p>Store: {getStoreName(menuItem.storeId)}</p>
-                                <button onClick={() => handleAddToCart(menuItem.itemId, menuItem.itemName, menuItem.itemPrice)}>Add to Cart</button>
+                                <button onClick={() => handleAddToCart(menuItem.itemId, menuItem.itemName, menuItem.itemPrice,menuItem.storeId)}>Add to Cart</button>
                             </div>
                         )
                     ))}

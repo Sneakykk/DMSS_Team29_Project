@@ -32,6 +32,13 @@ public class Order {
     @Column(name = "Quantity")
     private String quantity;
 
+    @Column(name = "OrderStatus")
+    private String orderStatus;
+
+    @Column(name = "MixedStores")
+    private boolean mixedStores;
+    
+
     @Transient
     private Order[] employeeOrderHistory;
 
@@ -43,13 +50,15 @@ public class Order {
     public Order() {
     }
 
-    public Order(int orderId, int employeeId, String itemName, Timestamp timeOfOrder, float totalBill, String quantity) {
+    public Order(int orderId, int employeeId, String itemName, Timestamp timeOfOrder, float totalBill, String quantity, String orderStatus, boolean mixedStores) {
         this.orderId = orderId;
         this.employeeId = employeeId;
         this.itemName = itemName;
         this.timeOfOrder = timeOfOrder;
         this.totalBill = totalBill;
         this.quantity = quantity;
+        this.orderStatus = orderStatus;
+        this.mixedStores = mixedStores;
     }
 
     // Getters and setters
@@ -99,6 +108,22 @@ public class Order {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public boolean getMixedStores() {
+        return mixedStores;
+    }
+
+    public void setMixedStores(boolean mixedStores) {
+        this.mixedStores = mixedStores;
     }
 
     public Order[] getEmployeeOrderHistory() {

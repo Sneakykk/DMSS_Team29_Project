@@ -27,4 +27,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByEmployeeId(int employeeId);
 
     List<Order> findByTimeOfOrderBetween(Timestamp startDate, Timestamp endDate);
+
+    @Query("SELECT o FROM Order o WHERE o.orderStatus <> 'Completed'")
+    List<Order> findOrdersByOrderStatusNotCompleted();
+
+    List<Order> findByEmployeeIdAndOrderStatusNot(int employeeId, String orderStatus);
+
 }

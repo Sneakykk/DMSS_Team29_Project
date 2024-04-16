@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
-
+import java.sql.Timestamp;
 
 import com.backend.foodProject.entity.*;
 
@@ -80,6 +80,71 @@ public class foodProjectController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add order"); // Return HTTP 500 Internal Server Error
         }
         
+    }
+
+    @PostMapping("/dashboard/get_order_status")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public List<Order> getOrderStatusNotCompleted (@RequestBody int storeId)
+    {
+        
+        List<Order> orders = orderService.getOrderStatusNotCompleted();
+        List<String> foodByStoreId = foodService.getFoodItemsByStoreId(storeId);
+        System.out.println(orders);
+        System.out.println(foodByStoreId);
+
+        Set<Integer> checkedOrderIds = new HashSet<>();
+        List<Order> ordersContainingFood = new ArrayList<>();
+
+              for (int i = 0; i < foodByStoreId.size(); i++) {
+                    String foodName = foodByStoreId.get(i);
+            // Loop through orders
+            for (Order order : orders) {
+                // Check if this order has already been checked
+                if (!checkedOrderIds.contains(order.getOrderId())) {
+                    // Check if the ordered items contain the food name
+                    if (order.getItemName().contains(foodName)) {
+                        ordersContainingFood.add(order);
+                        checkedOrderIds.add(order.getOrderId()); // Mark this order as checked
+                    }
+                }
+            }
+        }
+
+        return ordersContainingFood;
+    }
+
+    @PostMapping("/dashboard/user/get_order_status")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public List<Order> getUserOrderStatusNotCompleted (@RequestBody int employeeId)
+    {
+        
+        // List<Order> orders = orderService.findByEmployeeIdAndOrderStatusNotCompleted(employeeId);
+
+        return orderService.getOrderStatusNotCompletedByEmployeeId(employeeId);
+    }
+
+
+    @PostMapping("/dashboard/update_order_status")
+    @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
+    public void updateOrderStatus (@RequestBody String details)
+    {
+        JSONObject data = new JSONObject(details);
+        Order order = new Order();
+        order.setEmployeeId(data.getInt("employeeId"));
+        order.setItemName(data.getString("itemName"));
+        order.setMixedStores(data.getBoolean("mixedStores"));
+        order.setOrderStatus(data.getString("orderStatus"));
+        order.setQuantity(data.getString("quantity"));
+        order.setTotalBill(data.getFloat("totalBill"));
+        String timeOfOrderString = data.getString("timeOfOrder");
+        Timestamp timeOfOrder = Timestamp.valueOf(timeOfOrderString);
+        order.setTimeOfOrder(timeOfOrder);
+
+
+        orderService.updateOrder(data.getInt("orderId"),order);
+
+        return;
+
     }
 
     @GetMapping("/get_all_foods")

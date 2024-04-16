@@ -42,6 +42,15 @@ public class OrderService {
         return ;
     }
 
+    public void updateOrder(int id, Order order) {
+        if (!orderRepository.existsById(id)) {
+            throw new EntityNotFoundException("Order not found with id: " + id);
+        }
+        order.setOrderId(id); // Ensure the ID is set for update
+        orderRepository.save(order);
+        return ;
+    }
+
     public List<Order> employeeOrderHistory(int id, String startDate, String endDate) {
     
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -88,6 +97,14 @@ public class OrderService {
 
     }
 
+    public List<Order> getOrderStatusNotCompleted(){
+        return orderRepository.findOrdersByOrderStatusNotCompleted();
+    }
+
+
+    public List<Order> getOrderStatusNotCompletedByEmployeeId(int employeeId){    
+        return orderRepository.findByEmployeeIdAndOrderStatusNot(employeeId,"Completed");
+    }
     
 
 }
