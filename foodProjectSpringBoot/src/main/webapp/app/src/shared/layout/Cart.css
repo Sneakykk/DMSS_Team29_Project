@@ -93,3 +93,16 @@ table {
     font-weight: bold;
     border-top: 1px solid black; /* Add border underneath header */
   }
+
+/* Additional styling for the checkout button if it should look similar */
+.checkout-button {
+  background-color: #00BFFF; /* Blue background */
+  color: #000; /* Black text color */
+  border: 2px solid #000; /* Black border */
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px; /* Additional margin for placement */
+  font-weight: bold; /* Make the words inside the button bold */
+  text-transform: uppercase; /* Convert text to all caps */
+  padding: 8px 16px; /* Slightly larger padding for emphasis */
+}

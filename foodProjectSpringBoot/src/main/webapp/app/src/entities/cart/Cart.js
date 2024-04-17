@@ -10,6 +10,7 @@ const Cart = () => {
 
     const [updatedCartItems, setUpdatedCartItems] = useState();
     const [userData, setUserData] = useState(null);
+    
 
     useEffect(() => {
         setUpdatedCartItems(cartItems);
@@ -52,8 +53,7 @@ const Cart = () => {
 
         const firstStoreId = updatedCartItems.items[0].storeId;
         const allSameStoreId = updatedCartItems.items.every(item => item.storeId === firstStoreId);
-        const orderStatus = allSameStoreId ? "Sending orders" : "Sending order, Sending orders";
-        const mixedStores = allSameStoreId ? 1 : 0;
+        const orderStatus = allSameStoreId ? "Sending Orders" : "Sending Orders, Sending Orders";
 
         // const randomFourDigitNumber = Math.floor(Math.random() * 10000);
         // const fourDigitUuid = randomFourDigitNumber.toString().padStart(4, '0');
@@ -83,6 +83,9 @@ const Cart = () => {
                 console.log('Order added successfully');
                 // Here, you can integrate Google Pay payment processing
                 // For example, after adding the order successfully, initiate the Google Pay payment flow
+
+            window.location.href = '/dashboard';
+
             } else {
                 console.error('Failed to add order');
             }
@@ -163,7 +166,7 @@ const Cart = () => {
                     console.log('load payment data', paymentRequest);
                 }}
             />
-            <button onClick={checkoutOrder}>Checkout</button>
+            <button className="checkout-button" onClick={checkoutOrder}>Checkout</button>
         </div>
     );
 };
