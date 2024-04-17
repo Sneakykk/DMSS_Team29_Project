@@ -307,12 +307,13 @@ const renderOrderStatus = (order) => {
                 <p>Name: {userData?.username}</p>
                 <p>Employee ID: {userData?.employeeId}</p>
             </div>
-            <h3>Here is your Order Status</h3>
+            {!userData.storeId && (
+                <h3>Here is your Order Status</h3>
+            )}
             </div>
 
             {userData.storeId?(
                 <>
-                    <h1>Store Owner</h1>
                     <h1 className="text-center">Current Orders</h1>
                     <table>
                     <thead>

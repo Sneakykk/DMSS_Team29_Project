@@ -53,7 +53,7 @@ const Cart = () => {
 
         const firstStoreId = updatedCartItems.items[0].storeId;
         const allSameStoreId = updatedCartItems.items.every(item => item.storeId === firstStoreId);
-        const orderStatus = allSameStoreId ? "Sending Orders" : "Sending Orders, Sending Orders";
+        const orderStatus = allSameStoreId ? "Sending Orders" : "Sending Orders,Sending Orders";
 
         // const randomFourDigitNumber = Math.floor(Math.random() * 10000);
         // const fourDigitUuid = randomFourDigitNumber.toString().padStart(4, '0');
