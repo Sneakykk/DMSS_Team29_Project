@@ -67,6 +67,7 @@ const Analytics = () => {
             });
             if (responsePeakHour.ok) {
                 const peakHourData = await responsePeakHour.json();
+                peakHourData.sort((a, b) => parseInt(a.hour) - parseInt(b.hour));
                 setAnalyticsData(prevData => ({
                     ...prevData,
                     "peakOrderingHours": peakHourData
@@ -81,40 +82,55 @@ const Analytics = () => {
     }, [userData]);
  
     const updatePeakOrderChart = useCallback(() => {
-        const ctx = document.getElementById('peakOrderChart');
-        if (!ctx) return; // If canvas element does not exist, return
- 
-        // Check if peakOrderChart instance exists
+        const ctx = document.getElementById('peakOrderChart').getContext('2d');
+    
+        // Immediately destroy existing chart instance if it exists
         if (peakOrderChart) {
-            peakOrderChart.destroy(); // Destroy the previous chart
+            peakOrderChart.destroy();
         }
- 
-        // Create a new chart instance
+    
+        // Assuming analyticsData.peakOrderingHours might have been updated
+        const labels = [];
+        for (let hour = 8; hour <= 18; hour++) {
+            labels.push(`${hour < 10 ? '0' + hour : hour}:00`);
+        }
+    
         const newChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: analyticsData.peakOrderingHours.map(data => data.datetime),
-                datasets: [
-                    {
-                        label: 'Peak Ordering Hours',
-                        data: analyticsData.peakOrderingHours.map(data => data.orders),
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                    },
-                ],
+                labels: labels,
+                datasets: [{
+                    label: 'Peak Ordering Hours',
+                    data: analyticsData.peakOrderingHours.map(data => data.averageOrders),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                }],
             },
             options: {
                 scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time (24-hour format)',
+                        },
+                    },
                     y: {
+                        title: {
+                            display: true,
+                            text: 'Number of Orders',
+                        },
                         beginAtZero: true,
                     },
                 },
             },
         });
- 
+    
         setPeakOrderChart(newChart);
-    }, [analyticsData.peakOrderingHours, peakOrderChart]);
+    }, [analyticsData.peakOrderingHours]);
+    
+    
+    
  
     useEffect(() => {
         // Retrieve user data from localStorage when component mounts
@@ -151,11 +167,11 @@ const Analytics = () => {
     }, [userData, searchCriteria, fetchAnalyticsData]);
  
     useEffect(() => {
-        if (analyticsData.peakOrderingHours.length > 0 && peakOrderChart === null) {
+        if (analyticsData.peakOrderingHours.length > 0) {
             updatePeakOrderChart();
         }
-    }, [analyticsData.peakOrderingHours, peakOrderChart, updatePeakOrderChart]);
- 
+    }, [analyticsData.peakOrderingHours, updatePeakOrderChart]);
+    
     const onChangeSearchCriteria = (e) => {
         const { name, value } = e.target;
         setSearchCriteria(prevSearchCriteria => ({
@@ -226,13 +242,13 @@ const Analytics = () => {
                     <div className="analytics-card">
                         <h3>Peak Ordering Hours</h3>
                         <div className="chart-container">
-                            <canvas id="peakOrderChart" width="400" height="200"></canvas>
+                            <canvas id="peakOrderChart" width="1000" height="1000"></canvas>
                         </div>
-                        <ul>
+                        {/* <ul>
                             {analyticsData.peakOrderingHours.map((data, index) => (
-                                <li key={index}>{data.datetime}: {data.orders}</li>
+                                <li key={index}>{data.hour}: {data.averageOrders}</li>
                             ))}
-                        </ul>
+                        </ul> */}
                     </div>
                 </div>
             </div>
