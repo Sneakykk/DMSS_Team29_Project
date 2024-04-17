@@ -103,7 +103,7 @@ public class OrderService {
 
 
     public List<Order> getOrderStatusNotCompletedByEmployeeId(int employeeId){    
-        return orderRepository.findByEmployeeIdAndOrderStatusNot(employeeId,"Completed");
+        return orderRepository.findByEmployeeIdAndOrderStatusNotOrderByTimeOfOrderDesc(employeeId,"Completed");
     }
     
 

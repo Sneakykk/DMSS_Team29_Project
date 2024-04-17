@@ -31,6 +31,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT o FROM Order o WHERE o.orderStatus <> 'Completed'")
     List<Order> findOrdersByOrderStatusNotCompleted();
 
-    List<Order> findByEmployeeIdAndOrderStatusNot(int employeeId, String orderStatus);
+    List<Order> findByEmployeeIdAndOrderStatusNotOrderByTimeOfOrderDesc(int employeeId, String orderStatus);
 
 }
