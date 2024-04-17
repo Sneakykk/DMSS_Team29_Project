@@ -319,20 +319,40 @@ public class foodProjectController {
             
             int totalVolume = 0; 
             BigDecimal totalAmount = BigDecimal.ZERO; // Initialize totalAmount as BigDecimal.ZERO
-
+            
+            outer:
+            for (Order order : ordersBetweenDates) {
+                String[] orderedItems = order.getItemName().replaceAll("[\\[\\]\"]", "").split(","); // Split and remove square brackets and quotes
+                middle:
+                for (String item : orderedItems) {
+                    // Trim each item to remove leading/trailing spaces
+                    String trimmedItem = item.trim();
+                    // Check if the trimmed item exists in the menuByStoreId
+                    inner:
+                    for (Object menuEntry : menuByStoreId) {
+                        Object[] row = (Object[]) menuEntry;
+                        String foodName = row[0].toString();
+                        // Check if the food name matches the trimmed item
+                        if (foodName.equals(trimmedItem)) {
+                            // Item found in the menu, do something
+                            totalVolume += 1;;
+                            break middle; // Stop searching for this item in the menu
+                        }
+                    }
+                }
+            }
             for (int i = 0; i < menuByStoreId.size(); i++) {
                 Object[] row = (Object[]) menuByStoreId.get(i);
                 System.out.println(Arrays.toString(row));
 
                 String foodName = row[0].toString();
                 BigDecimal itemPrice = new BigDecimal(row[1].toString()); // Convert to BigDecimal
-                System.out.println(foodName);
+                // System.out.println("Menu store: "+foodName);
 
                 for (Order order : ordersBetweenDates) {
                     String orderedItems = order.getItemName();
-
+                    // System.out.println("orderNames: "+order.getItemName());
                     if (orderedItems.contains(foodName)) {
-                        totalVolume += 1;
                         totalAmount = totalAmount.add(itemPrice); // Use add() to accumulate BigDecimal
                         // System.out.println(totalVolume);
                     }
@@ -442,7 +462,6 @@ public class foodProjectController {
                         }        
                     }
                 }
-
             String top3Items = this.findTop3Items(everyItemInOrdersArray);
             System.out.println("Top 3 most frequent items: [" + top3Items + "]");
             return "["+top3Items+"]";
@@ -452,19 +471,14 @@ public class foodProjectController {
 
     private String generateOrderData(JSONObject data, List<Order> orders) {
         List<String> menuByStoreId = foodService.getFoodItemsByStoreId(data.getInt("storeId"));
-        Map<LocalDate, Map<Integer, Integer>> ordersPerDateAndHour = calculateOrdersPerDateAndHour(orders, menuByStoreId);
+        Map<Integer, Double> averageOrdersPerHour = calculateAverageOrdersPerHour(orders, menuByStoreId);
 
         StringBuilder jsonBuilder = new StringBuilder("[");
-        for (Map.Entry<LocalDate, Map<Integer, Integer>> entry : ordersPerDateAndHour.entrySet()) {
-            LocalDate date = entry.getKey();
-            for (Map.Entry<Integer, Integer> hourEntry : entry.getValue().entrySet()) {
-                int hour = hourEntry.getKey();
-                int ordersCount = hourEntry.getValue();
-                LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.of(hour, 0));
-                LocalDateTime endDateTime = LocalDateTime.of(date, LocalTime.of(hour, 59));
-                String jsonString = "{\"datetime\": \"" + startDateTime + " to " + endDateTime + "\", \"orders\": " + ordersCount + "}";
-                jsonBuilder.append(jsonString).append(",");
-            }
+        for (Map.Entry<Integer, Double> entry : averageOrdersPerHour.entrySet()) {
+            int hour = entry.getKey();
+            double averageOrders = entry.getValue();
+            String jsonString = "{\"hour\": \"" + hour + "\", \"averageOrders\": " + averageOrders + "}";
+            jsonBuilder.append(jsonString).append(",");
         }
         if (jsonBuilder.length() > 1) {
             jsonBuilder.setLength(jsonBuilder.length() - 1);
@@ -474,37 +488,41 @@ public class foodProjectController {
         return jsonBuilder.toString();
     }
 
-    private Map<LocalDate, Map<Integer, Integer>> calculateOrdersPerDateAndHour(List<Order> orders, List<String> menuByStoreId) {
-        Map<LocalDate, Map<Integer, Integer>> ordersPerDateAndHour = new HashMap<>();
+    private Map<Integer, Double> calculateAverageOrdersPerHour(List<Order> orders, List<String> menuByStoreId) {
+        Map<Integer, Map<Integer, Integer>> ordersPerDayAndHour = new HashMap<>();
+
+        // Initialize ordersPerDayAndHour map
         for (Order order : orders) {
             LocalDateTime orderDateTime = order.getTimeOfOrder().toLocalDateTime();
-            LocalDate orderDate = orderDateTime.toLocalDate();
+            int dayOfYear = orderDateTime.getDayOfYear();
             int hour = orderDateTime.getHour();
-            Map<Integer, Integer> ordersPerHour = ordersPerDateAndHour.computeIfAbsent(orderDate, k -> new HashMap<>());
-            String itemListString = order.getItemName();
-            itemListString = itemListString.substring(1, itemListString.length() - 1);
-            String[] items = itemListString.split(", ");
-            boolean orderedSpecifiedFood = false;
-            for (String item : items) {
-                String[] foodItems = item.split(",");
-                for (String foodItem : foodItems) {
-                    foodItem = foodItem.trim().replace("\"", "");
-                    if (menuByStoreId.contains(foodItem)) {
-                        orderedSpecifiedFood = true;
-                        break;
-                    }
-                }
-                if (orderedSpecifiedFood) {
-                    break;
-                }
-            }
-            if (orderedSpecifiedFood) {
-                ordersPerHour.put(hour, ordersPerHour.getOrDefault(hour, 0) + 1);
+            
+            if (hour >= 8 && hour <= 18) {
+                ordersPerDayAndHour.putIfAbsent(dayOfYear, new HashMap<>());
+                ordersPerDayAndHour.get(dayOfYear).put(hour, ordersPerDayAndHour.get(dayOfYear).getOrDefault(hour, 0) + 1);
             }
         }
-        return ordersPerDateAndHour;
+
+    // Calculate total orders per hour across all days
+    Map<Integer, Integer> totalOrdersPerHour = new HashMap<>();
+    for (Map<Integer, Integer> ordersPerHour : ordersPerDayAndHour.values()) {
+        for (Map.Entry<Integer, Integer> entry : ordersPerHour.entrySet()) {
+            int hour = entry.getKey();
+            int ordersCount = entry.getValue();
+            totalOrdersPerHour.put(hour, totalOrdersPerHour.getOrDefault(hour, 0) + ordersCount);
+        }
     }
 
+    // Calculate average orders per hour
+    Map<Integer, Double> averageOrdersPerHour = new HashMap<>();
+    int numDays = ordersPerDayAndHour.size();
+    for (int hour = 8; hour <= 18; hour++) {
+        int totalOrdersForHour = totalOrdersPerHour.getOrDefault(hour, 0);
+        averageOrdersPerHour.put(hour, (double) totalOrdersForHour / numDays);
+    }
+
+    return averageOrdersPerHour;
+}
 
     @PostMapping("/analytics/peak_ordering_hours")
     @CrossOrigin(origins = "http://localhost:3000") // Allow requests from localhost:3000
@@ -513,6 +531,7 @@ public class foodProjectController {
         JSONObject data = new JSONObject(details);
 
         if (data.getString("startDate").isEmpty() || data.getString("endDate").isEmpty()) {
+            System.out.println("Does this occur");
             return generateOrderData(data, orderService.getAllOrders());
         } else {
             return generateOrderData(data, orderService.orderVolume(data.getString("startDate"), data.getString("endDate")));
