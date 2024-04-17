@@ -127,6 +127,7 @@ const Analytics = () => {
         });
     
         setPeakOrderChart(newChart);
+        // eslint-disable-next-line
     }, [analyticsData.peakOrderingHours]);
     
     
