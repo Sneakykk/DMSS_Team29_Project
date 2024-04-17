@@ -8,7 +8,7 @@ const Dashboard = () => {
     // Access the state passed from the login page
     const [userData, setUserData] = useState([null]);
     const [currentOrders, setCurrentOrders] = useState([]);
-    const [foods, setFoods] = useState([]);
+    const [setFoods] = useState([]);
 
 
     useEffect(() => {
@@ -38,6 +38,7 @@ const Dashboard = () => {
     
             getFood();
         }
+    // eslint-disable-next-line    
     }, []);
 
     useEffect(()=>{
@@ -50,6 +51,7 @@ const Dashboard = () => {
                 }
             }
         }
+    // eslint-disable-next-line
     },[userData])
 
     const getUserOrderStatus = async() =>  {
@@ -97,6 +99,7 @@ const Dashboard = () => {
 const updateOrderStatus = async(data) =>  {
 
     try {
+        // eslint-disable-next-line
         const responseUpdateOrderStatus = await fetch('http://localhost:8080/api/dashboard/update_order_status', {
             method: 'POST',
             headers: {
@@ -137,6 +140,7 @@ const changeStatus = e =>{
             if (order.orderId === parseInt(id)) {
                 console.log(order)
                 // Update the status of the order
+                // eslint-disable-next-line
                 const orderStatusArray = order.orderStatus.replace(/[\[\]"]+/g, "").split(",");
                 const storeIndex = userData.storeId - 1;
                 orderStatusArray[storeIndex] = value;
@@ -213,162 +217,108 @@ const changeStatus = e =>{
 
     }
 
-    const renderOrderStatus=(order)=>{
-        let jsxToReturn;
-
-        switch (order.orderStatus) {
-            case "In-Progress":
-                jsxToReturn = (
-                    <div style={{border: "1px solid black"}}>
-                        <p>Time of Order: {formatDate(order.timeOfOrder)}</p>
-                        <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                        <p>Your Order is cooking now. Thank you for your patience</p>
+const renderOrderStatus = (order) => {
+    return (
+        <div className="status-row" key={order.orderId}>
+            <div className={`status-card sending-orders ${order.orderStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
+                <p>Sending Orders</p>
+                <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
+                <p>Your Order is cooking now. Thank you for your patience</p>
+            </div>
+            <div className={`status-card in-progress ${order.orderStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
+                <p>In-Progress</p>
+                <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
+                <p>Your order is being sent to the kitchen</p>
+            </div>
+            <div className={`status-card ready-to-be-picked ${order.orderStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
+                <p>Ready to be Picked</p>
+                {order.orderStatus === 'Ready To Be Picked' && (
+                    <div className="ready-to-be-picked-content">
+                        <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
+                        <p>Your order is ready to be collected!</p>
+                        <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
                     </div>
-                );
-                break;
-            case "Sending Orders":
-                jsxToReturn = (
-                    <div style={{border: "1px solid black"}}>
-                    <p>Time of Order: {formatDate(order.timeOfOrder)}</p>
-                    <img src={sendingOrdersImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                    <p>Your order is being sent to the kitchen</p>
-                </div>
-                );
-                break;
-            case "Ready To Be Picked":
-                    jsxToReturn = (
-                    <div style={{border: "1px solid black"}}>
-                            <p>Time of Order: {formatDate(order.timeOfOrder)}</p>
-                            <img src={ReadyToBePickedImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                            <p>Your order ready to be collected!</p>
-                            <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
-                    </div>
-                    );
-                    break;
-            default:
-                jsxToReturn = null; // Handle any other cases or edge cases
-        }
-
-        return jsxToReturn;
-    }
-
-    const renderMixedStoresOrderStatus = (order) =>{
-        const storeOneArr = [];
-        const storeTwoArr = [];
-        const itemsArrString = order.itemName;
-        const itemArray = JSON.parse(itemsArrString);
-        const orderStatus = order.orderStatus.split(",");
-        const arrayToDisplayStoreOne = [];
-        const arrayToDisplayStoreTwo = [];
-
-        console.log(itemArray[0])
-
-        if (parseInt(foods.length) !== 0) {
-            foods.forEach((food, index) => {
-                if (food.storeId === 1) {
-                    storeOneArr.push(food);
-                } else if (food.storeId === 2) {
-                    storeTwoArr.push(food);
-                }
-            });
-        }
-        
-        itemArray.forEach(item=>{
-            if (storeOneArr.includes(item)) {
-                arrayToDisplayStoreOne.push(item)
-            }else if(storeTwoArr.includes(item)){
-                arrayToDisplayStoreTwo.push(item)
-            }
-        })
-
-
-        return(
-            <div style={{border: "1px solid black"}}>
-                <p>Time of Order: {formatDate(order.timeOfOrder)}</p>
-
-        
-
-                {orderStatus.some(status => status === "Ready To Be Picked") ? (
-                    // JSX code to render when at least one element is "Ready To Be Picked"
-                    <>
-                        <div>
-                            {(orderStatus[0] === "Ready To Be Picked")?
-                            <>
-                                Store A orderStatus: In-Progress
-                            </>:
-                            <>
-                                Store A orderStatus: {orderStatus[0]}
-                            </>}
-                            
-                        </div>
-                        <div>
-                            {(orderStatus[1] === "Ready To Be Picked")?
-                            <>
-                                Store B orderStatus: In-Progress
-                            </>:
-                            <>
-                                Store B orderStatus: {orderStatus[1]}
-                            </>}
-                            
-                        </div>
-                    </>
-                ) : orderStatus.every(status => status !== "Ready To Be Picked") ? (
-                    // JSX code to render when neither of the elements is "Ready To Be Picked"
-                    <>
-                        <div>
-                            Store A orderStatus: {orderStatus[0]}
-                        </div>
-                        <div>
-                            Store B orderStatus: {orderStatus[1]}
-                        </div>
-                    </>
-                ) : (
-                    // JSX code to render when some elements are "Ready To Be Picked" and some are not
-                    <>
-                        <div>
-                            Store A orderStatus: {orderStatus[0]}
-                        </div>
-                        <div>
-                            Store B orderStatus: {orderStatus[1]}
-                        </div>
-                    </>
-                )}
-                
-                {orderStatus[0] === "Ready To Be Picked" && orderStatus[1] === "Ready To Be Picked" && (
-                    <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
                 )}
             </div>
-        )
+        </div>
+    );
+};
+
+    const renderMixedStoresOrderStatus = (order) =>{
+        const orderStatus = order.orderStatus.split(",");
+
+       // Define the ranking
+        // const ranking = ["Ready To Be Picked", "In-Progress", "Sending Orders"];
+        const ranking = ["Sending Orders", "In-Progress", "Ready To Be Picked"]
+
+        // Find the index of the lowest ranking item
+        const lowestIndex = orderStatus.reduce((acc, status) => {
+        const index = ranking.indexOf(status);
+        if (index !== -1 && index < acc) {
+            return index;
+        }
+        return acc;
+        }, ranking.length);
+
+        // Get the lowest ranking item
+        const lowestStatus = ranking[lowestIndex];
+
+        // Render different content based on the lowest ranking status
+        return (
+            <div className="status-row">
+                <div className={`status-card sending-orders ${lowestStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
+                    <p>Sending Orders</p>
+                    <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
+                    <p>Your Order is cooking now. Thank you for your patience</p>
+                </div>
+                <div className={`status-card in-progress ${lowestStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
+                    <p>In-Progress</p>
+                    <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
+                    <p>Your order is being sent to the kitchen</p>
+                </div>
+                <div className={`status-card ready-to-be-picked ${lowestStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
+                    <p>Ready to be Picked</p>
+                    {lowestStatus === 'Ready To Be Picked' && (
+                        <div className="ready-to-be-picked-content">
+                            <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
+                            <p>Your order is ready to be collected!</p>
+                            <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
     }
 
     return (
         <Layout>
+            <div className="card-container">
+            <h2>Dashboard</h2>
             <div>
-                <h2>Dashboard</h2>
-                <p>Welcome to your dashboard!</p>
-                <p>User Information:</p>
-                    <p>Name: {userData?.username}</p>
-                    <p>Email: {userData?.employeeId}</p>
+                <p>Name: {userData?.username}</p>
+                <p>Employee ID: {userData?.employeeId}</p>
+            </div>
+            <h3>Here is your Order Status</h3>
             </div>
 
             {userData.storeId?(
                 <>
                     <h1>Store Owner</h1>
-                    <h1>Current Orders</h1>
+                    <h1 className="text-center">Current Orders</h1>
                     <table>
                     <thead>
                     <tr>
                         <th>S/N</th>
                         <th>Orders</th>
                         <th>Qty</th>
-                        <th>Price</th>
+                        <th>Price($)</th>
                         <th>Time of Order</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {currentOrders?.map((order, index) => {
-                        
+                        // eslint-disable-next-line
                         const orderStatusArray = order.orderStatus.replace(/[\[\]"]+/g, "").split(",");
                         const storeIndex = userData.storeId - 1;
                         const statusForStore = orderStatusArray[storeIndex];
@@ -407,19 +357,21 @@ const changeStatus = e =>{
             )
         :
         (
-            currentOrders?.map((order, index) => (
-                <div key={index}>
-                    {order.mixedStores && order.orderStatus !== "Completed" ? (
-                        <>
-                            {renderMixedStoresOrderStatus(order)}
-                        </>
-                    ) : (
-                        <>
-                            {renderOrderStatus(order)}
-                        </>
-                    )}
-                </div>
-            ))
+            <div className="order-grid">
+                {currentOrders?.map((order, index) => (
+                    <div key={index}>
+                        {order.mixedStores && order.orderStatus !== "Completed" ? (
+                            <>
+                                {renderMixedStoresOrderStatus(order)}
+                            </>
+                        ) : (
+                            <>
+                                {renderOrderStatus(order)}
+                            </>
+                        )}
+                    </div>
+                ))}
+            </div>
         )}
         </Layout>
     );
