@@ -8,7 +8,7 @@ const Dashboard = () => {
     // Access the state passed from the login page
     const [userData, setUserData] = useState([null]);
     const [currentOrders, setCurrentOrders] = useState([]);
-    const [setFoods] = useState([]);
+    // const [setFoods] = useState([]);
 
 
     useEffect(() => {
@@ -21,22 +21,22 @@ const Dashboard = () => {
             setUserData({...parsedUserData});
 
 
-            const getFood = async () => {
-                try {
-                    const response = await fetch('http://localhost:8080/api/get_all_foods', {
-                        method: 'get',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    const data = await response.json();
-                    setFoods(data);
-                } catch (error) {
-                    console.error('An error occurred: ', error);
-                }
-            };
+            // const getFood = async () => {
+            //     try {
+            //         const response = await fetch('http://localhost:8080/api/get_all_foods', {
+            //             method: 'get',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //             },
+            //         });
+            //         const data = await response.json();
+            //         setFoods(data);
+            //     } catch (error) {
+            //         console.error('An error occurred: ', error);
+            //     }
+            // };
     
-            getFood();
+            // getFood();
         }
     // eslint-disable-next-line    
     }, []);
@@ -219,6 +219,10 @@ const changeStatus = e =>{
 
 const renderOrderStatus = (order) => {
     return (
+        <>
+        <p>Order Date: {formatDate(order.timeOfOrder)}</p>
+        <p>Order ID: {order.orderId}</p>
+        
         <div className="status-row" key={order.orderId}>
             <div className={`status-card sending-orders ${order.orderStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
                 <p>Sending Orders</p>
@@ -241,6 +245,7 @@ const renderOrderStatus = (order) => {
                 )}
             </div>
         </div>
+        </>
     );
 };
 
@@ -265,28 +270,32 @@ const renderOrderStatus = (order) => {
 
         // Render different content based on the lowest ranking status
         return (
-            <div className="status-row">
-                <div className={`status-card sending-orders ${lowestStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
-                    <p>Sending Orders</p>
-                    <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
-                    <p>Your Order is cooking now. Thank you for your patience</p>
+            <>
+                <p>Order Date: {formatDate(order.timeOfOrder)}</p>
+                <p>Order ID: {order.orderId}</p>
+                <div className="status-row">
+                    <div className={`status-card sending-orders ${lowestStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
+                        <p>Sending Orders</p>
+                        <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
+                        <p>Your Order is cooking now. Thank you for your patience</p>
+                    </div>
+                    <div className={`status-card in-progress ${lowestStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
+                        <p>In-Progress</p>
+                        <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
+                        <p>Your order is being sent to the kitchen</p>
+                    </div>
+                    <div className={`status-card ready-to-be-picked ${lowestStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
+                        <p>Ready to be Picked</p>
+                        {lowestStatus === 'Ready To Be Picked' && (
+                            <div className="ready-to-be-picked-content">
+                                <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
+                                <p>Your order is ready to be collected!</p>
+                                <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                <div className={`status-card in-progress ${lowestStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
-                    <p>In-Progress</p>
-                    <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                    <p>Your order is being sent to the kitchen</p>
-                </div>
-                <div className={`status-card ready-to-be-picked ${lowestStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
-                    <p>Ready to be Picked</p>
-                    {lowestStatus === 'Ready To Be Picked' && (
-                        <div className="ready-to-be-picked-content">
-                            <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
-                            <p>Your order is ready to be collected!</p>
-                            <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
-                        </div>
-                    )}
-                </div>
-            </div>
+            </>
         );
     }
 
@@ -343,7 +352,7 @@ const renderOrderStatus = (order) => {
                                 <select onChange={changeStatus} id={order.orderId} name={order.mixedStores.toString()} value={statusForStore}>
                                     <option value="In-Progress">In-Progress</option>
                                     <option value="Sending Orders">Sending Orders</option>
-                                    <option value="Completed">Completed</option>
+                                    <option value="Ready To Be Picked">Ready To Be Picked</option>
 
                                 </select>
                             </td>

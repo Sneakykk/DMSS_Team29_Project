@@ -266,6 +266,8 @@ public class foodProjectController {
 
         if (data.getString("startDate").isEmpty() || data.getString("endDate").isEmpty()) {
 
+            // Return Today
+
             // return orderService.findByEmployeeId(data.getInt("id"));
             // return "{\"totalVolume\": 0, \"totalAmount\": \"0\"}";
             LocalDateTime today = LocalDateTime.now();
@@ -284,22 +286,59 @@ public class foodProjectController {
             
             int totalVolume = 0; 
             BigDecimal totalAmount = BigDecimal.ZERO; // Initialize totalAmount as BigDecimal.ZERO
-
+            
+            outer:
+            for (Order order : ordersBetweenDates) {
+                String[] orderedItems = order.getItemName().replaceAll("[\\[\\]\"]", "").split(","); // Split and remove square brackets and quotes
+                middle:
+                for (String item : orderedItems) {
+                    // Trim each item to remove leading/trailing spaces
+                    String trimmedItem = item.trim();
+                    // Check if the trimmed item exists in the menuByStoreId
+                    inner:
+                    for (Object menuEntry : menuByStoreId) {
+                        Object[] row = (Object[]) menuEntry;
+                        String foodName = row[0].toString();
+                        // Check if the food name matches the trimmed item
+                        if (foodName.equals(trimmedItem)) {
+                            // Item found in the menu, do something
+                            totalVolume += 1;;
+                            break middle; // Stop searching for this item in the menu
+                        }
+                    }
+                }
+            }
             for (int i = 0; i < menuByStoreId.size(); i++) {
                 Object[] row = (Object[]) menuByStoreId.get(i);
                 System.out.println(Arrays.toString(row));
 
                 String foodName = row[0].toString();
                 BigDecimal itemPrice = new BigDecimal(row[1].toString()); // Convert to BigDecimal
-                System.out.println(foodName);
+                // System.out.println("Menu store: "+foodName);
 
                 for (Order order : ordersBetweenDates) {
                     String orderedItems = order.getItemName();
-
+                    System.out.println("orderNames: "+order.getItemName());
                     if (orderedItems.contains(foodName)) {
-                        totalVolume += 1;
-                        totalAmount = totalAmount.add(itemPrice); // Use add() to accumulate BigDecimal
-                        // System.out.println(totalVolume);
+                        String[] orderedItemsArr = orderedItems.replaceAll("[\\[\\]\"]", "").split(","); // Split and remove square brackets and quotes
+                        int index = -1; // Initialize index variable
+                        for (int j = 0; j < orderedItemsArr.length; j++) {
+                            if (orderedItemsArr[j].equals(foodName)) {
+                                index = j;
+                                break; // Exit the loop once the item is found
+                            }
+                        }
+                        if (index != -1) {
+                            String[] orderedQuantityArr = order.getQuantity().replaceAll("[\\[\\]\"]", "").split(",");
+                            // System.out.println("Price: "+(itemPrice*orderedQuantityArr[index]));
+                            BigDecimal bigDecimalValue = itemPrice; // Convert String to BigDecimal
+                            System.out.println(index);
+                            System.out.println(orderedQuantityArr[0]);
+                            BigDecimal total = bigDecimalValue.multiply(BigDecimal.valueOf(Long.parseLong(orderedQuantityArr[index])));
+                            totalAmount = totalAmount.add(total); // Use add() to accumulate BigDecimal
+                            // System.out.println(totalVolume);
+                        }
+                        
                     }
                 }
             }
@@ -351,10 +390,27 @@ public class foodProjectController {
 
                 for (Order order : ordersBetweenDates) {
                     String orderedItems = order.getItemName();
-                    // System.out.println("orderNames: "+order.getItemName());
+                    System.out.println("orderNames: "+order.getItemName());
                     if (orderedItems.contains(foodName)) {
-                        totalAmount = totalAmount.add(itemPrice); // Use add() to accumulate BigDecimal
-                        // System.out.println(totalVolume);
+                        String[] orderedItemsArr = orderedItems.replaceAll("[\\[\\]\"]", "").split(","); // Split and remove square brackets and quotes
+                        int index = -1; // Initialize index variable
+                        for (int j = 0; j < orderedItemsArr.length; j++) {
+                            if (orderedItemsArr[j].equals(foodName)) {
+                                index = j;
+                                break; // Exit the loop once the item is found
+                            }
+                        }
+                        if (index != -1) {
+                            String[] orderedQuantityArr = order.getQuantity().replaceAll("[\\[\\]\"]", "").split(",");
+                            // System.out.println("Price: "+(itemPrice*orderedQuantityArr[index]));
+                            BigDecimal bigDecimalValue = itemPrice; // Convert String to BigDecimal
+                            System.out.println(index);
+                            System.out.println(orderedQuantityArr[0]);
+                            BigDecimal total = bigDecimalValue.multiply(BigDecimal.valueOf(Long.parseLong(orderedQuantityArr[index])));
+                            totalAmount = totalAmount.add(total); // Use add() to accumulate BigDecimal
+                            // System.out.println(totalVolume);
+                        }
+                        
                     }
                 }
             }
@@ -531,7 +587,6 @@ public class foodProjectController {
         JSONObject data = new JSONObject(details);
 
         if (data.getString("startDate").isEmpty() || data.getString("endDate").isEmpty()) {
-            System.out.println("Does this occur");
             return generateOrderData(data, orderService.getAllOrders());
         } else {
             return generateOrderData(data, orderService.orderVolume(data.getString("startDate"), data.getString("endDate")));
