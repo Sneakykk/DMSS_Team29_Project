@@ -49,6 +49,8 @@ const Cart = () => {
     const currentDate = Date.now();
     const dateObject = new Date(currentDate);
     const timestamp = dateObject.getTime();
+    const doo = new Date(timestamp);
+    console.log(`the timestamp is : ${doo.toString()}`);
     let foodNames = updatedCartItems.items.map((item) => item.foodName);
     let quantities = updatedCartItems.items.map((item) => item.qty);
 
