@@ -138,19 +138,7 @@ public class foodProjectController {
         order.setTotalBill(data.getFloat("totalBill"));
         String timeOfOrderString = data.getString("timeOfOrder");
         Timestamp timeOfOrder = Timestamp.valueOf(timeOfOrderString);
-
-        // Convert Timestamp to LocalDateTime
-        LocalDateTime localDateTime = timeOfOrder.toLocalDateTime();
-
-        // Create ZonedDateTime with Singapore's time zone
-        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Singapore"));
-
-        // Convert ZonedDateTime back to LocalDateTime and then to Timestamp
-        LocalDateTime singaporeLocalDateTime = zonedDateTime.toLocalDateTime();
-        Timestamp singaporeTimestamp = Timestamp.valueOf(singaporeLocalDateTime);
-
-        //order.setTimeOfOrder(timeOfOrder);
-        order.setTimeOfOrder(singaporeTimestamp);
+        order.setTimeOfOrder(timeOfOrder);
 
         orderService.updateOrder(data.getInt("orderId"),order);
 

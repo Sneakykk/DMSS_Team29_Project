@@ -25,7 +25,7 @@ const Analytics = () => {
     async (searchData) => {
       try {
         const responseOrderVolume = await fetch(
-          "https://152.42.249.86:8443/api/analytics/order_volume",
+          "https://152.42.233.119:8443/api/analytics/order_volume",
           {
             method: "POST",
             headers: {
@@ -46,7 +46,7 @@ const Analytics = () => {
         }
 
         const responsePopularItems = await fetch(
-          "https://152.42.249.86:8443/api/analytics/popular_items",
+          "https://152.42.233.119:8443/api/analytics/popular_items",
           {
             method: "POST",
             headers: {
@@ -66,7 +66,7 @@ const Analytics = () => {
         }
 
         const responsePeakHour = await fetch(
-          "https://152.42.249.86:8443/api/analytics/peak_ordering_hours",
+          "https://152.42.233.119:8443/api/analytics/peak_ordering_hours",
           {
             method: "POST",
             headers: {

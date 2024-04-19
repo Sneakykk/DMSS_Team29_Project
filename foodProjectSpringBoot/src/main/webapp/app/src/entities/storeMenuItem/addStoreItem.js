@@ -52,7 +52,7 @@ const StoreMenuPage = () => {
     const getMenuItem = async () => {
       try {
         const response = await fetch(
-          "https://152.42.249.86:8443/api/get_food_by_itemId",
+          "https://152.42.233.119:8443/api/get_food_by_itemId",
           {
             method: "POST",
             headers: {
@@ -123,7 +123,7 @@ const StoreMenuPage = () => {
   const addMenuItem = async () => {
     try {
       const response = await fetch(
-        "https://152.42.249.86:8443/api/add_food_by_store",
+        "https://152.42.233.119:8443/api/add_food_by_store",
         {
           method: "POST",
           headers: {
@@ -146,7 +146,7 @@ const StoreMenuPage = () => {
   const updateMenuItem = async () => {
     try {
       const response = await fetch(
-        "https://152.42.249.86:8443/api/update_food_by_itemId",
+        "https://152.42.233.119:8443/api/update_food_by_itemId",
         {
           method: "POST",
           headers: {
@@ -178,7 +178,7 @@ const StoreMenuPage = () => {
     console.log("testWEEREWREWR" + formData);
 
     try {
-      await fetch("https://152.42.249.86:8443/api/upload", {
+      await fetch("https://152.42.233.119:8443/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -194,13 +194,16 @@ const StoreMenuPage = () => {
       const formData = {
         imageName: foodDetails.foodName,
       };
-      const response = await fetch("https://152.42.249.86:8443/api/get_image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }); // Replace with your API endpoint
+      const response = await fetch(
+        "https://152.42.233.119:8443/api/get_image",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      ); // Replace with your API endpoint
       const data = await response.blob();
       const urlToShow = URL.createObjectURL(data);
       setImageToShow(urlToShow);
