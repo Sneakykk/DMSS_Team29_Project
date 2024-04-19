@@ -91,7 +91,7 @@ const Cart = () => {
         // Here, you can integrate Google Pay payment processing
         // For example, after adding the order successfully, initiate the Google Pay payment flow
 
-        //window.location.href = "/dashboard";
+        window.location.href = "/dashboard";
       } else {
         console.error("Failed to add order");
       }
