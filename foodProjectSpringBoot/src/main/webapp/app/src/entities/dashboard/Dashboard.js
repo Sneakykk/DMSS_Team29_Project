@@ -1,122 +1,121 @@
-import React, {useEffect,useState} from 'react';
-import Layout from '../../Layout';
-import cookingImage from '../../shared/images/cooking.jpg'; // Import the image file
-import sendingOrdersImage from '../../shared/images/SendingOrders.jpg';
-import ReadyToBePickedImage from '../../shared/images/ReadyToBePicked.jpg'
+import React, { useEffect, useState } from "react";
+import Layout from "../../Layout";
+import cookingImage from "../../shared/images/cooking.jpg"; // Import the image file
+import sendingOrdersImage from "../../shared/images/SendingOrders.jpg";
+import ReadyToBePickedImage from "../../shared/images/ReadyToBePicked.jpg";
 
 const Dashboard = () => {
-    // Access the state passed from the login page
-    const [userData, setUserData] = useState([null]);
-    const [currentOrders, setCurrentOrders] = useState([]);
-    // const [setFoods] = useState([]);
+  // Access the state passed from the login page
+  const [userData, setUserData] = useState([null]);
+  const [currentOrders, setCurrentOrders] = useState([]);
+  // const [setFoods] = useState([]);
 
+  useEffect(() => {
+    // Retrieve user data from localStorage when component mounts
+    const storedUserData = localStorage.getItem("userData");
+    //console.log(storedUserData)
+    if (storedUserData) {
+      console.log("test");
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserData({ ...parsedUserData });
 
-    useEffect(() => {
-        // Retrieve user data from localStorage when component mounts
-        const storedUserData = localStorage.getItem('userData');
-        //console.log(storedUserData)
-        if (storedUserData) {
-            console.log("test")
-            const parsedUserData = JSON.parse(storedUserData);
-            setUserData({...parsedUserData});
+      // const getFood = async () => {
+      //     try {
+      //         const response = await fetch('http://localhost:8080/api/get_all_foods', {
+      //             method: 'get',
+      //             headers: {
+      //                 'Content-Type': 'application/json',
+      //             },
+      //         });
+      //         const data = await response.json();
+      //         setFoods(data);
+      //     } catch (error) {
+      //         console.error('An error occurred: ', error);
+      //     }
+      // };
 
-
-            // const getFood = async () => {
-            //     try {
-            //         const response = await fetch('http://localhost:8080/api/get_all_foods', {
-            //             method: 'get',
-            //             headers: {
-            //                 'Content-Type': 'application/json',
-            //             },
-            //         });
-            //         const data = await response.json();
-            //         setFoods(data);
-            //     } catch (error) {
-            //         console.error('An error occurred: ', error);
-            //     }
-            // };
-    
-            // getFood();
-        }
-    // eslint-disable-next-line    
-    }, []);
-
-    useEffect(()=>{
-        if(userData){
-            if(userData.storeId){
-                getOrderStatus();
-            }else{
-                if(userData.employeeId){
-                    getUserOrderStatus();
-                }
-            }
-        }
+      // getFood();
+    }
     // eslint-disable-next-line
-    },[userData])
+  }, []);
 
-    const getUserOrderStatus = async() =>  {
-
-        try {
-            const responseOrderStatus = await fetch('http://localhost:8080/api/dashboard/user/get_order_status', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: userData.employeeId,
-            });
-    
-            const data = await responseOrderStatus.json();
-            console.log(data)
-            setCurrentOrders([...data])
-    
-    
-        }catch(error){
-            console.error('An error occured: ', error);
+  useEffect(() => {
+    if (userData) {
+      if (userData.storeId) {
+        getOrderStatus();
+      } else {
+        if (userData.employeeId) {
+          getUserOrderStatus();
         }
+      }
     }
+    // eslint-disable-next-line
+  }, [userData]);
 
-    const getOrderStatus = async() =>  {
-
+  const getUserOrderStatus = async () => {
     try {
-        const responseOrderStatus = await fetch('http://localhost:8080/api/dashboard/get_order_status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: userData.storeId,
-        });
+      const responseOrderStatus = await fetch(
+        "https://152.42.233.119:8443/api/dashboard/user/get_order_status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: userData.employeeId,
+        }
+      );
 
-        const data = await responseOrderStatus.json();
-        console.log(data)
-        setCurrentOrders([...data])
-
-
-    }catch(error){
-        console.error('An error occured: ', error);
+      const data = await responseOrderStatus.json();
+      console.log(data);
+      setCurrentOrders([...data]);
+    } catch (error) {
+      console.error("An error occured: ", error);
     }
-}
+  };
 
-const updateOrderStatus = async(data) =>  {
-
+  const getOrderStatus = async () => {
     try {
-        // eslint-disable-next-line
-        const responseUpdateOrderStatus = await fetch('http://localhost:8080/api/dashboard/update_order_status', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+      const responseOrderStatus = await fetch(
+        "https://152.42.233.119:8443/api/dashboard/get_order_status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: userData.storeId,
+        }
+      );
 
-        // const data = await responseUpdateOrderStatus.json();
-        // console.log(data)
-
-    }catch(error){
-        console.error('An error occured: ', error);
+      const data = await responseOrderStatus.json();
+      console.log(data);
+      setCurrentOrders([...data]);
+    } catch (error) {
+      console.error("An error occured: ", error);
     }
-}
+  };
 
-const formatDate = (orderDate) => {
+  const updateOrderStatus = async (data) => {
+    try {
+      // eslint-disable-next-line
+      const responseUpdateOrderStatus = await fetch(
+        "https://152.42.233.119:8443/api/dashboard/update_order_status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      // const data = await responseUpdateOrderStatus.json();
+      // console.log(data)
+    } catch (error) {
+      console.error("An error occured: ", error);
+    }
+  };
+
+  const formatDate = (orderDate) => {
     const date = new Date(orderDate);
 
     // Extract the date and time components
@@ -129,262 +128,331 @@ const formatDate = (orderDate) => {
 
     // Format the date and time
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
+  };
 
-const changeStatus = e =>{
-    const {value,name,id} = e.target;
+  const changeStatus = (e) => {
+    const { value, name, id } = e.target;
 
-    if(name==="true"){
-        console.log(id)
-        const updatedOrders = currentOrders.map((order,index) => {
-            if (order.orderId === parseInt(id)) {
-                console.log(order)
-                // Update the status of the order
-                // eslint-disable-next-line
-                const orderStatusArray = order.orderStatus.replace(/[\[\]"]+/g, "").split(",");
-                const storeIndex = userData.storeId - 1;
-                orderStatusArray[storeIndex] = value;
-                const updatedOrderStatus = orderStatusArray.join(",");
-                const updatedOrdersWithValue = { ...order, orderStatus: updatedOrderStatus };
-                const updatedOrderDateFormat = { ...updatedOrdersWithValue, timeOfOrder: formatDate(updatedOrdersWithValue.timeOfOrder) };
-                updateOrderStatus(updatedOrderDateFormat);
+    if (name === "true") {
+      console.log(id);
+      const updatedOrders = currentOrders.map((order, index) => {
+        if (order.orderId === parseInt(id)) {
+          console.log(order);
+          // Update the status of the order
+          // eslint-disable-next-line
+          const orderStatusArray = order.orderStatus
+            .replace(/[\[\]"]+/g, "")
+            .split(",");
+          const storeIndex = userData.storeId - 1;
+          orderStatusArray[storeIndex] = value;
+          const updatedOrderStatus = orderStatusArray.join(",");
+          const updatedOrdersWithValue = {
+            ...order,
+            orderStatus: updatedOrderStatus,
+          };
+          const updatedOrderDateFormat = {
+            ...updatedOrdersWithValue,
+            timeOfOrder: formatDate(updatedOrdersWithValue.timeOfOrder),
+          };
+          updateOrderStatus(updatedOrderDateFormat);
 
-                return updatedOrdersWithValue;
-            }
+          return updatedOrdersWithValue;
+        }
 
-            return order;
-        });
-        setCurrentOrders(updatedOrders)
-    }else{
-        
-        setCurrentOrders(prevOrders => {
-            // Find the index of the order with orderId equal to 3
-            const orderToUpdateIndex = prevOrders.findIndex(order => order.orderId === parseInt(id));
-            console.log(orderToUpdateIndex)
-            // Check if the order with orderId equal to 3 exists
-            if (orderToUpdateIndex !== -1) {
-              // Create a copy of the previous state array
-              const updatedOrders = [...prevOrders];
-                
-              // Update the employeeId of the order
-              updatedOrders[orderToUpdateIndex] = {
-                ...updatedOrders[orderToUpdateIndex],
-                orderStatus: value
-              };
-      
-              // Log the updated order
-              console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
-              let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
-              tempArrToBeSend = {
-                ...tempArrToBeSend,
-                timeOfOrder: formatDate(tempArrToBeSend.timeOfOrder)
-              }
-              updateOrderStatus(tempArrToBeSend)
-      
-              // Return the updated state
-              return updatedOrders;
-            } else {
-              // Order with orderId equal to 3 not found
-              console.log(`Order with orderId ${id} not found`);
-              return prevOrders; // Return the previous state unchanged
-            }
-          });
-}
-}
+        return order;
+      });
+      setCurrentOrders(updatedOrders);
+    } else {
+      setCurrentOrders((prevOrders) => {
+        // Find the index of the order with orderId equal to 3
+        const orderToUpdateIndex = prevOrders.findIndex(
+          (order) => order.orderId === parseInt(id)
+        );
+        console.log(orderToUpdateIndex);
+        // Check if the order with orderId equal to 3 exists
+        if (orderToUpdateIndex !== -1) {
+          // Create a copy of the previous state array
+          const updatedOrders = [...prevOrders];
 
-    const pickUpOrder = e =>{
-        const {id} = e.target;
+          // Update the employeeId of the order
+          updatedOrders[orderToUpdateIndex] = {
+            ...updatedOrders[orderToUpdateIndex],
+            orderStatus: value,
+          };
 
-        const updatedOrders = currentOrders.map((order,index) => {
-            if (order.orderId === parseInt(id)) {
-                console.log(order)
-                // Update the status of the order
-                const newOrderStatus = {
-                    ...order,
-                    orderStatus: "Completed"
-                }
-                console.log(newOrderStatus)
-                const updatedOrderDateFormat = { ...newOrderStatus, timeOfOrder: formatDate(newOrderStatus.timeOfOrder) };
+          // Log the updated order
+          console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
+          let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
+          tempArrToBeSend = {
+            ...tempArrToBeSend,
+            timeOfOrder: formatDate(tempArrToBeSend.timeOfOrder),
+          };
+          updateOrderStatus(tempArrToBeSend);
 
-                updateOrderStatus(updatedOrderDateFormat);
-
-                return newOrderStatus;
-            }
-
-            return order;
-        });
-        setCurrentOrders(updatedOrders)
-
+          // Return the updated state
+          return updatedOrders;
+        } else {
+          // Order with orderId equal to 3 not found
+          console.log(`Order with orderId ${id} not found`);
+          return prevOrders; // Return the previous state unchanged
+        }
+      });
     }
+  };
 
-const renderOrderStatus = (order) => {
+  const pickUpOrder = (e) => {
+    const { id } = e.target;
+
+    const updatedOrders = currentOrders.map((order, index) => {
+      if (order.orderId === parseInt(id)) {
+        console.log(order);
+        // Update the status of the order
+        const newOrderStatus = {
+          ...order,
+          orderStatus: "Completed",
+        };
+        console.log(newOrderStatus);
+        const updatedOrderDateFormat = {
+          ...newOrderStatus,
+          timeOfOrder: formatDate(newOrderStatus.timeOfOrder),
+        };
+
+        updateOrderStatus(updatedOrderDateFormat);
+
+        return newOrderStatus;
+      }
+
+      return order;
+    });
+    setCurrentOrders(updatedOrders);
+  };
+
+  const renderOrderStatus = (order) => {
     return (
-        <>
+      <>
         <p>Order Date: {formatDate(order.timeOfOrder)}</p>
         <p>Order ID: {order.orderId}</p>
-        
+
         <div className="status-row" key={order.orderId}>
-            <div className={`status-card sending-orders ${order.orderStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
-                <p>Sending Orders</p>
-                <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
-                <p>Your Order is cooking now. Thank you for your patience</p>
-            </div>
-            <div className={`status-card in-progress ${order.orderStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
-                <p>In-Progress</p>
-                <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                <p>Your order is being sent to the kitchen</p>
-            </div>
-            <div className={`status-card ready-to-be-picked ${order.orderStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
-                <p>Ready to be Picked</p>
-                {order.orderStatus === 'Ready To Be Picked' && (
-                    <div className="ready-to-be-picked-content">
-                        <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
-                        <p>Your order is ready to be collected!</p>
-                        <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
-                    </div>
-                )}
-            </div>
-        </div>
-        </>
-    );
-};
-
-    const renderMixedStoresOrderStatus = (order) =>{
-        const orderStatus = order.orderStatus.split(",");
-
-       // Define the ranking
-        // const ranking = ["Ready To Be Picked", "In-Progress", "Sending Orders"];
-        const ranking = ["Sending Orders", "In-Progress", "Ready To Be Picked"]
-
-        // Find the index of the lowest ranking item
-        const lowestIndex = orderStatus.reduce((acc, status) => {
-        const index = ranking.indexOf(status);
-        if (index !== -1 && index < acc) {
-            return index;
-        }
-        return acc;
-        }, ranking.length);
-
-        // Get the lowest ranking item
-        const lowestStatus = ranking[lowestIndex];
-
-        // Render different content based on the lowest ranking status
-        return (
-            <>
-                <p>Order Date: {formatDate(order.timeOfOrder)}</p>
-                <p>Order ID: {order.orderId}</p>
-                <div className="status-row">
-                    <div className={`status-card sending-orders ${lowestStatus === 'Sending Orders' ? 'active' : 'inactive'}`}>
-                        <p>Sending Orders</p>
-                        <img src={sendingOrdersImage} alt="Sending Orders" style={{ width: '200px', height: 'auto' }} />
-                        <p>Your Order is cooking now. Thank you for your patience</p>
-                    </div>
-                    <div className={`status-card in-progress ${lowestStatus === 'In-Progress' ? 'active' : 'inactive'}`}>
-                        <p>In-Progress</p>
-                        <img src={cookingImage} alt="In-Progress" style={{ width: '200px', height: 'auto' }} />
-                        <p>Your order is being sent to the kitchen</p>
-                    </div>
-                    <div className={`status-card ready-to-be-picked ${lowestStatus === 'Ready To Be Picked' ? 'active' : 'inactive'}`}>
-                        <p>Ready to be Picked</p>
-                        {lowestStatus === 'Ready To Be Picked' && (
-                            <div className="ready-to-be-picked-content">
-                                <img src={ReadyToBePickedImage} alt="Ready To Be Picked" style={{ width: '200px', height: 'auto' }} />
-                                <p>Your order is ready to be collected!</p>
-                                <button onClick={pickUpOrder} id={order.orderId}>Pick up</button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </>
-        );
-    }
-
-    return (
-        <Layout>
-            <div className="card-container">
-            <h2>Dashboard</h2>
-            <div>
-                <p>Name: {userData?.username}</p>
-                <p>Employee ID: {userData?.employeeId}</p>
-            </div>
-            {!userData.storeId && (
-                <h3>Here is your Order Status</h3>
+          <div
+            className={`status-card sending-orders ${
+              order.orderStatus === "Sending Orders" ? "active" : "inactive"
+            }`}
+          >
+            <p>Sending Orders</p>
+            <img
+              src={sendingOrdersImage}
+              alt="Sending Orders"
+              style={{ width: "200px", height: "auto" }}
+            />
+            <p>Your Order is cooking now. Thank you for your patience</p>
+          </div>
+          <div
+            className={`status-card in-progress ${
+              order.orderStatus === "In-Progress" ? "active" : "inactive"
+            }`}
+          >
+            <p>In-Progress</p>
+            <img
+              src={cookingImage}
+              alt="In-Progress"
+              style={{ width: "200px", height: "auto" }}
+            />
+            <p>Your order is being sent to the kitchen</p>
+          </div>
+          <div
+            className={`status-card ready-to-be-picked ${
+              order.orderStatus === "Ready To Be Picked" ? "active" : "inactive"
+            }`}
+          >
+            <p>Ready to be Picked</p>
+            {order.orderStatus === "Ready To Be Picked" && (
+              <div className="ready-to-be-picked-content">
+                <img
+                  src={ReadyToBePickedImage}
+                  alt="Ready To Be Picked"
+                  style={{ width: "200px", height: "auto" }}
+                />
+                <p>Your order is ready to be collected!</p>
+                <button onClick={pickUpOrder} id={order.orderId}>
+                  Pick up
+                </button>
+              </div>
             )}
-            </div>
-
-            {userData.storeId?(
-                <>
-                    <h1 className="text-center">Current Orders</h1>
-                    <table>
-                    <thead>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Orders</th>
-                        <th>Qty</th>
-                        <th>Price($)</th>
-                        <th>Time of Order</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {currentOrders?.map((order, index) => {
-                        // eslint-disable-next-line
-                        const orderStatusArray = order.orderStatus.replace(/[\[\]"]+/g, "").split(",");
-                        const storeIndex = userData.storeId - 1;
-                        const statusForStore = orderStatusArray[storeIndex];
-                        return(
-                        
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>
-                                {order.itemName.replace(/[[\]]/g, '').split(",").map((item, i) => (
-                                    <div key={i}>{i + 1}: {item.replace(/['"]/g, '').trim()}</div>
-                                ))}
-                            </td>
-                            <td>
-                                {/* Split the quantity string into an array and map over it */}
-                                {order.quantity.replace(/[[\]]/g, '').split(",").map((item, i) => (
-                                    <div key={i}> x{item.trim()}</div>
-                                ))}
-                            </td>
-                            <td>${order.totalBill}</td>
-                            <td>{formatDate(order.timeOfOrder)}</td>
-                            <td>
-                                <select onChange={changeStatus} id={order.orderId} name={order.mixedStores.toString()} value={statusForStore}>
-                                    <option value="In-Progress">In-Progress</option>
-                                    <option value="Sending Orders">Sending Orders</option>
-                                    <option value="Ready To Be Picked">Ready To Be Picked</option>
-
-                                </select>
-                            </td>
-
-                        </tr>
-                        );
-                    })}
-                    </tbody>
-                </table>
-                </>
-            )
-        :
-        (
-            <div className="order-grid">
-                {currentOrders?.map((order, index) => (
-                    <div key={index}>
-                        {order.mixedStores && order.orderStatus !== "Completed" ? (
-                            <>
-                                {renderMixedStoresOrderStatus(order)}
-                            </>
-                        ) : (
-                            <>
-                                {renderOrderStatus(order)}
-                            </>
-                        )}
-                    </div>
-                ))}
-            </div>
-        )}
-        </Layout>
+          </div>
+        </div>
+      </>
     );
+  };
+
+  const renderMixedStoresOrderStatus = (order) => {
+    const orderStatus = order.orderStatus.split(",");
+
+    // Define the ranking
+    // const ranking = ["Ready To Be Picked", "In-Progress", "Sending Orders"];
+    const ranking = ["Sending Orders", "In-Progress", "Ready To Be Picked"];
+
+    // Find the index of the lowest ranking item
+    const lowestIndex = orderStatus.reduce((acc, status) => {
+      const index = ranking.indexOf(status);
+      if (index !== -1 && index < acc) {
+        return index;
+      }
+      return acc;
+    }, ranking.length);
+
+    // Get the lowest ranking item
+    const lowestStatus = ranking[lowestIndex];
+
+    // Render different content based on the lowest ranking status
+    return (
+      <>
+        <p>Order Date: {formatDate(order.timeOfOrder)}</p>
+        <p>Order ID: {order.orderId}</p>
+        <div className="status-row">
+          <div
+            className={`status-card sending-orders ${
+              lowestStatus === "Sending Orders" ? "active" : "inactive"
+            }`}
+          >
+            <p>Sending Orders</p>
+            <img
+              src={sendingOrdersImage}
+              alt="Sending Orders"
+              style={{ width: "200px", height: "auto" }}
+            />
+            <p>Your Order is cooking now. Thank you for your patience</p>
+          </div>
+          <div
+            className={`status-card in-progress ${
+              lowestStatus === "In-Progress" ? "active" : "inactive"
+            }`}
+          >
+            <p>In-Progress</p>
+            <img
+              src={cookingImage}
+              alt="In-Progress"
+              style={{ width: "200px", height: "auto" }}
+            />
+            <p>Your order is being sent to the kitchen</p>
+          </div>
+          <div
+            className={`status-card ready-to-be-picked ${
+              lowestStatus === "Ready To Be Picked" ? "active" : "inactive"
+            }`}
+          >
+            <p>Ready to be Picked</p>
+            {lowestStatus === "Ready To Be Picked" && (
+              <div className="ready-to-be-picked-content">
+                <img
+                  src={ReadyToBePickedImage}
+                  alt="Ready To Be Picked"
+                  style={{ width: "200px", height: "auto" }}
+                />
+                <p>Your order is ready to be collected!</p>
+                <button onClick={pickUpOrder} id={order.orderId}>
+                  Pick up
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <Layout>
+      <div className="card-container">
+        <h2>Dashboard</h2>
+        <div>
+          <p>Name: {userData?.username}</p>
+          <p>Employee ID: {userData?.employeeId}</p>
+        </div>
+        {!userData.storeId && <h3>Here is your Order Status</h3>}
+      </div>
+
+      {userData.storeId ? (
+        <>
+          <h1 className="text-center">Current Orders</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>S/N</th>
+                <th>Orders</th>
+                <th>Qty</th>
+                <th>Price($)</th>
+                <th>Time of Order</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentOrders?.map((order, index) => {
+                // eslint-disable-next-line
+                const orderStatusArray = order.orderStatus
+                  .replace(/[\[\]"]+/g, "")
+                  .split(",");
+                const storeIndex = userData.storeId - 1;
+                const statusForStore = orderStatusArray[storeIndex];
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {order.itemName
+                        .replace(/[[\]]/g, "")
+                        .split(",")
+                        .map((item, i) => (
+                          <div key={i}>
+                            {i + 1}: {item.replace(/['"]/g, "").trim()}
+                          </div>
+                        ))}
+                    </td>
+                    <td>
+                      {/* Split the quantity string into an array and map over it */}
+                      {order.quantity
+                        .replace(/[[\]]/g, "")
+                        .split(",")
+                        .map((item, i) => (
+                          <div key={i}> x{item.trim()}</div>
+                        ))}
+                    </td>
+                    <td>${order.totalBill}</td>
+                    <td>{formatDate(order.timeOfOrder)}</td>
+                    <td>
+                      <select
+                        onChange={changeStatus}
+                        id={order.orderId}
+                        name={order.mixedStores.toString()}
+                        value={statusForStore}
+                      >
+                        <option value="In-Progress">In-Progress</option>
+                        <option value="Sending Orders">Sending Orders</option>
+                        <option value="Ready To Be Picked">
+                          Ready To Be Picked
+                        </option>
+                      </select>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <div className="order-grid">
+          {currentOrders?.map((order, index) => (
+            <div key={index}>
+              {order.mixedStores && order.orderStatus !== "Completed" ? (
+                <>{renderMixedStoresOrderStatus(order)}</>
+              ) : (
+                <>{renderOrderStatus(order)}</>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </Layout>
+  );
 };
 
 export default Dashboard;
