@@ -87,7 +87,7 @@ const Dashboard = () => {
       );
 
       const data = await responseOrderStatus.json();
-      console.log(data);
+      console.log(`The current data details are: ${data}`);
       setCurrentOrders([...data]);
     } catch (error) {
       console.error("An error occured: ", error);
@@ -154,6 +154,7 @@ const Dashboard = () => {
             ...updatedOrdersWithValue,
             timeOfOrder: formatDate(updatedOrdersWithValue.timeOfOrder),
           };
+
           updateOrderStatus(updatedOrderDateFormat);
 
           return updatedOrdersWithValue;
