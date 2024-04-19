@@ -9,7 +9,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**") // Apply CORS settings to all endpoints under /api
-                .allowedOrigins("https://lobster-app-hadq7.ondigitalocean.app")
+                .allowedOrigins("https://octopus-app-m8hyy.ondigitalocean.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .exposedHeaders("Access-Control-Allow-Origin");
