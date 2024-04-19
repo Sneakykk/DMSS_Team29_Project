@@ -96,7 +96,7 @@ public class Order {
         LocalDateTime adjustedDateTime = localDateTime.minusHours(8);
         ZonedDateTime zonedDateTime = adjustedDateTime.atZone(ZoneId.of("Asia/Singapore"));
         this.timeOfOrder = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
-        this.timeOfOrder = timeOfOrder;
+        //this.timeOfOrder = timeOfOrder;
     }
 
     public float getTotalBill() {
