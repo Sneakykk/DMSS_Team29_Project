@@ -33,7 +33,7 @@ const OrderHistory = () => {
     try {
       console.log(searchData);
       const response = await fetch(
-        "https://152.42.233.119:8443/api/employee/get_food_history",
+        "https://152.42.249.86:8443/api/employee/get_food_history",
         {
           // Update to your backend endpoint
           method: "POST",

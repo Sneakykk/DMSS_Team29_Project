@@ -27,7 +27,7 @@ const StoreMenuPage = () => {
     try {
       console.log(storeId);
       const response = await fetch(
-        "https://152.42.233.119:8443/api/get_food_menu_by_store",
+        "https://152.42.249.86:8443/api/get_food_menu_by_store",
         {
           // Update to your backend endpoint
           method: "POST",
@@ -58,7 +58,7 @@ const StoreMenuPage = () => {
         fileName: fileName,
       };
       const response = await fetch(
-        "https://152.42.233.119:8443/api/delete_food_by_itemId",
+        "https://152.42.249.86:8443/api/delete_food_by_itemId",
         {
           // Update to your backend endpoint
           method: "POST",

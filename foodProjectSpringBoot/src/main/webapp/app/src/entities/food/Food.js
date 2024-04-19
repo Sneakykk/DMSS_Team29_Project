@@ -42,7 +42,7 @@ const Food = () => {
   const fetchFoodMenu = async () => {
     try {
       const response = await fetch(
-        "https://152.42.233.119:8443/api/get_all_foods"
+        "https://152.42.249.86:8443/api/get_all_foods"
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -60,7 +60,7 @@ const Food = () => {
   const fetchStoreData = async () => {
     try {
       const storeResponse = await fetch(
-        "https://152.42.233.119:8443/api/get_all_stores"
+        "https://152.42.249.86:8443/api/get_all_stores"
       );
       if (!storeResponse.ok) {
         throw new Error("Network response was not ok");
@@ -76,7 +76,7 @@ const Food = () => {
   const fetchUnqiueFoodType = async () => {
     try {
       const uniqueFoodtypeResponse = await fetch(
-        "https://152.42.233.119:8443/api/get_unique_food_type"
+        "https://152.42.249.86:8443/api/get_unique_food_type"
       );
       if (!uniqueFoodtypeResponse.ok) {
         throw new Error("Network response was not ok");

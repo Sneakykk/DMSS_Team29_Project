@@ -78,16 +78,13 @@ const Cart = () => {
     console.log(finalOrderDetails);
 
     try {
-      const response = await fetch(
-        "https://152.42.233.119:8443/api/add_order",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...finalOrderDetails }),
-        }
-      );
+      const response = await fetch("https://152.42.249.86:8443/api/add_order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...finalOrderDetails }),
+      });
 
       if (response.ok) {
         console.log("Order added successfully");

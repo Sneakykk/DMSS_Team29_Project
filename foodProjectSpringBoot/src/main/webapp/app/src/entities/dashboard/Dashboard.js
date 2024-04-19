@@ -55,7 +55,7 @@ const Dashboard = () => {
   const getUserOrderStatus = async () => {
     try {
       const responseOrderStatus = await fetch(
-        "https://152.42.233.119:8443/api/dashboard/user/get_order_status",
+        "https://152.42.249.86:8443/api/dashboard/user/get_order_status",
         {
           method: "POST",
           headers: {
@@ -76,7 +76,7 @@ const Dashboard = () => {
   const getOrderStatus = async () => {
     try {
       const responseOrderStatus = await fetch(
-        "https://152.42.233.119:8443/api/dashboard/get_order_status",
+        "https://152.42.249.86:8443/api/dashboard/get_order_status",
         {
           method: "POST",
           headers: {
@@ -98,7 +98,7 @@ const Dashboard = () => {
     try {
       // eslint-disable-next-line
       const responseUpdateOrderStatus = await fetch(
-        "https://152.42.233.119:8443/api/dashboard/update_order_status",
+        "https://152.42.249.86:8443/api/dashboard/update_order_status",
         {
           method: "POST",
           headers: {

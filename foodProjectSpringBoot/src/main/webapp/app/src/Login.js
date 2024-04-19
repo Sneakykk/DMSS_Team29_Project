@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault(); // Prevent the default form submit action
     try {
       const response = await fetch(
-        "https://152.42.233.119:8443/api/user/login",
+        "https://152.42.249.86:8443/api/user/login",
         {
           // Update to your backend endpoint
           method: "POST",
