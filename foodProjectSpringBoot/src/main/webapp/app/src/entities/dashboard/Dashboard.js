@@ -150,6 +150,9 @@ const Dashboard = () => {
             ...order,
             orderStatus: updatedOrderStatus,
           };
+          console.log(
+            `I am in the changeStatus(). updatedOrdersWithValue.timeOfOrder: ${updatedOrdersWithValue.timeOfOrder}`
+          );
           const updatedOrderDateFormat = {
             ...updatedOrdersWithValue,
             timeOfOrder: formatDate(updatedOrdersWithValue.timeOfOrder),
