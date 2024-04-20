@@ -1,0 +1,39 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+      # Build the Spring Boot application
+    - name: Build Spring Boot Application
+      run: mvn clean package -DskipTests
+
+    # Install SSH client
+    - name: Install SSH client
+      run: sudo apt-get install -y openssh-client
+
+    # Create SSH private key file
+    - name: Create SSH private key file
+      run: echo "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcEFJQkFBS0NBUUVBdWlvKzVBdmtGM0xzK21JSVNzYXV2ZUkxY05Na2d0cllNVHBDWVdBMWNhLzhnNm1NCmdMUS9IajNZaldaRTBobEI4SysrcEdreUduVkRENlVHTmcyNlIwMCtvTHo0U1c3T09NbkJ0TlhCdDk3c3Z3eDYKckJpUGFCM1FVSVZyeWRUNUtVN3k4WHBnbE9tYkJLaDFEbGFCSmliWVMyS0ZseFhveUpvS0xLRi9ydUZXTytyTQpSNnV1blZHRTA5RENNdkE4dWlyKzlSeGZ1ZEFPTXRobFk3Uk03NkdQbm9FMnhTY1NXdHd4R0o2Y1hqT1QvK25yCndWUDc5QVNlWjNFNFZwcFloUG1nN29CWk9NQWk1TkYxdDJPMzdqemgzSTM3dDNlWmh0Yk4yR21zWldnU29ZWjYKUU9OVDdIYUswM21iLzliQ0t0cGhoTldaVXdpZTN6RlFtY2JlVVFJREFRQUJBb0lCQVFDWDYrWEs0RkZST1g1ZQpqaVhLTC8xbUEvWXNqb0liTDFDQ1M5TGorRWxrNzRNWVJ3TGIvVHdOQjlkeS9PUm91Q2Z4ck5uYy9lUGZaNVpFCmJCMTNleGhyRzRSaVZCUWlpUVJObjRndWRNcFRyTjV5d2xKUm92RlV2QS9GeGp2Q1I4VFZpeElETWlVaklNaGEKc3NaajN3QWlERTB5cDhIeEcvWU56bmRER01CRUMwV21YTHBoOGZYVTlZaGZQRStpbW16N0p5UWJNR0hoU0phVQpadFhnaDRXZVdwZVdmMGN2OXFiWGpVd293SzUya3FIdVVIQ1U4RXhzYndGSkZSRG0wRll3d0t6N1JyR3VLQlhZCmxmV0FKVkt4RSsvaTNtV2Y1bm9DOHRQaE5xcmUzSFIxQVBQakEwOGJWaHR6UXZiNFltVXpORytkZzNaQXRmS2IKL2RVSkJUdHBBb0dCQVBMcVZ4bTE5MHJRUHA2ZEJFRFJjaXYvbzN5WXZ0Z2FYU3BySHR2dmM3MlYzUSttNUtqTgo3QUJmd3pwcWlHMksyZEREcGk5NkN2UFFNeGFxRmNmWEpielZ2c1h6ejRBWUkwdE1sdEtNWTVuMytzL1ZkSGZvCnNHSFJ3VUV3c2R1SjErdVlqQmFYYjd5TXdFc0NlOGdjbHZqK3lndUZhODdrc0VDOFVhYzZPejJYQW9HQkFNUXgKV2ZLZStMd2NTVllhY0gzNldXaysyZUd1UTBGbmVLdzJRR0F2eEgrcEhEWDZ2T1VNV2FtbVgzM1liT2JZNzZzegpyUEVnU2ZrWXc1ZkQxaTNTQUJFL3lHWHF3TGRVVzRoeTUxUjVqaDB2UVN6c3hZMzJyZVdJWkZWMi9MdldRTTF6CldabnAvNmhydldDc3pXb1JRSUY5TXd0NnNYZWUvSG9LOERNTEFKQlhBb0dCQU52SlhpK2NMZmpaL0o2RTBSRlkKc0dYUThucE10ZmhQdWxZa0FCTGRVQ3FNU3l6YlEyN2NpcGs0REN0eHNxanloZXZXNmlsdzBqSVNBZmVTd3d4Qwp4UmxiaURZUlNJRE0xanBPUFBTYUk1QnZCOWMrZWhmNFNJYnBRMk1aalFObmNCN3hzbWJLZEVYMFVCUk9WZk1VCnN5RHRYNkFYQXhsNlgyTGpRVG4rZlJWWEFvR0FZVTM0eHBTQjJRcE9kUjMzM1FObGhRVmZHc2RMSkEwbGxJUHoKdWNEM1BEbXJmRG8zcFlKU2xnbW1Jc3hNZHRIeFRILzhyanJOZFhZS3pDS2MvMnpBQzg0T25qMm9CMFVYZ0wwOApibkU3UXM1RkRQc0JvRDlRVUI4dFpCWDNrMUhZSWcycnl1SjdvaFNOZ0gwMEEvODZkdjZaYW9BWHRMUnRsRG9JCmw4aEZKMUVDZ1lCZ2RMTmVnU1dibnhCWW9ZV2FGeDFLOThvMUZUbnE5YmtNcXBDeE5UeU5lU1FveTI4anJPR3oKSGl3YjR4d2c4WFZBeWZuc3grYkVqTkxwRzdyMzZuWnFuZCtVbmxucGtHREZOOTdkNU40dzJ2cE9kSVVsbnBFdQovSjBTaWlxNUJNMlYyUHllTVdsWDBBbWxuNEdDWnJCQ1QwSXZtaFN6ZkJTUytFbm5PRjhHaFE9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=" | base64 -d > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
+    #running the backend on digital ocean:
+    # Copy the JAR file to the DigitalOcean Droplet
+    - name: Copy JAR to DigitalOcean Droplet
+      run: scp target/kkfoodProject.jar root@152.42.233.119:/root/deployments
+
+    # SSH into the DigitalOcean Droplet and start the server
+    - name: Start Backend Server
+      run: ssh -i ~/.ssh/id_rsa root@152.42.233.119 'java -jar kkfoodProject.jar'
