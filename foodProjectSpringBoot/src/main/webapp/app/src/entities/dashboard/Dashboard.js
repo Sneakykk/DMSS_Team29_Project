@@ -167,6 +167,7 @@ const Dashboard = () => {
       });
       setCurrentOrders(updatedOrders);
     } else {
+      console.log("I am in the else statement instead.");
       setCurrentOrders((prevOrders) => {
         // Find the index of the order with orderId equal to 3
         const orderToUpdateIndex = prevOrders.findIndex(
