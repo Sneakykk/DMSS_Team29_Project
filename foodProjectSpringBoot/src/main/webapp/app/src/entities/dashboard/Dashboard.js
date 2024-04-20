@@ -189,11 +189,13 @@ const Dashboard = () => {
           const originalTimeOfOrder = new Date(
             updatedOrders[orderToUpdateIndex].timeOfOrder
           );
+          console.log(`The original time of order is: ${originalTimeOfOrder}`);
 
           // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
           const updatedTimeOfOrder = new Date(
             originalTimeOfOrder.getTime() - 8 * 60 * 60 * 1000
           );
+          console.log(`The updated time of order is: ${updatedTimeOfOrder}`);
 
           // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
           const formattedUpdatedTimeOfOrder = updatedTimeOfOrder
