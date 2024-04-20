@@ -87,7 +87,7 @@ const Dashboard = () => {
       );
 
       const data = await responseOrderStatus.json();
-      console.log(`The current data details are: ${data}`);
+      console.log("The current data details are: ", data);
       setCurrentOrders([...data]);
     } catch (error) {
       console.error("An error occured: ", error);
@@ -126,6 +126,9 @@ const Dashboard = () => {
     const minutes = ("0" + date.getMinutes()).slice(-2);
     const seconds = ("0" + date.getSeconds()).slice(-2);
 
+    console.log(
+      `Inside formateDate(). the date is: ${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+    );
     // Format the date and time
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
