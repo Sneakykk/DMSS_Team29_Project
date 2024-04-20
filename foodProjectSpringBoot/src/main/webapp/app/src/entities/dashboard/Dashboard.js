@@ -66,7 +66,7 @@ const Dashboard = () => {
       );
 
       const data = await responseOrderStatus.json();
-      console.log(data);
+      console.log(`I am now in the getOrderStatus. The data is : ${data}`);
       setCurrentOrders([...data]);
     } catch (error) {
       console.error("An error occured: ", error);
@@ -212,6 +212,9 @@ const Dashboard = () => {
             `The formatted updated time is: ${formattedAdjustedTimeOfOrder}`
           );
           // Log the updated order
+
+          updatedOrders[orderToUpdateIndex].timeOfOrder =
+            formattedAdjustedTimeOfOrder;
           console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
           let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
           tempArrToBeSend = {
