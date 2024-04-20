@@ -49,7 +49,12 @@ const Cart = () => {
     const currentDate = Date.now();
     const dateObject = new Date(currentDate);
     const timestamp = dateObject.getTime();
-    const doo = new Date(timestamp);
+
+    const hoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const newTimestamp = currentDate - hoursInMilliseconds;
+    const dateTimestamp = new Date(newTimestamp).getTime();
+
+    const doo = new Date(dateTimestamp);
     console.log(`the timestamp is : ${doo.toString()}`);
     let foodNames = updatedCartItems.items.map((item) => item.foodName);
     let quantities = updatedCartItems.items.map((item) => item.qty);
@@ -68,7 +73,8 @@ const Cart = () => {
       // "orderId": fourDigitUuid,
       employeeId: userData.employeeId,
       itemName: JSON.stringify(foodNames),
-      timeOfOrder: timestamp,
+      //timeOfOrder: timestamp,
+      timeOfOrder: dateTimestamp,
       totalBill: totalPrice(),
       quantity: JSON.stringify(quantities),
       orderStatus: orderStatus,
@@ -94,7 +100,7 @@ const Cart = () => {
         // Here, you can integrate Google Pay payment processing
         // For example, after adding the order successfully, initiate the Google Pay payment flow
 
-        window.location.href = "/dashboard";
+        //window.location.href = "/dashboard";
       } else {
         console.error("Failed to add order");
       }
