@@ -198,12 +198,18 @@ const Dashboard = () => {
           console.log(`The updated time of order is: ${updatedTimeOfOrder}`);
 
           // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
-          const formattedUpdatedTimeOfOrder = updatedTimeOfOrder
-            .toISOString()
-            .slice(0, 19)
-            .replace("T", " ");
+          const formattedAdjustedTimeOfOrder = `${updatedTimeOfOrder.getFullYear()}-${String(
+            updatedTimeOfOrder.getMonth() + 1
+          ).padStart(2, "0")}-${String(updatedTimeOfOrder.getDate()).padStart(
+            2,
+            "0"
+          )} ${String(updatedTimeOfOrder.getHours()).padStart(2, "0")}:${String(
+            updatedTimeOfOrder.getMinutes()
+          ).padStart(2, "0")}:${String(
+            updatedTimeOfOrder.getSeconds()
+          ).padStart(2, "0")}`;
           console.log(
-            `The formatted updated time is: ${formattedUpdatedTimeOfOrder}`
+            `The formatted updated time is: ${formattedAdjustedTimeOfOrder}`
           );
           // Log the updated order
           console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
