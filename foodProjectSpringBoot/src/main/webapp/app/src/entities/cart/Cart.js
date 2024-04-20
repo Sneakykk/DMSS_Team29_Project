@@ -50,7 +50,7 @@ const Cart = () => {
     // const dateObject = new Date(currentDate);
     // const timestamp = dateObject.getTime();
 
-    const hoursInMilliseconds = 16 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const hoursInMilliseconds = 8 * 60 * 60 * 1000; // 24 hours in milliseconds
     const newTimestamp = currentDate - hoursInMilliseconds;
     const dateTimestamp = new Date(newTimestamp).getTime();
 
