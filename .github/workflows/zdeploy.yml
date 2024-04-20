@@ -1,4 +1,4 @@
-name: Deploy to DigitalOcean
+name: ZDeploy to DigitalOcean
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         distribution: 'adopt'
         
     - name: Navigate to project directory
-      run: cd DMSS_Team29_Project/foodProjectSpringBoot/
+      run: cd foodProjectSpringBoot
 
 
       # Build the Spring Boot application
