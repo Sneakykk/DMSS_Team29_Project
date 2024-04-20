@@ -185,6 +185,24 @@ const Dashboard = () => {
             orderStatus: value,
           };
 
+          // Convert the timeOfOrder string to a JavaScript Date object
+          const originalTimeOfOrder = new Date(
+            updatedOrders[orderToUpdateIndex].timeOfOrder
+          );
+
+          // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
+          const updatedTimeOfOrder = new Date(
+            originalTimeOfOrder.getTime() - 8 * 60 * 60 * 1000
+          );
+
+          // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
+          const formattedUpdatedTimeOfOrder = updatedTimeOfOrder
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ");
+          console.log(
+            `The formatted updated time is: ${formattedUpdatedTimeOfOrder}`
+          );
           // Log the updated order
           console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
           let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
@@ -192,7 +210,7 @@ const Dashboard = () => {
             ...tempArrToBeSend,
             timeOfOrder: formatDate(tempArrToBeSend.timeOfOrder),
           };
-          console.log(`The updated time is: ${tempArrToBeSend.timeOfOrder}`);
+          //console.log(`The updated time is: ${tempArrToBeSend.timeOfOrder}`);
           updateOrderStatus(tempArrToBeSend);
 
           // Return the updated state
