@@ -50,11 +50,11 @@ const Cart = () => {
     const dateObject = new Date(currentDate);
     const timestamp = dateObject.getTime();
 
-    const hoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-    const newTimestamp = currentDate - hoursInMilliseconds;
-    const dateTimestamp = new Date(newTimestamp).getTime();
+    // const hoursInMilliseconds = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    // const newTimestamp = currentDate - hoursInMilliseconds;
+    // const dateTimestamp = new Date(newTimestamp).getTime();
 
-    const doo = new Date(dateTimestamp);
+    const doo = new Date(timestamp);
     console.log(`the timestamp is : ${doo.toString()}`);
     let foodNames = updatedCartItems.items.map((item) => item.foodName);
     let quantities = updatedCartItems.items.map((item) => item.qty);
@@ -73,8 +73,8 @@ const Cart = () => {
       // "orderId": fourDigitUuid,
       employeeId: userData.employeeId,
       itemName: JSON.stringify(foodNames),
-      //timeOfOrder: timestamp,
-      timeOfOrder: dateTimestamp,
+      timeOfOrder: timestamp,
+      //timeOfOrder: dateTimestamp,
       totalBill: totalPrice(),
       quantity: JSON.stringify(quantities),
       orderStatus: orderStatus,

@@ -185,6 +185,13 @@ const Dashboard = () => {
             orderStatus: value,
           };
 
+          // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from timeOfOrder
+          const updatedTimeOfOrder =
+            updatedOrders[orderToUpdateIndex].timeOfOrder - 8 * 60 * 60 * 1000;
+
+          // Update the timeOfOrder in the updated order
+          updatedOrders[orderToUpdateIndex].timeOfOrder = updatedTimeOfOrder;
+
           // Log the updated order
           console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
           let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
@@ -192,6 +199,7 @@ const Dashboard = () => {
             ...tempArrToBeSend,
             timeOfOrder: formatDate(tempArrToBeSend.timeOfOrder),
           };
+          console.log(`The updated time is: ${tempArrToBeSend.timeOfOrder}`);
           updateOrderStatus(tempArrToBeSend);
 
           // Return the updated state
