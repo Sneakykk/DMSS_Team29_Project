@@ -96,6 +96,7 @@ const Dashboard = () => {
 
   const updateOrderStatus = async (data) => {
     try {
+      console.log("Inside updateOrderStatus. data is: ", data);
       // eslint-disable-next-line
       const responseUpdateOrderStatus = await fetch(
         "https://152.42.233.119:8443/api/dashboard/update_order_status",
@@ -286,7 +287,8 @@ const Dashboard = () => {
 
         const updatedOrderDateFormat = {
           ...newOrderStatus,
-          timeOfOrder: formatDate(newOrderStatus.timeOfOrder),
+          //timeOfOrder: formatDate(newOrderStatus.timeOfOrder),
+          timeOfOrder: newOrderStatus.timeOfOrder,
         };
 
         updateOrderStatus(updatedOrderDateFormat);
