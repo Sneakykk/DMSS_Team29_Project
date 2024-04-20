@@ -66,7 +66,7 @@ const Dashboard = () => {
       );
 
       const data = await responseOrderStatus.json();
-      console.log(`I am now in the getOrderStatus. The data is : ${data}`);
+      console.log("I am now in the getUserOrderStatus. The data is : ", data);
       setCurrentOrders([...data]);
     } catch (error) {
       console.error("An error occured: ", error);
@@ -250,6 +250,40 @@ const Dashboard = () => {
           orderStatus: "Completed",
         };
         console.log(newOrderStatus);
+
+        const originalTimeOfNewOrder = new Date(newOrderStatus.timeOfOrder);
+        console.log(
+          `The original time of newOrderStatus is: ${originalTimeOfNewOrder}`
+        );
+
+        // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
+        const updatedTimeOfNewOrder = new Date(
+          originalTimeOfNewOrder.getTime() - 8 * 60 * 60 * 1000
+        );
+        console.log(
+          `The updated time of new order is: ${updatedTimeOfNewOrder}`
+        );
+
+        // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
+        const formattedAdjustedTimeOfNewOrder = `${updatedTimeOfNewOrder.getFullYear()}-${String(
+          updatedTimeOfNewOrder.getMonth() + 1
+        ).padStart(2, "0")}-${String(updatedTimeOfNewOrder.getDate()).padStart(
+          2,
+          "0"
+        )} ${String(updatedTimeOfNewOrder.getHours()).padStart(
+          2,
+          "0"
+        )}:${String(updatedTimeOfNewOrder.getMinutes()).padStart(
+          2,
+          "0"
+        )}:${String(updatedTimeOfNewOrder.getSeconds()).padStart(2, "0")}`;
+        console.log(
+          `The formatted updated time of new order is: ${formattedAdjustedTimeOfNewOrder}`
+        );
+        // Log the updated order
+
+        newOrderStatus.timeOfOrder = formattedAdjustedTimeOfNewOrder;
+
         const updatedOrderDateFormat = {
           ...newOrderStatus,
           timeOfOrder: formatDate(newOrderStatus.timeOfOrder),
