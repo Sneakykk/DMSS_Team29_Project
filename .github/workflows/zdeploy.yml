@@ -16,6 +16,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
+        
+    - name: Navigate to project directory
+      run: cd DMSS_Team29_Project/foodProjectSpringBoot/
+
 
       # Build the Spring Boot application
     - name: Build Spring Boot Application
