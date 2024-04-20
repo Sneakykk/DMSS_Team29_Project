@@ -128,24 +128,24 @@ public class foodProjectController {
     //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
     public void updateOrderStatus (@RequestBody String details)
     {
-        JSONObject data = new JSONObject(details);
-        Order order = new Order();
-        order.setEmployeeId(data.getInt("employeeId"));
-        order.setItemName(data.getString("itemName"));
-        order.setMixedStores(data.getBoolean("mixedStores"));
-        order.setOrderStatus(data.getString("orderStatus"));
-        order.setQuantity(data.getString("quantity"));
-        order.setTotalBill(data.getFloat("totalBill"));
-        String timeOfOrderString = data.getString("timeOfOrder");
-        Timestamp timeOfOrder = Timestamp.valueOf(timeOfOrderString);
+        // JSONObject data = new JSONObject(details);
+        // Order order = new Order();
+        // order.setEmployeeId(data.getInt("employeeId"));
+        // order.setItemName(data.getString("itemName"));
+        // order.setMixedStores(data.getBoolean("mixedStores"));
+        // order.setOrderStatus(data.getString("orderStatus"));
+        // order.setQuantity(data.getString("quantity"));
+        // order.setTotalBill(data.getFloat("totalBill"));
+        // String timeOfOrderString = data.getString("timeOfOrder");
+        // Timestamp timeOfOrder = Timestamp.valueOf(timeOfOrderString);
 
-        long timeOfOrderMillis = timeOfOrder.getTime() - (8 * 60 * 60 * 1000);
-        Timestamp adjustedTimeOfOrder = new Timestamp(timeOfOrderMillis);
-        order.setTimeOfOrder(adjustedTimeOfOrder);
-        
+        // long timeOfOrderMillis = timeOfOrder.getTime() - (8 * 60 * 60 * 1000);
+        // Timestamp adjustedTimeOfOrder = new Timestamp(timeOfOrderMillis);
+        // order.setTimeOfOrder(adjustedTimeOfOrder);
+
         //order.setTimeOfOrder(timeOfOrder);
 
-        orderService.updateOrder(data.getInt("orderId"),order);
+        //orderService.updateOrder(data.getInt("orderId"),order);
 
         return;
 
