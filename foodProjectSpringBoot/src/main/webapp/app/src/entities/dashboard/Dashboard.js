@@ -124,17 +124,17 @@ const Dashboard = () => {
       };
 
       // eslint-disable-next-line
-      const responseUpdateOrderStatus = await fetch(
-        "https://152.42.233.119:8443/api/dashboard/update_order_status",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          //body: JSON.stringify(data),
-          body: JSON.stringify(adjustedData),
-        }
-      );
+      // const responseUpdateOrderStatus = await fetch(
+      //   "https://152.42.233.119:8443/api/dashboard/update_order_status",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     //body: JSON.stringify(data),
+      //     body: JSON.stringify(adjustedData),
+      //   }
+      // );
 
       // const data = await responseUpdateOrderStatus.json();
       // console.log(data)
