@@ -104,7 +104,7 @@ const Dashboard = () => {
 
       // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
       const updatedTime = new Date(
-        originalTime.getTime() - 12 * 60 * 60 * 1000
+        originalTime.getTime() - 16 * 60 * 60 * 1000
       );
       console.log(
         `The updated time of order in updateOrderStatus is: ${updatedTime}`
