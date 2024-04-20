@@ -97,6 +97,32 @@ const Dashboard = () => {
   const updateOrderStatus = async (data) => {
     try {
       console.log("Inside updateOrderStatus. data is: ", data);
+      const originalTime = new Date(data.timeOfOrder);
+      console.log(
+        `The original time of order in updateOrderStatus is: ${originalTime}`
+      );
+
+      // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
+      const updatedTime = new Date(originalTime.getTime() - 8 * 60 * 60 * 1000);
+      console.log(
+        `The updated time of order in updateOrderStatus is: ${updatedTime}`
+      );
+
+      // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
+      const formattedAdjustedTime = `${updatedTime.getFullYear()}-${String(
+        updatedTime.getMonth() + 1
+      ).padStart(2, "0")}-${String(updatedTime.getDate()).padStart(
+        2,
+        "0"
+      )} ${String(updatedTime.getHours()).padStart(2, "0")}:${String(
+        updatedTime.getMinutes()
+      ).padStart(2, "0")}:${String(updatedTime.getSeconds()).padStart(2, "0")}`;
+
+      const adjustedData = {
+        ...data,
+        timeOfOrder: formattedAdjustedTime,
+      };
+
       // eslint-disable-next-line
       const responseUpdateOrderStatus = await fetch(
         "https://152.42.233.119:8443/api/dashboard/update_order_status",
@@ -105,7 +131,8 @@ const Dashboard = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          //body: JSON.stringify(data),
+          body: JSON.stringify(adjustedData),
         }
       );
 
