@@ -138,7 +138,12 @@ public class foodProjectController {
         order.setTotalBill(data.getFloat("totalBill"));
         String timeOfOrderString = data.getString("timeOfOrder");
         Timestamp timeOfOrder = Timestamp.valueOf(timeOfOrderString);
-        order.setTimeOfOrder(timeOfOrder);
+
+        long timeOfOrderMillis = timeOfOrder.getTime() - (8 * 60 * 60 * 1000);
+        Timestamp adjustedTimeOfOrder = new Timestamp(timeOfOrderMillis);
+        order.setTimeOfOrder(adjustedTimeOfOrder);
+        
+        //order.setTimeOfOrder(timeOfOrder);
 
         orderService.updateOrder(data.getInt("orderId"),order);
 
