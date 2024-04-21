@@ -45,10 +45,10 @@ describe("Login", function () {
       await driver.sleep(10000); // Wait for 1 second before fetching the text for debugging
       await driver2.get("https://152.42.233.119:8443/api/user/login");                  
       // Click on the "details" button to show the advanced options
-      await driver2.findElement(By.id("details-button")).click();                  
-      //Wait for the "Proceed" link to appear and click on it
-      await driver2.wait(until.elementLocated(By.id("proceed-link")), 5000);         
-      await driver2.findElement(By.id("proceed-link")).click();
+      await driver2.wait(until.elementLocated(By.css("#details-button")), 5000);   
+      await driver2.findElement(By.css("#details-button")).click();                  
+      //Wait for the "Proceed" link to appear and click on it      
+      await driver2.findElement(By.css("#proceed-link")).click();
       const dashboardText = await driver.findElement(By.css("h2")).getText();
       console.log("Dashboard Text: ", dashboardText); // This will show you what is being captured
       assert.strictEqual(dashboardText, "Dashboard");
