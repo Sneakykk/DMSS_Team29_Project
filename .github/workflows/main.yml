@@ -89,8 +89,7 @@ ucD3PDmrfDo3pYJSlgmmIsxMdtHxTH/8rjrNdXYKzCKc/2zAC84Onj2oB0UXgL08
 bnE7Qs5FDPsBoD9QUB8tZBX3k1HYIg2ryuJ7ohSNgH00A/86dv6ZaoAXtLRtlDoI
 l8hFJ1ECgYBgdLNegSWbnxBYoYWaFx1K98o1FTnq9bkMqpCxNTyNeSQoy28jrOGz
 Hiwb4xwg8XVAyfnsx+bEjNLpG7r36nZqnd+UnlnpkGDFN97d5N4w2vpOdIUlnpEu
-/J0Siiq5BM2V2PyeMWlX0Amln4GCZrBCT0IvmhSzfBSS+EnnOF8GhQ==
-" | base64 -d > ~/.ssh/id_rsa
+/J0Siiq5BM2V2PyeMWlX0Amln4GCZrBCT0IvmhSzfBSS+EnnOF8GhQ==" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
