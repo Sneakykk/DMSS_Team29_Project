@@ -43,7 +43,9 @@ describe("Login", function () {
       await driver.findElement(By.css(".login-button")).click();
       // Introducing a wait to see what happens before fetching the text
       await driver.sleep(100000); // Wait for 1 second before fetching the text for debugging
-      await driver2.get("https://152.42.233.119:8443/api/user/login");                  
+      await driver2.get("https://152.42.233.119:8443/api/user/login");  
+      const pageSource = await driver2.getPageSource();         
+      console.log(pageSource); // Print the page source to the console                
       // Click on the "details" button to show the advanced options
       await driver2.wait(until.elementLocated(By.css("#details-button")), 10000);   
       await driver2.findElement(By.css("#details-button")).click();                  
