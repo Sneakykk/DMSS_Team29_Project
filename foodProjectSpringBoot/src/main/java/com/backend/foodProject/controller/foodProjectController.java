@@ -50,7 +50,7 @@ public class foodProjectController {
 
 
     @PostMapping("/user/login")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public ResponseEntity<User> login (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -69,7 +69,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/add_order")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public ResponseEntity<String> addNewOrder (@RequestBody Order order)
     {
         try {
@@ -83,7 +83,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/dashboard/get_order_status")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Order> getOrderStatusNotCompleted (@RequestBody int storeId)
     {
         
@@ -114,7 +114,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/dashboard/user/get_order_status")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Order> getUserOrderStatusNotCompleted (@RequestBody int employeeId)
     {
         
@@ -125,7 +125,7 @@ public class foodProjectController {
 
 
     @PostMapping("/dashboard/update_order_status")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public void updateOrderStatus (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -148,14 +148,14 @@ public class foodProjectController {
     }
 
     @GetMapping("/get_all_foods")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Food> allFoods ()
     {
         return foodService.getAllFoods();
     }
 
     @PostMapping("/get_food_by_itemId")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public Food getFoodByItemId (@RequestBody int storedId)
     {
         return foodService.getFoodById(storedId);
@@ -168,28 +168,28 @@ public class foodProjectController {
     }
 
     @GetMapping("/get_all_stores")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Store> allStores ()
     {
         return storeService.getAllStores();
     }
 
     @GetMapping("/get_unique_food_type")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<String> unqiueFoodType ()
     {
         return foodService.getUnqiueTypeArray();
     }
 
     @PostMapping("/get_food_menu_by_store")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Food> foodMenuByStore (@RequestBody int storedId)
     {
         return foodService.getAllFoodByStoreId(storedId);
     }
 
     @PostMapping("/add_food_by_store")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public void addFoodMenuByStore (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -210,7 +210,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/update_food_by_itemId")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public Food updateFoodById (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -224,7 +224,7 @@ public class foodProjectController {
     }
     
     @PostMapping("/delete_food_by_itemId")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public void deleteFoodById (@RequestBody String details)
     {
         try{
@@ -238,7 +238,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/employee/get_food_history")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public List<Order> getEmployeeOrderHistory (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -259,7 +259,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/analytics/order_volume")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public String getOrderVolume (@RequestBody String details)
     {
         JSONObject data = new JSONObject(details);
@@ -460,7 +460,7 @@ public class foodProjectController {
 
 
     @PostMapping("/analytics/popular_items")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public String getPopularItems (@RequestBody String details){
 
         JSONObject data = new JSONObject(details);
@@ -581,7 +581,7 @@ public class foodProjectController {
 }
 
     @PostMapping("/analytics/peak_ordering_hours")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public String getPeakorderingHours (@RequestBody String details){
         
         JSONObject data = new JSONObject(details);
@@ -595,7 +595,7 @@ public class foodProjectController {
 
 
     @PostMapping("/upload")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public String uploadImage(@RequestParam("file") MultipartFile file,@RequestParam("fileName") String fileName) {
         if (file == null || file.isEmpty()) {
             return "File is empty";
@@ -628,7 +628,7 @@ public class foodProjectController {
     }
 
     @PostMapping("/get_image")
-    //@CrossOrigin(origins = "https://lobster-app-hadq7.ondigitalocean.app") // Allow requests from localhost:3000
+    @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
     public ResponseEntity<byte[]> getImage(@RequestBody String details) throws IOException {
         JSONObject data = new JSONObject(details);
         File currentDirFile = new File(".");

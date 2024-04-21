@@ -28,7 +28,7 @@ describe("Login", function () {
   });
 
   it("Login", async function () {
-    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app/");
+    await driver.get("http://localhost:3000/");
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
     await driver.findElement(By.name("password")).click();
@@ -64,7 +64,7 @@ describe("Invalid Login", function () {
     await driver.quit();
   });
   it("Invalid Login", async function () {
-    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app/");
+    await driver.get("http://localhost:3000/");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
@@ -100,7 +100,7 @@ describe("AddToCart", function () {
     await driver.quit();
   });
   it("AddToCart", async function () {
-    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app/");
+    await driver.get("http://localhost:3000/");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
@@ -172,7 +172,7 @@ describe("OrderHistory", function () {
     await driver.quit();
   });
   it("OrderHistory", async function () {
-    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app/");
+    await driver.get("http://localhost:3000/");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
