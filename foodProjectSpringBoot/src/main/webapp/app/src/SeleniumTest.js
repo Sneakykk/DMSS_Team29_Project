@@ -31,6 +31,8 @@ describe("Login", function () {
 
   it("Login", async function () {
       await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
+      const pageSource = await driver.pageSource;
+      console.log(pageSource);
       await driver.findElement(By.name("username")).click();
       await driver.findElement(By.name("username")).sendKeys("pck");
       await driver.findElement(By.name("password")).click();
