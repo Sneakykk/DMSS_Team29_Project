@@ -98,25 +98,22 @@ const Dashboard = () => {
     try {
       console.log("Inside updateOrderStatus. data is: ", data);
       const originalTime = new Date(data.timeOfOrder);
-      console.log(
-        `The original time of order in updateOrderStatus is: ${originalTime}`
-      );
 
       // Subtract 8 hours (8 * 60 * 60 * 1000 milliseconds) from the timeOfOrder
-      const updatedTime = new Date(originalTime.getTime() - 8 * 60 * 60 * 1000);
-      console.log(
-        `The updated time of order in updateOrderStatus is: ${updatedTime}`
-      );
+      //const updatedTime = new Date(originalTime.getTime() - 8 * 60 * 60 * 1000);
 
       // Format the updatedTimeOfOrder back to the desired format ("YYYY-MM-DD HH:mm:ss")
-      const formattedAdjustedTime = `${updatedTime.getFullYear()}-${String(
-        updatedTime.getMonth() + 1
-      ).padStart(2, "0")}-${String(updatedTime.getDate()).padStart(
+      const formattedAdjustedTime = `${originalTime.getFullYear()}-${String(
+        originalTime.getMonth() + 1
+      ).padStart(2, "0")}-${String(originalTime.getDate()).padStart(
         2,
         "0"
-      )} ${String(updatedTime.getHours()).padStart(2, "0")}:${String(
-        updatedTime.getMinutes()
-      ).padStart(2, "0")}:${String(updatedTime.getSeconds()).padStart(2, "0")}`;
+      )} ${String(originalTime.getHours()).padStart(2, "0")}:${String(
+        originalTime.getMinutes()
+      ).padStart(2, "0")}:${String(originalTime.getSeconds()).padStart(
+        2,
+        "0"
+      )}`;
 
       const adjustedData = {
         ...data,
@@ -215,33 +212,6 @@ const Dashboard = () => {
             ...updatedOrders[orderToUpdateIndex],
             orderStatus: value,
           };
-
-          // const originalTimeOfOrder = new Date(
-          //   updatedOrders[orderToUpdateIndex].timeOfOrder
-          // );
-          // console.log(`The original time of order is: ${originalTimeOfOrder}`);
-
-          // const updatedTimeOfOrder = new Date(
-          //   originalTimeOfOrder.getTime() - 8 * 60 * 60 * 1000
-          // );
-          // console.log(`The updated time of order is: ${updatedTimeOfOrder}`);
-
-          // const formattedAdjustedTimeOfOrder = `${updatedTimeOfOrder.getFullYear()}-${String(
-          //   updatedTimeOfOrder.getMonth() + 1
-          // ).padStart(2, "0")}-${String(updatedTimeOfOrder.getDate()).padStart(
-          //   2,
-          //   "0"
-          // )} ${String(updatedTimeOfOrder.getHours()).padStart(2, "0")}:${String(
-          //   updatedTimeOfOrder.getMinutes()
-          // ).padStart(2, "0")}:${String(
-          //   updatedTimeOfOrder.getSeconds()
-          // ).padStart(2, "0")}`;
-          // console.log(
-          //   `The formatted updated time is: ${formattedAdjustedTimeOfOrder}`
-          // );
-
-          // updatedOrders[orderToUpdateIndex].timeOfOrder =
-          //   formattedAdjustedTimeOfOrder;
           console.log("Updated order:", updatedOrders[orderToUpdateIndex]);
           let tempArrToBeSend = updatedOrders[orderToUpdateIndex];
           tempArrToBeSend = {
