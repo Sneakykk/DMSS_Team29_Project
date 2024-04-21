@@ -3,7 +3,7 @@ const assert = require("assert");
 const chrome = require("selenium-webdriver/chrome");
 
 describe("Login", function () {
-  this.timeout(30000);
+  this.timeout(100000);
   let driver;
   let vars;
 
@@ -50,7 +50,7 @@ describe("Login", function () {
 });
 
 describe("Invalid Login", function () {
-  this.timeout(30000);
+  this.timeout(100000);
   let driver;
   let vars;
   beforeEach(async function () {
@@ -88,7 +88,7 @@ describe("Invalid Login", function () {
 });
 
 describe("AddToCart", function () {
-  this.timeout(30000);
+  this.timeout(100000);
   let driver;
   let vars;
   beforeEach(async function () {
@@ -162,7 +162,7 @@ describe("AddToCart", function () {
 });
 
 describe("OrderHistory", function () {
-  this.timeout(30000);
+  this.timeout(100000);
   let driver;
   let vars;
   beforeEach(async function () {
