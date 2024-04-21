@@ -105,9 +105,4 @@ jobs:
 
       # SSH into the DigitalOcean Droplet and start the server
       - name: Start Backend Server
-        run: |
-          ssh -v -i ~/.ssh/id_rsa root@152.42.233.119 'java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar' &
-          sleep 30 # Wait for the server to start (adjust this as needed)
-          echo "Backend server started successfully. Press Ctrl+C to stop."
-          read -r -p "Press Enter to stop the server..." key
-          ssh -i ~/.ssh/id_rsa root@152.42.233.119 'pkill -f "java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar"'
+        run: ssh -v -i ~/.ssh/id_rsa root@152.42.233.119 'java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar'
