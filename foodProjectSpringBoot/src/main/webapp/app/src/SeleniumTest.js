@@ -30,6 +30,12 @@ describe("Login", function () {
   it("Login", async function () {
 
     try{
+      await driver.get("https://152.42.233.119:8443/api/user/login");                  
+      // Click on the "details" button to show the advanced options
+      await driver.findElement(By.id("details-button")).click();                  
+      //Wait for the "Proceed" link to appear and click on it
+      await driver.wait(until.elementLocated(By.id("proceed-link")), 5000);         
+      await driver.findElement(By.id("proceed-link")).click();
       await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
       await driver.findElement(By.name("username")).click();
       await driver.findElement(By.name("username")).sendKeys("pck");
