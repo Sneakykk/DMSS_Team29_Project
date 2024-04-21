@@ -12,13 +12,10 @@ describe("Login", function () {
     //options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
+    options.addArguments("--ignore-ssl-errors=yes");
+    options.addArguments("--ignore-certificate-errors")
 
     driver = await new Builder()
-      .forBrowser("chrome")
-      .setChromeOptions(options)
-      .build();
-
-    driver2 = await new Builder()
       .forBrowser("chrome")
       .setChromeOptions(options)
       .build();
@@ -33,30 +30,16 @@ describe("Login", function () {
   });
 
   it("Login", async function () {
-
-    try{
       await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
       await driver.findElement(By.name("username")).click();
       await driver.findElement(By.name("username")).sendKeys("pck");
       await driver.findElement(By.name("password")).click();
       await driver.findElement(By.name("password")).sendKeys("passwordPCK");
       await driver.findElement(By.css(".login-button")).click();
-      // Introducing a wait to see what happens before fetching the text
-      await driver.sleep(100000); // Wait for 1 second before fetching the text for debugging
-      await driver2.get("https://152.42.233.119:8443/api/user/login");  
-      const pageSource = await driver2.getPageSource();         
-      console.log(pageSource); // Print the page source to the console                
-      // Click on the "details" button to show the advanced options
-      await driver2.wait(until.elementLocated(By.css("#details-button")), 10000);   
-      await driver2.findElement(By.css("#details-button")).click();                  
-      //Wait for the "Proceed" link to appear and click on it      
-      await driver2.findElement(By.css("#proceed-link")).click();
+      await driver.sleep(1000); // Wait for 1 second before fetching the text for debugging
       const dashboardText = await driver.findElement(By.css("h2")).getText();
       console.log("Dashboard Text: ", dashboardText); // This will show you what is being captured
       assert.strictEqual(dashboardText, "Dashboard");
-    }catch(error){
-      console.error("An error: ", error)
-    }
   });
 });
 
@@ -66,9 +49,11 @@ describe("Invalid Login", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    options.addArguments("--headless"); // Comment out or remove for GUI mode
+    //options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
+    options.addArguments("--ignore-ssl-errors=yes");
+    options.addArguments("--ignore-certificate-errors")
 
     driver = await new Builder()
       .forBrowser("chrome")
@@ -81,7 +66,7 @@ describe("Invalid Login", function () {
     await driver.quit();
   });
   it("Invalid Login", async function () {
-    await driver.get("http://localhost:3000/");
+    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
@@ -102,9 +87,11 @@ describe("AddToCart", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    options.addArguments("--headless"); // Comment out or remove for GUI mode
+    //options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
+    options.addArguments("--ignore-ssl-errors=yes");
+    options.addArguments("--ignore-certificate-errors")
 
     driver = await new Builder()
       .forBrowser("chrome")
@@ -117,7 +104,7 @@ describe("AddToCart", function () {
     await driver.quit();
   });
   it("AddToCart", async function () {
-    await driver.get("http://localhost:3000/");
+    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
@@ -174,9 +161,11 @@ describe("OrderHistory", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    options.addArguments("--headless"); // Comment out or remove for GUI mode
+    //options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
-    options.addArguments("--window-size=1536,824"); // Sets the window size
+    options.addArguments("--window-size=1536,824"); // Sets the window sizez
+    options.addArguments("--ignore-ssl-errors=yes");
+    options.addArguments("--ignore-certificate-errors")
 
     driver = await new Builder()
       .forBrowser("chrome")
@@ -189,7 +178,7 @@ describe("OrderHistory", function () {
     await driver.quit();
   });
   it("OrderHistory", async function () {
-    await driver.get("http://localhost:3000/");
+    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
     await driver.manage().window().setRect({ width: 1536, height: 824 });
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
