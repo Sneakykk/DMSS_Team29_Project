@@ -40,9 +40,12 @@ describe("Login", function () {
       await driver.findElement(By.name("password")).sendKeys("passwordPCK");
       await driver.findElement(By.css(".login-button")).click();
       await driver.sleep(1000); // Wait for 1 second before fetching the text for debugging
+      
       const dashboardText = await driver.findElement(By.css("h2")).getText();
       console.log("Dashboard Text: ", dashboardText); // This will show you what is being captured
       assert.strictEqual(dashboardText, "Dashboard");
+
+      return Promise.resolve();
   });
 });
 
