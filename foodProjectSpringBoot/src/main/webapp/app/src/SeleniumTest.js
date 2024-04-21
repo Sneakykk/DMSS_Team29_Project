@@ -28,7 +28,7 @@ describe("Login", function () {
   });
 
   it("Login", async function () {
-    await driver.get("http://localhost:3000/");
+    await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
     await driver.findElement(By.name("username")).click();
     await driver.findElement(By.name("username")).sendKeys("pck");
     await driver.findElement(By.name("password")).click();
