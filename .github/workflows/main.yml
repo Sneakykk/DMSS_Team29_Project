@@ -105,4 +105,4 @@ jobs:
 
       # SSH into the DigitalOcean Droplet and start the server
       - name: Start Backend Server
-        run: ssh -v -i ~/.ssh/id_rsa root@152.42.233.119 'nohup java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar &' &
+        run: ssh -v -i ~/.ssh/id_rsa root@152.42.233.119 'nohup java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar &'
