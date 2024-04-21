@@ -21,12 +21,9 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        
+    
     - name: Set up Chrome
       uses: browser-actions/setup-chrome@v1
-      with:
-        chrome-version: 120
-        install-dependencies: true
 
     - name: Build and test Spring Boot
       run: |
