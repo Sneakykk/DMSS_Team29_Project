@@ -31,11 +31,12 @@ describe("Login", function () {
 
   it("Login", async function () {
       await driver.get("https://octopus-app-m8hyy.ondigitalocean.app");
-      const pageSource = await driver.pageSource;
-      console.log(pageSource);
+      
       await driver.findElement(By.name("username")).click();
       await driver.findElement(By.name("username")).sendKeys("pck");
       await driver.findElement(By.name("password")).click();
+      // const pageSource = await driver.pageSource;
+      console.log((await driver.getTitle()));
       await driver.findElement(By.name("password")).sendKeys("passwordPCK");
       await driver.findElement(By.css(".login-button")).click();
       await driver.sleep(1000); // Wait for 1 second before fetching the text for debugging
