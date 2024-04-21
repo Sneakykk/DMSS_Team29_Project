@@ -100,8 +100,8 @@ jobs:
       - name: Copy JAR to DigitalOcean Droplet
         run: |
           ssh-keyscan 152.42.233.119 >> ~/.ssh/known_hosts
-          cd ${{ github.workspace }}/foodProjectSpringBoot
-          scp -v -i ~/.ssh/id_rsa target/kkfoodProject.jar root@152.42.233.119:/root/deployments
+          cd ${{ github.workspace }}/foodProjectSpringBoot/target
+          scp -v -i ~/.ssh/id_rsa kkfoodProject.jar root@152.42.233.119:/root/deployments
 
       # SSH into the DigitalOcean Droplet and start the server
       - name: Start Backend Server
