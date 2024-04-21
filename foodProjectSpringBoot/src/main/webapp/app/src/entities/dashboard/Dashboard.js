@@ -172,7 +172,7 @@ const Dashboard = () => {
           // Update the status of the order
           // eslint-disable-next-line
           const orderStatusArray = order.orderStatus
-            .replace(/[\[\]"]+/g, "")
+            .replace(/[[\]"]+/g, "")
             .split(",");
           const storeIndex = userData.storeId - 1;
           orderStatusArray[storeIndex] = value;
@@ -454,7 +454,7 @@ const Dashboard = () => {
               {currentOrders?.map((order, index) => {
                 // eslint-disable-next-line
                 const orderStatusArray = order.orderStatus
-                  .replace(/[\[\]"]+/g, "")
+                  .replace(/[[\]"]+/g, "")
                   .split(",");
                 const storeIndex = userData.storeId - 1;
                 const statusForStore = orderStatusArray[storeIndex];
