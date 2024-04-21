@@ -9,7 +9,7 @@ describe("Login", function () {
 
   beforeEach(async function () {
     const options = new chrome.Options();
-    //options.addArguments("--headless"); // Comment out or remove for GUI mode
+    options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
     options.addArguments("--ignore-ssl-errors=yes");
@@ -49,7 +49,7 @@ describe("Invalid Login", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    //options.addArguments("--headless"); // Comment out or remove for GUI mode
+    options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
     options.addArguments("--ignore-ssl-errors=yes");
@@ -87,7 +87,7 @@ describe("AddToCart", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    //options.addArguments("--headless"); // Comment out or remove for GUI mode
+    options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window size
     options.addArguments("--ignore-ssl-errors=yes");
@@ -161,7 +161,7 @@ describe("OrderHistory", function () {
   let vars;
   beforeEach(async function () {
     const options = new chrome.Options();
-    //options.addArguments("--headless"); // Comment out or remove for GUI mode
+    options.addArguments("--headless"); // Comment out or remove for GUI mode
     options.addArguments("--disable-gpu"); // Optional: only needed for headless
     options.addArguments("--window-size=1536,824"); // Sets the window sizez
     options.addArguments("--ignore-ssl-errors=yes");
