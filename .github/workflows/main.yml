@@ -91,7 +91,7 @@ jobs:
           l8hFJ1ECgYBgdLNegSWbnxBYoYWaFx1K98o1FTnq9bkMqpCxNTyNeSQoy28jrOGz
           Hiwb4xwg8XVAyfnsx+bEjNLpG7r36nZqnd+UnlnpkGDFN97d5N4w2vpOdIUlnpEu
           /J0Siiq5BM2V2PyeMWlX0Amln4GCZrBCT0IvmhSzfBSS+EnnOF8GhQ==
-          -----END RSA PRIVATE KEY-----" | base64 -d > ~/.ssh/id_rsa
+          -----END RSA PRIVATE KEY-----" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
 
