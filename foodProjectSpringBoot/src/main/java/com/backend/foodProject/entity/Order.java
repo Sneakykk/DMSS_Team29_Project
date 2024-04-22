@@ -2,7 +2,8 @@ package com.backend.foodProject.entity;
 
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
-
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import jakarta.persistence.*;
 
@@ -91,6 +92,11 @@ public class Order {
     }
 
     public void setTimeOfOrder(Timestamp timeOfOrder) {
+        // System.out.println("The current time of order is: " + timeOfOrder);
+        // LocalDateTime localDateTime = timeOfOrder.toLocalDateTime();
+        // LocalDateTime adjustedDateTime = localDateTime.plusHours(8);
+        // ZonedDateTime zonedDateTime = adjustedDateTime.atZone(ZoneId.of("Asia/Singapore"));
+        // this.timeOfOrder = Timestamp.valueOf(zonedDateTime.toLocalDateTime());
         this.timeOfOrder = timeOfOrder;
     }
 

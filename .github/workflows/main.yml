@@ -13,39 +13,105 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v2.4.0
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2.4.0
 
-    # Setup Java environment with JDK 17
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      # Setup Java environment with JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
 
-    # Build and Test Spring Boot Application
-    - name: Build and test Spring Boot
-      run: |
-        cd ${{ github.workspace }}/foodProjectSpringBoot
-        mvn clean compile test
+      # Build and Test Spring Boot Application
+      - name: Build and test Spring Boot
+        run: |
+          cd ${{ github.workspace }}/foodProjectSpringBoot
+          mvn clean compile test
 
-    # Setup Node.js environment
-    - name: Set up Node.js
-      uses: actions/setup-node@v3.2.0
-      with:
-        node-version: '20.11.1'
+      # Setup Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: "20.11.1"
 
-    # Debug: Show workspace directory structure
-    - name: Debug
-      run: ls -R $GITHUB_WORKSPACE
+      # Debug: Show workspace directory structure
+      - name: Debug
+        run: ls -R $GITHUB_WORKSPACE
 
-    # Install Node.js dependencies for React application
-    - name: Install React dependencies
-      run: npm install
-      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+      # Install Node.js dependencies for React application
+      - name: Install React dependencies
+        run: npm install
+        working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
 
-    # Build React application
-    - name: Build React app
-      run: npm run build
-      working-directory: ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+      # Build React application
+      - name: Build React app
+        run: npm run build
+        working-directory:
+          ${{ github.workspace }}/foodProjectSpringBoot/src/main/webapp/app
+
+          # Build the Spring Boot application
+      - name: Build Spring Boot Application
+        run: |
+          cd ${{ github.workspace }}/foodProjectSpringBoot
+          mvn clean package -DskipTests
+
+      # Install SSH client
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+
+      # Create SSH private key file
+      - name: Create SSH private key file
+        run: |
+          mkdir -p /home/runner/.ssh/
+          echo "-----BEGIN RSA PRIVATE KEY-----
+          MIIEpAIBAAKCAQEAuio+5AvkF3Ls+mIISsauveI1cNMkgtrYMTpCYWA1ca/8g6mM
+          gLQ/Hj3YjWZE0hlB8K++pGkyGnVDD6UGNg26R00+oLz4SW7OOMnBtNXBt97svwx6
+          rBiPaB3QUIVrydT5KU7y8XpglOmbBKh1DlaBJibYS2KFlxXoyJoKLKF/ruFWO+rM
+          R6uunVGE09DCMvA8uir+9RxfudAOMthlY7RM76GPnoE2xScSWtwxGJ6cXjOT/+nr
+          wVP79ASeZ3E4VppYhPmg7oBZOMAi5NF1t2O37jzh3I37t3eZhtbN2GmsZWgSoYZ6
+          QONT7HaK03mb/9bCKtphhNWZUwie3zFQmcbeUQIDAQABAoIBAQCX6+XK4FFROX5e
+          jiXKL/1mA/YsjoIbL1CCS9Lj+Elk74MYRwLb/TwNB9dy/ORouCfxrNnc/ePfZ5ZE
+          bB13exhrG4RiVBQiiQRNn4gudMpTrN5ywlJRovFUvA/FxjvCR8TVixIDMiUjIMha
+          ssZj3wAiDE0yp8HxG/YNzndDGMBEC0WmXLph8fXU9YhfPE+immz7JyQbMGHhSJaU
+          ZtXgh4WeWpeWf0cv9qbXjUwowK52kqHuUHCU8ExsbwFJFRDm0FYwwKz7RrGuKBXY
+          lfWAJVKxE+/i3mWf5noC8tPhNqre3HR1APPjA08bVhtzQvb4YmUzNG+dg3ZAtfKb
+          /dUJBTtpAoGBAPLqVxm190rQPp6dBEDRciv/o3yYvtgaXSprHtvvc72V3Q+m5KjN
+          7ABfwzpqiG2K2dDDpi96CvPQMxaqFcfXJbzVvsXzz4AYI0tMltKMY5n3+s/VdHfo
+          sGHRwUEwsduJ1+uYjBaXb7yMwEsCe8gclvj+yguFa87ksEC8Uac6Oz2XAoGBAMQx
+          WfKe+LwcSVYacH36WWk+2eGuQ0FneKw2QGAvxH+pHDX6vOUMWammX33YbObY76sz
+          rPEgSfkYw5fD1i3SABE/yGXqwLdUW4hy51R5jh0vQSzsxY32reWIZFV2/LvWQM1z
+          WZnp/6hrvWCszWoRQIF9Mwt6sXee/HoK8DMLAJBXAoGBANvJXi+cLfjZ/J6E0RFY
+          sGXQ8npMtfhPulYkABLdUCqMSyzbQ27cipk4DCtxsqjyhevW6ilw0jISAfeSwwxC
+          xRlbiDYRSIDM1jpOPPSaI5BvB9c+ehf4SIbpQ2MZjQNncB7xsmbKdEX0UBROVfMU
+          syDtX6AXAxl6X2LjQTn+fRVXAoGAYU34xpSB2QpOdR333QNlhQVfGsdLJA0llIPz
+          ucD3PDmrfDo3pYJSlgmmIsxMdtHxTH/8rjrNdXYKzCKc/2zAC84Onj2oB0UXgL08
+          bnE7Qs5FDPsBoD9QUB8tZBX3k1HYIg2ryuJ7ohSNgH00A/86dv6ZaoAXtLRtlDoI
+          l8hFJ1ECgYBgdLNegSWbnxBYoYWaFx1K98o1FTnq9bkMqpCxNTyNeSQoy28jrOGz
+          Hiwb4xwg8XVAyfnsx+bEjNLpG7r36nZqnd+UnlnpkGDFN97d5N4w2vpOdIUlnpEu
+          /J0Siiq5BM2V2PyeMWlX0Amln4GCZrBCT0IvmhSzfBSS+EnnOF8GhQ==
+          -----END RSA PRIVATE KEY-----" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      #running the backend on digital ocean:
+      # Copy the JAR file to the DigitalOcean Droplet
+      - name: Copy JAR to DigitalOcean Droplet
+        run: |
+          ssh-keyscan 152.42.233.119 >> ~/.ssh/known_hosts
+          cd ${{ github.workspace }}/foodProjectSpringBoot/target
+          scp -v -i ~/.ssh/id_rsa foodProject-0.0.1-SNAPSHOT.jar root@152.42.233.119:/root/deployments
+
+      # SSH into the DigitalOcean Droplet and start the server
+      - name: Start Backend Server
+        run: |
+          ssh -i ~/.ssh/id_rsa root@152.42.233.119 'nohup java -jar /root/deployments/foodProject-0.0.1-SNAPSHOT.jar </dev/null >/dev/null 2>&1 & disown'
+          echo "Server command issued."
+
+      # Conclude the Workflow
+      - name: Conclude Deployment
+        run: echo "Deployment completed successfully, and the server is up and running!"
+
+
+

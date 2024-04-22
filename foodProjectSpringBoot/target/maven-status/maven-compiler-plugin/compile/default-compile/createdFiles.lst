@@ -8,6 +8,7 @@ com\backend\foodProject\Service\StoreService.class
 com\backend\foodProject\entity\Order.class
 com\backend\foodProject\entity\Store.class
 com\backend\foodProject\FoodProjectApplication.class
+com\backend\foodProject\config\CorsConfig.class
 com\backend\foodProject\repo\OrderRepository.class
 com\backend\foodProject\Service\CartService.class
 com\backend\foodProject\repo\CartRepository.class
