@@ -19,4 +19,4 @@ cd NUSDMSS\DMSS_Team29_Project\foodProjectSpringBoot\src\main\webapp\app
 npm start
 ```
 
-Testing Deployment
+Testing Deployment Now
