@@ -18,3 +18,5 @@ Run
 cd NUSDMSS\DMSS_Team29_Project\foodProjectSpringBoot\src\main\webapp\app
 npm start
 ```
+
+test Deployment
