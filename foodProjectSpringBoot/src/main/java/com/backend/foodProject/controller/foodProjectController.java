@@ -2,6 +2,7 @@ package com.backend.foodProject.controller;
 
 import com.backend.foodProject.Service.*;
 import com.backend.foodProject.entity.Food;
+import com.backend.foodProject.builder.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -194,20 +195,21 @@ public class foodProjectController {
     {
         JSONObject data = new JSONObject(details);
         System.out.println(data);
-        Food food = foodBuilder(data);
+        Food food = buildFood(data);
         foodService.addFoodItemByStoreId(food);
         return ;
     }
 
-    private Food foodBuilder (JSONObject data)
+    private Food buildFood(JSONObject data) 
     {
-        Food food = new Food();
-        food.setItemName(data.getString("foodName"));
-        food.setItemPrice(data.getFloat("foodPrice"));
-        food.setItemType(data.getString("foodType"));
-        food.setStoreId(data.getInt("storeId"));
-        return food;
+        return new FoodBuilder()
+            .itemName(data.getString("foodName"))
+            .itemPrice(data.getFloat("foodPrice"))
+            .itemType(data.getString("foodType"))
+            .storeId(data.getInt("storeId"))
+            .build();
     }
+
 
     @PostMapping("/update_food_by_itemId")
     @CrossOrigin(origins = {"https://octopus-app-m8hyy.ondigitalocean.app", "http://localhost:3000"})
